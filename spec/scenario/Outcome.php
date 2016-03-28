@@ -4,6 +4,7 @@ namespace spec\happy\inventory\scenario;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\Event;
 use happy\inventory\events\MaterialAcquired;
+use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\ExtraCost;
@@ -31,7 +32,7 @@ class Outcome {
         $this->try = $try;
     }
 
-    private function then($eventClass, $condition, $count = null) {
+    private function then($eventClass, $condition = null, $count = null) {
         $this->karma->thenShould($eventClass, $condition, $count);
         $this->try->thenNoExceptionShouldBeThrown();
     }
@@ -127,6 +128,12 @@ class Outcome {
     }
 
     public function _UnitsOf_ShouldBeConsumed($amount, $material) {
+        $this->then(MaterialConsumed::class, function (MaterialConsumed $e) use ($amount, $material) {
+            return [
+                [$e->getMaterial(), new MaterialIdentifier($material)],
+                [$e->getAmount(), $amount]
+            ];
+        });
     }
 
     public function TheInventoryOf_ShouldBeUpdatedTo_Units($material, $amount) {

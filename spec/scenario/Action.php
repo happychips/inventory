@@ -2,6 +2,7 @@
 namespace spec\happy\inventory\scenario;
 
 use happy\inventory\AcquireMaterial;
+use happy\inventory\ConsumeMaterial;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
@@ -77,6 +78,11 @@ class Action {
     }
 
     public function IConsume_UnitsOf($amount, $material) {
+        $this->karma->when(new ConsumeMaterial(
+            new MaterialIdentifier($material),
+            $amount,
+            $this->when
+        ));
     }
 
     public function IUpdateTheInventoryOf_To_Units($material, $amount) {
