@@ -9,6 +9,7 @@ use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
+use happy\inventory\UpdateInventory;
 use rtens\domin\parameters\file\MemoryFile;
 use watoki\karma\Specification;
 
@@ -86,6 +87,11 @@ class Action {
     }
 
     public function IUpdateTheInventoryOf_To_Units($material, $amount) {
+        $this->karma->when(new UpdateInventory(
+            new MaterialIdentifier($material),
+            $amount,
+            $this->when
+        ));
     }
 
     public function IProduce_UnitsOf($amount, $product) {

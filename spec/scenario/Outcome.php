@@ -3,6 +3,7 @@ namespace spec\happy\inventory\scenario;
 
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\Event;
+use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
@@ -137,6 +138,12 @@ class Outcome {
     }
 
     public function TheInventoryOf_ShouldBeUpdatedTo_Units($material, $amount) {
+        $this->then(InventoryUpdated::class, function (InventoryUpdated $e) use ($amount, $material) {
+            return [
+                [$e->getMaterial(), new MaterialIdentifier($material)],
+                [$e->getAmount(), $amount]
+            ];
+        });
     }
 
     public function _UnitsOf_ShouldBeProduced($amount, $prodcut) {
