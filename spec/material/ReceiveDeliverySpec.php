@@ -8,7 +8,7 @@ use spec\happy\inventory\scenario\Specification;
 class ReceiveDeliverySpec extends Specification {
 
     function before() {
-        $this->given->IHaveAcquired_UnitsOf_For__As(12, 'Potatoes', 6, 'BTN', 'acquisition1');
+        $this->given->IAmLoggedInAs('test');
     }
 
     function exactDelivery() {

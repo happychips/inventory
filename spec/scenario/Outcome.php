@@ -1,10 +1,14 @@
 <?php
 namespace spec\happy\inventory\scenario;
 
+use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\Event;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\model\AcquisitionIdentifier;
+use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
+use happy\inventory\model\Money;
 use happy\inventory\model\UserIdentifier;
 use rtens\domin\parameters\File;
 use rtens\domin\parameters\file\MemoryFile;
@@ -84,15 +88,41 @@ class Outcome {
     }
 
     public function _ShouldBeReceived($acquisition) {
+        $this->karma->thenShould(DeliveryReceived::class, function (DeliveryReceived $e) use ($acquisition) {
+            return [
+                [$e->getAcquisition(), new AcquisitionIdentifier($acquisition)]
+            ];
+        });
     }
 
     public function _ShouldBeReceivedWithTheDocuments_Attached($acquisition, $documents) {
+        $this->karma->thenShould(DeliveryReceived::class, function (DeliveryReceived $e) use ($acquisition, $documents) {
+            $conditions = [
+                [$e->getAcquisition(), new AcquisitionIdentifier($acquisition)]
+            ];
+            foreach ($documents as $i => $name) {
+                $conditions[] = [$e->getDocuments()[$i], new MemoryFile($name, 'type/foo', $name . 'content')];
+            }
+            return $conditions;
+        });
     }
 
     public function _ShouldBeReceivedWithTheExtraCostOf__For($acquisition, $cost, $currency, $reason) {
+        $this->karma->thenShould(DeliveryReceived::class, function (DeliveryReceived $e) use ($acquisition, $cost, $currency, $reason) {
+            return [
+                [$e->getAcquisition(), new AcquisitionIdentifier($acquisition)],
+                [$e->getExtraCosts(), [new ExtraCost(new Money($cost, $currency), $reason)]]
+            ];
+        });
     }
 
     public function _ShouldBeReceivedContaining_Units($acquisition, $amount) {
+        $this->karma->thenShould(DeliveryReceived::class, function (DeliveryReceived $e) use ($acquisition, $amount) {
+            return [
+                [$e->getAcquisition(), new AcquisitionIdentifier($acquisition)],
+                [$e->getAmount(), $amount]
+            ];
+        });
     }
 
     public function _UnitsOf_ShouldBeConsumed($amount, $material) {

@@ -29,15 +29,6 @@ class Context {
         Time::freeze(new \DateTimeImmutable($when));
     }
 
-    public function IRegisteredAMaterial_WithTheUnit($material, $unit) {
-    }
-
-    public function IHaveAcquired_UnitsOf_For__As($amount, $material, $cost, $currency, $acquisition) {
-    }
-
-    public function _UnitsOf_HaveBeenDelivered($amount, $material) {
-    }
-
     public function nothingHasHappened() {
         $this->karma->reset();
     }

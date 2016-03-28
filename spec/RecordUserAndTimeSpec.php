@@ -24,7 +24,8 @@ class RecordUserAndTimeSpec extends Specification {
     private function actions() {
         return [
             $this->action->IRegisterAMaterial_WithTheUnit('foo', 'bar'),
-            $this->action->IAcquire_UnitsOf_For(1, 'foo', 1, 'bar')
+            $this->action->IAcquire_UnitsOf_For(1, 'foo', 1, 'bar'),
+            $this->action->IReceiveTheDeliveryOf('foo'),
         ];
     }
 

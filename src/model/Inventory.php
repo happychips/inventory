@@ -2,8 +2,10 @@
 namespace happy\inventory\model;
 
 use happy\inventory\AcquireMaterial;
+use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 
 class Inventory {
@@ -18,7 +20,11 @@ class Inventory {
     }
 
     public function handleRegisterMaterial(RegisterMaterial $c) {
-        return new MaterialRegistered($c->getName(), $c->getUnit(), $this->session->requireLogin(), $c->getWhen());
+        return new MaterialRegistered(
+            $c->getName(),
+            $c->getUnit(),
+            $this->session->requireLogin(),
+            $c->getWhen());
     }
 
     public function handleAcquireMaterial(AcquireMaterial $c) {
@@ -28,6 +34,16 @@ class Inventory {
             $c->getCost(),
             $c->getCurrency(),
             $c->getDocuments(),
+            $this->session->requireLogin(),
+            $c->getWhen());
+    }
+
+    public function handleReceiveDelivery(ReceiveDelivery $c) {
+        return new DeliveryReceived(
+            $c->getAcquisition(),
+            $c->getAmount(),
+            $c->getDocuments(),
+            $c->getExtraCosts(),
             $this->session->requireLogin(),
             $c->getWhen()
         );

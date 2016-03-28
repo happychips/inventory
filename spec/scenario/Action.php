@@ -2,7 +2,11 @@
 namespace spec\happy\inventory\scenario;
 
 use happy\inventory\AcquireMaterial;
+use happy\inventory\model\AcquisitionIdentifier;
+use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
+use happy\inventory\model\Money;
+use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use rtens\domin\parameters\file\MemoryFile;
 use watoki\karma\Specification;
@@ -45,22 +49,34 @@ class Action {
             intval($amount),
             4200,
             'foo',
-            array_map(function ($document) {
-                return new MemoryFile($document, 'type/foo', $document . 'content');
-            }, $documents)
+            $this->makeFiles($documents)
         ));
     }
 
     public function IReceiveTheDeliveryOf($acquisition) {
+        $this->ReceiveDelivery($acquisition);
     }
 
     public function IReceiveTheDeliveryOf_WithTheDocuments_Attached($acquisition, $documents) {
+        $this->ReceiveDelivery($acquisition, null, [], $documents);
     }
 
     public function IReceiveTheDeliveryOf_WithTheExtraCostOf__For($acquisition, $cost, $currency, $reason) {
+        $this->ReceiveDelivery($acquisition, null, [new ExtraCost(new Money($cost, $currency), $reason)]);
     }
 
     public function IReceiveTheDeliveryOf_Containing_Units($acquisition, $amount) {
+        $this->ReceiveDelivery($acquisition, $amount);
+    }
+
+    private function ReceiveDelivery($acquisition, $amount = null, $extraCosts = [], $documents = []) {
+        $this->karma->when(new ReceiveDelivery(
+            new AcquisitionIdentifier($acquisition),
+            $amount,
+            $this->makeFiles($documents),
+            $extraCosts,
+            $this->when
+        ));
     }
 
     public function IConsume_UnitsOf($amount, $material) {
@@ -89,5 +105,15 @@ class Action {
 
     public function ISetWhenTo($when) {
         $this->when = new \DateTimeImmutable($when);
+    }
+
+    /**
+     * @param $documents
+     * @return array
+     */
+    private function makeFiles($documents) {
+        return array_map(function ($document) {
+            return new MemoryFile($document, 'type/foo', $document . 'content');
+        }, $documents);
     }
 }
