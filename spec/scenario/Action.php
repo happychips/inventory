@@ -3,6 +3,7 @@ namespace spec\happy\inventory\scenario;
 
 use happy\inventory\AcquireMaterial;
 use happy\inventory\ConsumeMaterial;
+use happy\inventory\ListAcquisitions;
 use happy\inventory\ListMaterials;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\ExtraCost;
@@ -133,5 +134,9 @@ class Action {
 
     public function IListAllMaterials() {
         $this->karma->when(new ListMaterials());
+    }
+
+    public function IListAllAcquisitions() {
+        $this->karma->when(new ListAcquisitions());
     }
 }

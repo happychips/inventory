@@ -16,6 +16,7 @@ class MaterialList {
      * @return array
      */
     public function getMaterials() {
+        asort($this->materials);
         return $this->materials;
     }
 }

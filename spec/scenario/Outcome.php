@@ -12,6 +12,7 @@ use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\model\UserIdentifier;
+use happy\inventory\projecting\AcquisitionList;
 use happy\inventory\projecting\MaterialList;
 use rtens\domin\parameters\File;
 use rtens\domin\parameters\file\MemoryFile;
@@ -190,6 +191,54 @@ class Outcome {
 
             return [
                 [$returned->getMaterials()[$pos], $caption]
+            ];
+        });
+    }
+
+    public function Material_ShouldBe($pos, $material) {
+        $this->thenReturn(function ($returned) use ($pos, $material) {
+            if (!($returned instanceof MaterialList)) {
+                return false;
+            }
+
+            return [
+                [array_keys($returned->getMaterials())[$pos-1], $material]
+            ];
+        });
+    }
+
+    public function ItShouldList_Acquisitions($int) {
+        $this->thenReturn(function ($returned) use ($int) {
+            if (!($returned instanceof AcquisitionList)) {
+                return false;
+            }
+
+            return [
+                'count' => [count($returned->getAcquisitions()), $int]
+            ];
+        });
+    }
+
+    public function Acqusition_ShouldHaveTheCaption($id, $caption) {
+        $this->thenReturn(function ($returned) use ($id, $caption) {
+            if (!($returned instanceof AcquisitionList)) {
+                return false;
+            }
+
+            return [
+                [$returned->getAcquisitions()[$id], $caption]
+            ];
+        });
+    }
+
+    public function Acqusition_ShouldBe($pos, $id) {
+        $this->thenReturn(function ($returned) use ($pos, $id) {
+            if (!($returned instanceof AcquisitionList)) {
+                return false;
+            }
+
+            return [
+                [array_keys($returned->getAcquisitions())[$pos-1], $id]
             ];
         });
     }

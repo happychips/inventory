@@ -36,6 +36,7 @@ class Inventory {
 
     public function handleAcquireMaterial(AcquireMaterial $c) {
         return new MaterialAcquired(
+            AcquisitionIdentifier::generate(),
             $c->getMaterial(),
             $c->getAmount(),
             $c->getCost(),

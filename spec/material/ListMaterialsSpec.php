@@ -1,7 +1,6 @@
 <?php
 namespace spec\happy\inventory\material;
 
-use rtens\scrut\Failure;
 use spec\happy\inventory\scenario\Specification;
 
 class ListMaterialsSpec extends Specification {
@@ -19,6 +18,13 @@ class ListMaterialsSpec extends Specification {
     }
 
     function sortByName() {
-        throw new Failure('Incomplete');
+        $this->given->IRegisteredTheMaterial_WithTheUnit('Potatoes', 'kg');
+        $this->given->IRegisteredTheMaterial_WithTheUnit('Tomatoes', 'kg');
+        $this->given->IRegisteredTheMaterial_WithTheUnit('Carrots', 'kg');
+        $this->when->IListAllMaterials();
+        $this->then->ItSholdList_Materials(3);
+        $this->then->Material_ShouldBe(1, 'Carrots');
+        $this->then->Material_ShouldBe(2, 'Potatoes');
+        $this->then->Material_ShouldBe(3, 'Tomatoes');
     }
 }

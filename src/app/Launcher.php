@@ -3,6 +3,7 @@ namespace happy\inventory\app;
 
 use happy\inventory\AcquireMaterial;
 use happy\inventory\ConsumeMaterial;
+use happy\inventory\ListAcquisitions;
 use happy\inventory\ListMaterials;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\MaterialIdentifier;
@@ -50,7 +51,7 @@ class Launcher {
                 return $this->app->handle(new ListMaterials())->getMaterials();
             });
             $domin->identifiers->setProvider(AcquisitionIdentifier::class, function () {
-                return [];
+                return $this->app->handle(new ListAcquisitions())->getAcquisitions();
             });
         }, WebDelivery::init()));
     }

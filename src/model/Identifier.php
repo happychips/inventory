@@ -23,4 +23,8 @@ abstract class Identifier {
     function __toString() {
         return $this->identifier;
     }
+
+    public static function generate() {
+        return new static(uniqid());
+    }
 }
