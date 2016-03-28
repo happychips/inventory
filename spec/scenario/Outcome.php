@@ -69,8 +69,7 @@ class Outcome {
             return [
                 [$e->getMaterial(), new MaterialIdentifier($material)],
                 [$e->getAmount(), intval($amount)],
-                [$e->getCost(), intval($cost) * 100],
-                [$e->getCurrency(), $currency]
+                [$e->getCost(), new Money($cost, $currency)],
             ];
         });
         $this->pass();

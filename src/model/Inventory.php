@@ -32,7 +32,6 @@ class Inventory {
             $c->getMaterial(),
             $c->getAmount(),
             $c->getCost(),
-            $c->getCurrency(),
             $c->getDocuments(),
             $this->session->requireLogin(),
             $c->getWhen());

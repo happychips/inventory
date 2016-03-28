@@ -2,6 +2,7 @@
 namespace happy\inventory\events;
 
 use happy\inventory\model\MaterialIdentifier;
+use happy\inventory\model\Money;
 use happy\inventory\model\UserIdentifier;
 use rtens\domin\parameters\File;
 
@@ -10,29 +11,25 @@ class MaterialAcquired extends Event {
     private $material;
     /** @var int */
     private $amount;
-    /** @var int */
+    /** @var Money */
     private $cost;
-    /** @var string */
-    private $currency;
     /** @var array|File[] */
     private $documents;
 
     /**
      * @param MaterialIdentifier $material
      * @param int $amount
-     * @param int $cost
-     * @param string $currency
+     * @param Money $cost
      * @param File[] $documents
      * @param UserIdentifier $who
      * @param \DateTimeImmutable|null $when
      */
-    public function __construct(MaterialIdentifier $material, $amount, $cost, $currency, array $documents, UserIdentifier $who, \DateTimeImmutable $when = null) {
+    public function __construct(MaterialIdentifier $material, $amount, Money $cost, array $documents, UserIdentifier $who, \DateTimeImmutable $when = null) {
         parent::__construct($who, $when);
 
         $this->material = $material;
         $this->amount = $amount;
         $this->cost = $cost;
-        $this->currency = $currency;
         $this->documents = $documents;
     }
 
@@ -51,17 +48,10 @@ class MaterialAcquired extends Event {
     }
 
     /**
-     * @return int
+     * @return Money
      */
     public function getCost() {
         return $this->cost;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCurrency() {
-        return $this->currency;
     }
 
     /**

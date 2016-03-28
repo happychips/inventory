@@ -3,6 +3,7 @@ namespace happy\inventory;
 
 use happy\inventory\app\Command;
 use happy\inventory\model\MaterialIdentifier;
+use happy\inventory\model\Money;
 use rtens\domin\parameters\File;
 
 class AcquireMaterial extends Command {
@@ -10,28 +11,24 @@ class AcquireMaterial extends Command {
     private $material;
     /** @var int */
     private $amount;
-    /** @var int */
+    /** @var Money */
     private $cost;
-    /** @var string */
-    private $currency;
     /** @var array|File[] */
     private $documents;
 
     /**
      * @param MaterialIdentifier $material
      * @param int $amount
-     * @param int $cost
-     * @param string $currency
+     * @param Money $cost
      * @param File[] $documents
      * @param \DateTimeImmutable|null $when
      */
-    public function __construct(MaterialIdentifier $material, $amount, $cost, $currency, array $documents = [], \DateTimeImmutable $when = null) {
+    public function __construct(MaterialIdentifier $material, $amount, Money $cost, array $documents = [], \DateTimeImmutable $when = null) {
         parent::__construct($when);
 
         $this->material = $material;
         $this->amount = $amount;
         $this->cost = $cost;
-        $this->currency = $currency;
         $this->documents = $documents;
     }
 
@@ -57,16 +54,9 @@ class AcquireMaterial extends Command {
     }
 
     /**
-     * @return int
+     * @return Money
      */
     public function getCost() {
         return $this->cost;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCurrency() {
-        return $this->currency;
     }
 }

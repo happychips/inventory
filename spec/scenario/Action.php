@@ -33,23 +33,20 @@ class Action {
     }
 
     public function IAcquire_UnitsOf_For($amount, $material, $cost, $currency) {
-        $this->karma->when(new AcquireMaterial(
-            new MaterialIdentifier($material),
-            intval($amount),
-            intval($cost * 100),
-            $currency,
-            [],
-            $this->when
-        ));
+        $this->AcquireMaterial($amount, $material, $cost, $currency);
     }
 
     public function IAcquire_UnitsOf_WithTheDocuments($amount, $material, $documents) {
+        $this->AcquireMaterial($amount, $material, 42, 'FOO', $documents);
+    }
+
+    private function AcquireMaterial($amount, $material, $cost, $currency, $documents = []) {
         $this->karma->when(new AcquireMaterial(
             new MaterialIdentifier($material),
             intval($amount),
-            4200,
-            'foo',
-            $this->makeFiles($documents)
+            new Money($cost, $currency),
+            $this->makeFiles($documents),
+            $this->when
         ));
     }
 
