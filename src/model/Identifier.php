@@ -1,7 +1,7 @@
 <?php
 namespace happy\inventory\model;
 
-class Identifier {
+abstract class Identifier {
 
     /** @var string */
     private $identifier;

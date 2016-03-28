@@ -1,9 +1,11 @@
 <?php
 namespace spec\happy\inventory\scenario;
 
+use happy\inventory\events\Event;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialRegistered;
 use happy\inventory\model\MaterialIdentifier;
+use happy\inventory\model\UserIdentifier;
 use rtens\domin\parameters\File;
 use rtens\domin\parameters\file\MemoryFile;
 use rtens\scrut\fixtures\ExceptionFixture;
@@ -43,9 +45,19 @@ class Outcome {
     }
 
     public function AllEventsShouldHaveHappenedAt($when) {
+        $this->karma->thenShould(Event::class, function (Event $e) use ($when) {
+            return [
+                [$e->getWhen()->format('c'), (new \DateTimeImmutable($when))->format('c')]
+            ];
+        }, count($this->karma->allEvents()));
     }
 
     public function AllEventsShouldBeCausedBy($user) {
+        $this->karma->thenShould(Event::class, function (Event $e) use ($user) {
+            return [
+                [$e->getWho(), new UserIdentifier($user)]
+            ];
+        }, count($this->karma->allEvents()));
     }
 
     public function _UnitsOf_For__ShouldBeAcquired($amount, $material, $cost, $currency) {

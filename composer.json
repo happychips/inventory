@@ -14,7 +14,7 @@
     "rtens/domin": "^0.8.2"
   },
   "require-dev": {
-    "rtens/scrut": "1.*"
+    "rtens/scrut": "dev-master"
   },
   "autoload": {
     "psr-4": {

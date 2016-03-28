@@ -1,20 +1,23 @@
 <?php
-namespace happy\inventory;
+namespace happy\inventory\app;
 
 use happy\inventory\model\Inventory;
+use happy\inventory\model\Session;
 use watoki\karma\command\AggregateFactory;
 use watoki\karma\command\CommandHandler;
 use watoki\karma\EventStore;
 
 class Application implements AggregateFactory {
-
+    /** @var Session */
+    private $session;
     /** @var CommandHandler */
     private $command;
 
     /**
      * @param EventStore $events
      */
-    public function __construct(EventStore $events) {
+    public function __construct(EventStore $events, Session $session) {
+        $this->session = $session;
         $this->command = new CommandHandler($events, $this);
     }
 
@@ -51,6 +54,6 @@ class Application implements AggregateFactory {
      * @return object
      */
     public function buildAggregateRoot($identifier) {
-        return new Inventory();
+        return new Inventory($this->session);
     }
 }

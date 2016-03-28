@@ -2,9 +2,10 @@
 namespace happy\inventory\events;
 
 use happy\inventory\model\MaterialIdentifier;
+use happy\inventory\model\UserIdentifier;
 use rtens\domin\parameters\File;
 
-class MaterialAcquired {
+class MaterialAcquired extends Event {
     /** @var MaterialIdentifier */
     private $material;
     /** @var int */
@@ -22,8 +23,12 @@ class MaterialAcquired {
      * @param int $cost
      * @param string $currency
      * @param File[] $documents
+     * @param UserIdentifier $who
+     * @param \DateTimeImmutable|null $when
      */
-    public function __construct(MaterialIdentifier $material, $amount, $cost, $currency, array $documents) {
+    public function __construct(MaterialIdentifier $material, $amount, $cost, $currency, array $documents, UserIdentifier $who, \DateTimeImmutable $when = null) {
+        parent::__construct($who, $when);
+
         $this->material = $material;
         $this->amount = $amount;
         $this->cost = $cost;

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d1025a23d1a67e4e06c3db7e6d5cf821",
-    "content-hash": "a377f7d4a8d64344c28979326ed9d269",
+    "hash": "92cdb3185c6f2f020cb28fdbd2de77ca",
+    "content-hash": "9d701853b92d2718e9b2e57a47ae5e00",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -348,16 +348,16 @@
     "packages-dev": [
         {
             "name": "rtens/scrut",
-            "version": "v1.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rtens/scrut.git",
-                "reference": "aac4c34f19c93a59fd917175ec7e64b9298c0921"
+                "reference": "83a23fab0e9ae23b6a7373fde9ef0e548162f40b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rtens/scrut/zipball/aac4c34f19c93a59fd917175ec7e64b9298c0921",
-                "reference": "aac4c34f19c93a59fd917175ec7e64b9298c0921",
+                "url": "https://api.github.com/repos/rtens/scrut/zipball/83a23fab0e9ae23b6a7373fde9ef0e548162f40b",
+                "reference": "83a23fab0e9ae23b6a7373fde9ef0e548162f40b",
                 "shasum": ""
             },
             "require": {
@@ -369,9 +369,8 @@
             ],
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "rtens\\scrut": "src/",
-                    "spec\\rtens\\scrut": ""
+                "psr-4": {
+                    "rtens\\scrut\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -393,13 +392,14 @@
                 "test",
                 "test runner"
             ],
-            "time": "2016-02-17 06:03:43"
+            "time": "2016-03-08 12:33:18"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "watoki/stores": 20
+        "watoki/stores": 20,
+        "rtens/scrut": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

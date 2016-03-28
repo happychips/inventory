@@ -1,7 +1,9 @@
 <?php
 namespace happy\inventory\events;
 
-class MaterialRegistered {
+use happy\inventory\model\UserIdentifier;
+
+class MaterialRegistered extends Event {
     /** @var string */
     private $name;
     /** @var string */
@@ -10,8 +12,11 @@ class MaterialRegistered {
     /**
      * @param string $name
      * @param string $unit
+     * @param UserIdentifier $who
+     * @param \DateTimeImmutable|null $when
      */
-    public function __construct($name, $unit) {
+    public function __construct($name, $unit, UserIdentifier $who, \DateTimeImmutable $when = null) {
+        parent::__construct($who, $when);
         $this->name = $name;
         $this->unit = $unit;
     }

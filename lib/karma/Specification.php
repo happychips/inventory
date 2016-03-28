@@ -17,7 +17,7 @@ abstract class Specification {
     private $caught;
 
     public function __construct() {
-        $this->events = $this->makeEventStore();
+        $this->reset();
     }
 
     /**
@@ -72,10 +72,17 @@ abstract class Specification {
         }
     }
 
-    public function thenShould($eventOrClass, callable $condition = null) {
+    public function thenShould($eventOrClass, callable $condition = null, $count = null) {
         $filtered = $this->mapFilters($eventOrClass, $condition);
-        if (!$this->evaluateFilters($filtered)) {
-            $this->fail("No matching event [" . ValuePrinter::serialize($eventOrClass) . "] was recorded: " .
+        $evaluated = $this->evaluateFilters($filtered);
+
+        if (is_null($count)) {
+            if (!$evaluated) {
+                $this->fail("No matching event [" . ValuePrinter::serialize($eventOrClass) . "] was recorded: " .
+                    $this->printFilters($filtered));
+            }
+        } else if (count($evaluated) != $count) {
+            $this->fail("Recorded [" . count($evaluated) . "] of [" . ValuePrinter::serialize($eventOrClass) . "] instead of [$count]: " .
                 $this->printFilters($filtered));
         }
     }
@@ -184,5 +191,13 @@ abstract class Specification {
             }
         }
         return ValuePrinter::serialize($printed);
+    }
+
+    public function allEvents() {
+        return $this->events->allEvents();
+    }
+
+    public function reset() {
+        $this->events = $this->makeEventStore();
     }
 }

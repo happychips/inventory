@@ -1,7 +1,9 @@
 <?php
 namespace happy\inventory;
 
-class RegisterMaterial {
+use happy\inventory\app\Command;
+
+class RegisterMaterial extends Command {
 
     /** @var string */
     private $name;
@@ -11,9 +13,12 @@ class RegisterMaterial {
     /**
      * @param string $name
      * @param string $unit
+     * @param \DateTimeImmutable|null $when
      * @throws \Exception
      */
-    public function __construct($name, $unit) {
+    public function __construct($name, $unit, \DateTimeImmutable $when = null) {
+        parent::__construct($when);
+
         $this->name = trim($name);
         $this->unit = trim($unit);
 

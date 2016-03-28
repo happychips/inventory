@@ -11,6 +11,8 @@ class Action {
 
     /** @var Specification */
     private $karma;
+    /** @var \DateTimeImmutable */
+    private $when;
 
     /**
      * @param Specification $karma
@@ -20,7 +22,7 @@ class Action {
     }
 
     public function IRegisterAMaterial_WithTheUnit($material, $unit) {
-        $this->karma->when(new RegisterMaterial($material, $unit));
+        $this->karma->when(new RegisterMaterial($material, $unit, $this->when));
     }
 
     public function IRegisterAProduct_WithTheUnit($product, $unit) {
@@ -31,7 +33,9 @@ class Action {
             new MaterialIdentifier($material),
             intval($amount),
             intval($cost * 100),
-            $currency
+            $currency,
+            [],
+            $this->when
         ));
     }
 
@@ -81,5 +85,9 @@ class Action {
     }
 
     public function IUpdateTheStockOf_To_Units($product, $amount) {
+    }
+
+    public function ISetWhenTo($when) {
+        $this->when = new \DateTimeImmutable($when);
     }
 }

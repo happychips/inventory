@@ -7,6 +7,10 @@ use spec\happy\inventory\scenario\Specification;
  */
 class RegisterMaterialSpec extends Specification {
 
+    function before() {
+        $this->given->IAmLoggedInAs('admin');
+    }
+
     function nameCannotBeEmpty() {
         $this->tryThat->IRegisterAMaterial_WithTheUnit("  \t ", 'kg');
         $this->then->ItShouldFailWith('The article name cannot be empty');

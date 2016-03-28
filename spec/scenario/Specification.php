@@ -1,7 +1,7 @@
 <?php
 namespace spec\happy\inventory\scenario;
 
-use happy\inventory\Application;
+use happy\inventory\app\Application;
 use rtens\scrut\failures\IncompleteTestFailure;
 use rtens\scrut\fixtures\ExceptionFixture;
 use watoki\karma\command\EventListener;
@@ -16,13 +16,17 @@ use watoki\karma\Specification as KarmaSpecification;
  */
 class Specification extends KarmaSpecification {
 
+    private $session;
+
     /**
      * @param ExceptionFixture $try <-
      */
     public function __construct(ExceptionFixture $try) {
         parent::__construct();
 
-        $this->given = new Context();
+        $this->session = new FakeSession();
+
+        $this->given = new Context($this, $this->session);
         $this->when = new Action($this);
         $this->tryThat = new Experiment($this->when, $try);
         $this->then = new Outcome($this, $try);
@@ -32,6 +36,7 @@ class Specification extends KarmaSpecification {
      * @return EventListener[]
      */
     protected function listeners() {
+        return [];
     }
 
     /**
@@ -40,7 +45,7 @@ class Specification extends KarmaSpecification {
      * @return mixed
      */
     protected function handle(EventStore $events, $commandOrQuery) {
-        (new Application($events))->handle($commandOrQuery);
+        (new Application($events, $this->session))->handle($commandOrQuery);
     }
 
     protected function skip() {

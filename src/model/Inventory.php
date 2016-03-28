@@ -7,15 +7,18 @@ use happy\inventory\events\MaterialRegistered;
 use happy\inventory\RegisterMaterial;
 
 class Inventory {
+    /** @var Session */
+    private $session;
 
     /**
-     * Inventory constructor.
+     * @param Session $session
      */
-    public function __construct() {
+    public function __construct(Session $session) {
+        $this->session = $session;
     }
 
     public function handleRegisterMaterial(RegisterMaterial $c) {
-        return new MaterialRegistered($c->getName(), $c->getUnit());
+        return new MaterialRegistered($c->getName(), $c->getUnit(), $this->session->requireLogin(), $c->getWhen());
     }
 
     public function handleAcquireMaterial(AcquireMaterial $c) {
@@ -24,7 +27,9 @@ class Inventory {
             $c->getAmount(),
             $c->getCost(),
             $c->getCurrency(),
-            $c->getDocuments()
+            $c->getDocuments(),
+            $this->session->requireLogin(),
+            $c->getWhen()
         );
     }
 }

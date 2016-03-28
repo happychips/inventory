@@ -1,10 +1,11 @@
 <?php
 namespace happy\inventory;
 
+use happy\inventory\app\Command;
 use happy\inventory\model\MaterialIdentifier;
 use rtens\domin\parameters\File;
 
-class AcquireMaterial {
+class AcquireMaterial extends Command {
     /** @var MaterialIdentifier */
     private $material;
     /** @var int */
@@ -22,8 +23,11 @@ class AcquireMaterial {
      * @param int $cost
      * @param string $currency
      * @param File[] $documents
+     * @param \DateTimeImmutable|null $when
      */
-    public function __construct(MaterialIdentifier $material, $amount, $cost, $currency, array $documents = []) {
+    public function __construct(MaterialIdentifier $material, $amount, $cost, $currency, array $documents = [], \DateTimeImmutable $when = null) {
+        parent::__construct($when);
+
         $this->material = $material;
         $this->amount = $amount;
         $this->cost = $cost;
