@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "92cdb3185c6f2f020cb28fdbd2de77ca",
-    "content-hash": "9d701853b92d2718e9b2e57a47ae5e00",
+    "hash": "af18e9884646e0be06bef58ac254ad32",
+    "content-hash": "ddb1e6fec5de02d6e282f3fcbaeb05f4",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -54,16 +54,16 @@
         },
         {
             "name": "rtens/domin",
-            "version": "v0.8.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rtens/domin.git",
-                "reference": "34d9dcdbc3f8e774740ef1ee51871a91e0777615"
+                "reference": "f576123082447f34ce4889419b78bf2f5b714c2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rtens/domin/zipball/34d9dcdbc3f8e774740ef1ee51871a91e0777615",
-                "reference": "34d9dcdbc3f8e774740ef1ee51871a91e0777615",
+                "url": "https://api.github.com/repos/rtens/domin/zipball/f576123082447f34ce4889419b78bf2f5b714c2e",
+                "reference": "f576123082447f34ce4889419b78bf2f5b714c2e",
                 "shasum": ""
             },
             "require": {
@@ -107,7 +107,7 @@
                 "ddd",
                 "domain model"
             ],
-            "time": "2016-03-03 08:53:55"
+            "time": "2016-03-10 12:06:34"
         },
         {
             "name": "watoki/collections",
@@ -153,6 +153,112 @@
                 "watoki"
             ],
             "time": "2015-08-07 08:22:49"
+        },
+        {
+            "name": "watoki/curir",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/watoki/curir.git",
+                "reference": "20a44e1d1980f472369991e19ef8d3bafda79a64"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/watoki/curir/zipball/20a44e1d1980f472369991e19ef8d3bafda79a64",
+                "reference": "20a44e1d1980f472369991e19ef8d3bafda79a64",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4",
+                "watoki/collections": "*",
+                "watoki/deli": "*",
+                "watoki/factory": "*",
+                "watoki/stores": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*@stable",
+                "watoki/scrut": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "watoki\\curir\\": "src/",
+                    "spec\\watoki\\curir\\": "spec/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nikolas Martens",
+                    "email": "Nikolas.M@rtens.org",
+                    "homepage": "http://rtens.org"
+                }
+            ],
+            "description": "Web delivery system for PHP applications",
+            "homepage": "http://github.com/watoki/curir",
+            "keywords": [
+                "mvc",
+                "router",
+                "routing",
+                "watoki"
+            ],
+            "time": "2016-03-11 11:07:22"
+        },
+        {
+            "name": "watoki/deli",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/watoki/deli.git",
+                "reference": "cdc369f29d37cb51addbd9547acee5abf8b5c3e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/watoki/deli/zipball/cdc369f29d37cb51addbd9547acee5abf8b5c3e4",
+                "reference": "cdc369f29d37cb51addbd9547acee5abf8b5c3e4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4",
+                "watoki/collections": "*",
+                "watoki/factory": "*",
+                "watoki/reflect": "*",
+                "watoki/stores": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*@stable",
+                "watoki/scrut": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "watoki\\deli\\": "src/",
+                    "spec\\watoki\\deli\\": "spec/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nikolas Martens",
+                    "email": "Nikolas.M@rtens.org",
+                    "homepage": "http://rtens.org"
+                }
+            ],
+            "description": "Abstract delivery system for PHP applications",
+            "homepage": "http://github.com/watoki/deli",
+            "keywords": [
+                "delivery",
+                "router",
+                "routing",
+                "watoki"
+            ],
+            "time": "2016-03-10 10:38:05"
         },
         {
             "name": "watoki/factory",
@@ -399,6 +505,9 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "watoki/stores": 20,
+        "rtens/domin": 20,
+        "watoki/curir": 20,
+        "watoki/deli": 20,
         "rtens/scrut": 20
     },
     "prefer-stable": false,

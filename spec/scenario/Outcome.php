@@ -12,6 +12,7 @@ use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\model\UserIdentifier;
+use happy\inventory\projecting\MaterialList;
 use rtens\domin\parameters\File;
 use rtens\domin\parameters\file\MemoryFile;
 use rtens\scrut\fixtures\ExceptionFixture;
@@ -35,6 +36,11 @@ class Outcome {
 
     private function then($eventClass, $condition = null, $count = null) {
         $this->karma->thenShould($eventClass, $condition, $count);
+        $this->try->thenNoExceptionShouldBeThrown();
+    }
+
+    private function thenReturn(callable $condition) {
+        $this->karma->thenItShouldReturn($condition);
         $this->try->thenNoExceptionShouldBeThrown();
     }
 
@@ -162,5 +168,29 @@ class Outcome {
     }
 
     public function TheStockOf_ShouldBeUpdatedTo_Units($product, $amount) {
+    }
+
+    public function ItSholdList_Materials($int) {
+        $this->thenReturn(function ($returned) use ($int) {
+            if (!($returned instanceof MaterialList)) {
+                return false;
+            }
+
+            return [
+                'count' => [count($returned->getMaterials()), $int]
+            ];
+        });
+    }
+
+    public function Material_ShouldHaveTheCaption($pos, $caption) {
+        $this->thenReturn(function ($returned) use ($pos, $caption) {
+            if (!($returned instanceof MaterialList)) {
+                return false;
+            }
+
+            return [
+                [$returned->getMaterials()[$pos], $caption]
+            ];
+        });
     }
 }

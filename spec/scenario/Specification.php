@@ -45,7 +45,7 @@ class Specification extends KarmaSpecification {
      * @return mixed
      */
     protected function handle(EventStore $events, $commandOrQuery) {
-        (new Application($events, $this->session))->handle($commandOrQuery);
+        return (new Application($events, $this->session))->handle($commandOrQuery);
     }
 
     protected function skip() {

@@ -1,6 +1,8 @@
 <?php
 namespace spec\happy\inventory\scenario;
 
+use happy\inventory\events\MaterialRegistered;
+use happy\inventory\model\Inventory;
 use happy\inventory\model\Time;
 use happy\inventory\model\UserIdentifier;
 use watoki\karma\Specification as KarmaSpecification;
@@ -31,5 +33,13 @@ class Context {
 
     public function nothingHasHappened() {
         $this->karma->reset();
+    }
+
+    public function IRegisteredTheMaterial_WithTheUnit($material, $unit) {
+        $this->karma->given(new MaterialRegistered(
+            $material,
+            $unit,
+            new UserIdentifier('test')
+        ), Inventory::IDENTIFIER);
     }
 }

@@ -13,27 +13,27 @@ class AcquireMaterial extends Command {
     private $amount;
     /** @var Money */
     private $cost;
-    /** @var array|File[] */
+    /** @var File[]|null */
     private $documents;
 
     /**
      * @param MaterialIdentifier $material
      * @param int $amount
      * @param Money $cost
-     * @param File[] $documents
+     * @param File[]|null $documents
      * @param \DateTimeImmutable|null $when
      */
-    public function __construct(MaterialIdentifier $material, $amount, Money $cost, array $documents = [], \DateTimeImmutable $when = null) {
+    public function __construct(MaterialIdentifier $material, $amount, Money $cost, array $documents = null, \DateTimeImmutable $when = null) {
         parent::__construct($when);
 
         $this->material = $material;
         $this->amount = $amount;
         $this->cost = $cost;
-        $this->documents = $documents;
+        $this->documents = $documents ?: [];
     }
 
     /**
-     * @return array|File[]
+     * @return File[]|null
      */
     public function getDocuments() {
         return $this->documents;

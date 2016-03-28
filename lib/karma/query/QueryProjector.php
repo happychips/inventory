@@ -23,9 +23,15 @@ class QueryProjector {
     /**
      * @param mixed $query
      * @return object
+     * @throws \Exception
      */
     public function project($query) {
         $projection = $this->projections->buildProjection($query);
+
+        if (!is_object($projection)) {
+            throw new \Exception('Projections must be objects.');
+        }
+
         $this->applyEvents($projection, $this->store->allEvents());
 
         return $projection;

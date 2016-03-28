@@ -10,9 +10,9 @@ class ReceiveDelivery extends Command {
 
     /** @var AcquisitionIdentifier */
     private $acquisition;
-    /** @var File[] */
+    /** @var File[]|null */
     private $documents;
-    /** @var ExtraCost[] */
+    /** @var ExtraCost[]|null */
     private $extraCosts;
     /** @var int|null */
     private $amount;
@@ -20,15 +20,15 @@ class ReceiveDelivery extends Command {
     /**
      * @param AcquisitionIdentifier $acquisition
      * @param null|int $amount
-     * @param File[] $documents
-     * @param ExtraCost[] $extraCosts
+     * @param File[]|null $documents
+     * @param ExtraCost[]|null $extraCosts
      * @param \DateTimeImmutable $when
      */
-    public function __construct(AcquisitionIdentifier $acquisition, $amount = null, array $documents = [], array $extraCosts = [], \DateTimeImmutable $when = null) {
+    public function __construct(AcquisitionIdentifier $acquisition, $amount = null, array $documents = null, array $extraCosts = null, \DateTimeImmutable $when = null) {
         parent::__construct($when);
         $this->acquisition = $acquisition;
-        $this->documents = $documents;
-        $this->extraCosts = $extraCosts;
+        $this->documents = $documents ?: [];
+        $this->extraCosts = $extraCosts ?: [];
         $this->amount = $amount;
     }
 
@@ -47,14 +47,14 @@ class ReceiveDelivery extends Command {
     }
 
     /**
-     * @return File[]
+     * @return File[]|null
      */
     public function getDocuments() {
         return $this->documents;
     }
 
     /**
-     * @return ExtraCost[]
+     * @return ExtraCost[]|null
      */
     public function getExtraCosts() {
         return $this->extraCosts;

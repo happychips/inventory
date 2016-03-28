@@ -3,6 +3,7 @@ namespace spec\happy\inventory\scenario;
 
 use happy\inventory\AcquireMaterial;
 use happy\inventory\ConsumeMaterial;
+use happy\inventory\ListMaterials;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
@@ -42,7 +43,7 @@ class Action {
         $this->AcquireMaterial($amount, $material, 42, 'FOO', $documents);
     }
 
-    private function AcquireMaterial($amount, $material, $cost, $currency, $documents = []) {
+    private function AcquireMaterial($amount, $material, $cost, $currency, $documents = null) {
         $this->karma->when(new AcquireMaterial(
             new MaterialIdentifier($material),
             intval($amount),
@@ -68,7 +69,7 @@ class Action {
         $this->ReceiveDelivery($acquisition, $amount);
     }
 
-    private function ReceiveDelivery($acquisition, $amount = null, $extraCosts = [], $documents = []) {
+    private function ReceiveDelivery($acquisition, $amount = null, $extraCosts = null, $documents = null) {
         $this->karma->when(new ReceiveDelivery(
             new AcquisitionIdentifier($acquisition),
             $amount,
@@ -121,8 +122,16 @@ class Action {
      * @return array
      */
     private function makeFiles($documents) {
+        if (!$documents) {
+            return $documents;
+        }
+
         return array_map(function ($document) {
             return new MemoryFile($document, 'type/foo', $document . 'content');
         }, $documents);
+    }
+
+    public function IListAllMaterials() {
+        $this->karma->when(new ListMaterials());
     }
 }

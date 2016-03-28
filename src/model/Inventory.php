@@ -13,6 +13,9 @@ use happy\inventory\RegisterMaterial;
 use happy\inventory\UpdateInventory;
 
 class Inventory {
+
+    const IDENTIFIER = 'inventory';
+
     /** @var Session */
     private $session;
 
