@@ -1,7 +1,11 @@
 <?php
 namespace spec\happy\inventory\scenario;
 
+use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\model\MaterialIdentifier;
+use rtens\domin\parameters\File;
+use rtens\domin\parameters\file\MemoryFile;
 use rtens\scrut\fixtures\ExceptionFixture;
 use watoki\karma\Specification;
 
@@ -14,6 +18,7 @@ class Outcome {
 
     /**
      * @param Specification $karma
+     * @param ExceptionFixture $try
      */
     public function __construct(Specification $karma, ExceptionFixture $try) {
         $this->karma = $karma;
@@ -31,7 +36,7 @@ class Outcome {
                 [$e->getUnit(), $unit]
             ];
         });
-        $this->try->thenNoExceptionShouldBeThrown();
+        $this->pass();
     }
 
     public function AProduct_WithTheUnit_ShouldBeRegistered($article, $unit) {
@@ -44,9 +49,26 @@ class Outcome {
     }
 
     public function _UnitsOf_For__ShouldBeAcquired($amount, $material, $cost, $currency) {
+        $this->karma->thenShould(MaterialAcquired::class, function (MaterialAcquired $e) use ($amount, $material, $cost, $currency) {
+            return [
+                [$e->getMaterial(), new MaterialIdentifier($material)],
+                [$e->getAmount(), intval($amount)],
+                [$e->getCost(), intval($cost) * 100],
+                [$e->getCurrency(), $currency]
+            ];
+        });
+        $this->pass();
     }
 
     public function TheAcquisitionShouldContainTheDocuments($documents) {
+        $this->karma->thenShould(MaterialAcquired::class, function (MaterialAcquired $e) use ($documents) {
+            $conditions = [];
+            foreach ($documents as $i => $name) {
+                $conditions[] = [$e->getDocuments()[$i], new MemoryFile($name, 'type/foo', $name . 'content')];
+            }
+            return $conditions;
+        });
+        $this->pass();
     }
 
     public function _ShouldBeReceived($acquisition) {
@@ -83,5 +105,9 @@ class Outcome {
     }
 
     public function TheStockOf_ShouldBeUpdatedTo_Units($product, $amount) {
+    }
+
+    private function pass() {
+        $this->try->thenNoExceptionShouldBeThrown();
     }
 }

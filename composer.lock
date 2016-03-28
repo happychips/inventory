@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5116a35c013ac0ef54334892c297bc70",
-    "content-hash": "41a517abbc4819ca4e9ac0fdad492e2e",
+    "hash": "d1025a23d1a67e4e06c3db7e6d5cf821",
+    "content-hash": "a377f7d4a8d64344c28979326ed9d269",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -53,6 +53,63 @@
             "time": "2015-09-19 14:15:08"
         },
         {
+            "name": "rtens/domin",
+            "version": "v0.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rtens/domin.git",
+                "reference": "34d9dcdbc3f8e774740ef1ee51871a91e0777615"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rtens/domin/zipball/34d9dcdbc3f8e774740ef1ee51871a91e0777615",
+                "reference": "34d9dcdbc3f8e774740ef1ee51871a91e0777615",
+                "shasum": ""
+            },
+            "require": {
+                "watoki/factory": "1.*",
+                "watoki/reflect": "1.*"
+            },
+            "require-dev": {
+                "rtens/mockster": "3.*",
+                "rtens/scrut": "1.*"
+            },
+            "suggest": {
+                "erusev/parsedown": "To parse Action and Parameter descriptions for HTML output.",
+                "league/climate": "Used by some CLI components",
+                "mobiledetect/mobiledetectlib": "To enable mobile-specific client-side code only when on mobile.",
+                "silex/silex": "Supported delivery system",
+                "watoki/curir": "Supported delivery system."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "rtens\\domin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nikolas Martens",
+                    "email": "Nikolas.M@rtens.org",
+                    "homepage": "http://rtens.org"
+                }
+            ],
+            "description": "General purpose DDD-friendly administration interface",
+            "homepage": "http://github.com/rtens/domin",
+            "keywords": [
+                "admin",
+                "administration",
+                "cms",
+                "ddd",
+                "domain model"
+            ],
+            "time": "2016-03-03 08:53:55"
+        },
+        {
             "name": "watoki/collections",
             "version": "v1.1",
             "source": {
@@ -96,6 +153,53 @@
                 "watoki"
             ],
             "time": "2015-08-07 08:22:49"
+        },
+        {
+            "name": "watoki/factory",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/watoki/factory.git",
+                "reference": "689d178b1f475ae34e6f1b1bdaa3d17d07cee2f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/watoki/factory/zipball/689d178b1f475ae34e6f1b1bdaa3d17d07cee2f2",
+                "reference": "689d178b1f475ae34e6f1b1bdaa3d17d07cee2f2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.8",
+                "watoki/reflect": "*"
+            },
+            "require-dev": {
+                "watoki/scrut": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "watoki\\factory": "src/",
+                    "spec\\watoki\\factory": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nikolas Martens",
+                    "email": "Nikolas.M@rtens.org",
+                    "homepage": "http://rtens.org"
+                }
+            ],
+            "description": "A simple dependency injection container for PHP",
+            "homepage": "http://github.com/watoki/factory",
+            "keywords": [
+                "dependency injection",
+                "watoki"
+            ],
+            "time": "2016-02-17 05:49:53"
         },
         {
             "name": "watoki/reflect",
@@ -290,53 +394,6 @@
                 "test runner"
             ],
             "time": "2016-02-17 06:03:43"
-        },
-        {
-            "name": "watoki/factory",
-            "version": "v1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/watoki/factory.git",
-                "reference": "689d178b1f475ae34e6f1b1bdaa3d17d07cee2f2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/watoki/factory/zipball/689d178b1f475ae34e6f1b1bdaa3d17d07cee2f2",
-                "reference": "689d178b1f475ae34e6f1b1bdaa3d17d07cee2f2",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.8",
-                "watoki/reflect": "*"
-            },
-            "require-dev": {
-                "watoki/scrut": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "watoki\\factory": "src/",
-                    "spec\\watoki\\factory": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nikolas Martens",
-                    "email": "Nikolas.M@rtens.org",
-                    "homepage": "http://rtens.org"
-                }
-            ],
-            "description": "A simple dependency injection container for PHP",
-            "homepage": "http://github.com/watoki/factory",
-            "keywords": [
-                "dependency injection",
-                "watoki"
-            ],
-            "time": "2016-02-17 05:49:53"
         }
     ],
     "aliases": [],

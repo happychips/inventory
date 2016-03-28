@@ -7,10 +7,6 @@ use spec\happy\inventory\scenario\Specification;
  */
 class AcquireMaterialSpec extends Specification {
 
-    function before() {
-        $this->given->IRegisteredAMaterial_WithTheUnit('Potatoes', 'kg');
-    }
-
     function succeed() {
         $this->when->IAcquire_UnitsOf_For(12, 'Potatoes', 6, 'BTN');
         $this->then->_UnitsOf_For__ShouldBeAcquired(12, 'Potatoes', 6, 'BTN');

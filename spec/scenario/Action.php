@@ -1,7 +1,10 @@
 <?php
 namespace spec\happy\inventory\scenario;
 
+use happy\inventory\AcquireMaterial;
+use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\RegisterMaterial;
+use rtens\domin\parameters\file\MemoryFile;
 use watoki\karma\Specification;
 
 class Action {
@@ -24,9 +27,24 @@ class Action {
     }
 
     public function IAcquire_UnitsOf_For($amount, $material, $cost, $currency) {
+        $this->karma->when(new AcquireMaterial(
+            new MaterialIdentifier($material),
+            intval($amount),
+            intval($cost * 100),
+            $currency
+        ));
     }
 
     public function IAcquire_UnitsOf_WithTheDocuments($amount, $material, $documents) {
+        $this->karma->when(new AcquireMaterial(
+            new MaterialIdentifier($material),
+            intval($amount),
+            4200,
+            'foo',
+            array_map(function ($document) {
+                return new MemoryFile($document, 'type/foo', $document . 'content');
+            }, $documents)
+        ));
     }
 
     public function IReceiveTheDeliveryOf($acquisition) {

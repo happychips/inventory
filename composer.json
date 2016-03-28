@@ -10,7 +10,8 @@
     }
   ],
   "require": {
-    "watoki/stores": "dev-master"
+    "watoki/stores": "dev-master",
+    "rtens/domin": "^0.8.2"
   },
   "require-dev": {
     "rtens/scrut": "1.*"
