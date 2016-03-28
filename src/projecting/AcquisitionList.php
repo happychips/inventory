@@ -12,7 +12,7 @@ class AcquisitionList {
      * @param MaterialAcquired $e
      */
     public function applyMaterialAcquired(MaterialAcquired $e) {
-        $this->acquisitions[(string)$e->getIdentifier()] = $e->getWhen()->format('Y-m-d') . ' - ' . $e->getMaterial() . ' (' . $e->getAmount() . ')';
+        $this->acquisitions[(string)$e->getAcquisition()] = $e->getWhen()->format('Y-m-d') . ' - ' . $e->getMaterial() . ' (' . $e->getAmount() . ')';
     }
 
     public function applyDeliveryReceived(DeliveryReceived $e) {

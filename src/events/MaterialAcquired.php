@@ -9,7 +9,7 @@ use rtens\domin\parameters\File;
 
 class MaterialAcquired extends Event {
     /** @var AcquisitionIdentifier */
-    private $identifier;
+    private $acquisition;
     /** @var MaterialIdentifier */
     private $material;
     /** @var int */
@@ -20,7 +20,7 @@ class MaterialAcquired extends Event {
     private $documents;
 
     /**
-     * @param AcquisitionIdentifier $identifier
+     * @param AcquisitionIdentifier $acquisition
      * @param MaterialIdentifier $material
      * @param int $amount
      * @param Money $cost
@@ -28,7 +28,7 @@ class MaterialAcquired extends Event {
      * @param UserIdentifier $who
      * @param \DateTimeImmutable|null $when
      */
-    public function __construct(AcquisitionIdentifier $identifier, MaterialIdentifier $material, $amount,
+    public function __construct(AcquisitionIdentifier $acquisition, MaterialIdentifier $material, $amount,
                                 Money $cost, array $documents, UserIdentifier $who, \DateTimeImmutable $when = null) {
         parent::__construct($who, $when);
 
@@ -36,7 +36,7 @@ class MaterialAcquired extends Event {
         $this->amount = $amount;
         $this->cost = $cost;
         $this->documents = $documents;
-        $this->identifier = $identifier;
+        $this->acquisition = $acquisition;
     }
 
     /**
@@ -70,7 +70,7 @@ class MaterialAcquired extends Event {
     /**
      * @return AcquisitionIdentifier
      */
-    public function getIdentifier() {
-        return $this->identifier;
+    public function getAcquisition() {
+        return $this->acquisition;
     }
 }
