@@ -1,9 +1,23 @@
 <?php
-namespace happy\inventory\scenario;
+namespace spec\happy\inventory\scenario;
+
+use happy\inventory\RegisterMaterial;
+use watoki\karma\Specification;
 
 class Action {
 
+    /** @var Specification */
+    private $karma;
+
+    /**
+     * @param Specification $karma
+     */
+    public function __construct(Specification $karma) {
+        $this->karma = $karma;
+    }
+
     public function IRegisterAMaterial_WithTheUnit($material, $unit) {
+        $this->karma->when(new RegisterMaterial($material, $unit));
     }
 
     public function IRegisterAProduct_WithTheUnit($product, $unit) {

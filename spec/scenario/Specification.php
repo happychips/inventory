@@ -1,12 +1,14 @@
 <?php
-namespace happy\inventory\scenario;
+namespace spec\happy\inventory\scenario;
 
-use rtens\scrut\Assert;
+use happy\inventory\Application;
+use rtens\scrut\failures\IncompleteTestFailure;
+use rtens\scrut\fixtures\ExceptionFixture;
 use watoki\karma\command\EventListener;
+use watoki\karma\EventStore;
 use watoki\karma\Specification as KarmaSpecification;
 
 /**
- * @property Assert assert <-
  * @property Context given
  * @property Action when
  * @property Action tryThat
@@ -14,27 +16,34 @@ use watoki\karma\Specification as KarmaSpecification;
  */
 class Specification extends KarmaSpecification {
 
-    public function __construct() {
+    /**
+     * @param ExceptionFixture $try <-
+     */
+    public function __construct(ExceptionFixture $try) {
         parent::__construct();
 
         $this->given = new Context();
-        $this->when = new Action();
-        $this->tryThat = new Experiment();
-        $this->then = new Outcome();
+        $this->when = new Action($this);
+        $this->tryThat = new Experiment($this->when, $try);
+        $this->then = new Outcome($this, $try);
     }
 
     /**
      * @return EventListener[]
      */
     protected function listeners() {
-        // TODO: Implement listeners() method.
     }
 
     /**
+     * @param EventStore $events
      * @param mixed $commandOrQuery
      * @return mixed
      */
-    protected function handle($commandOrQuery) {
-        // TODO: Implement handle() method.
+    protected function handle(EventStore $events, $commandOrQuery) {
+        (new Application($events))->handle($commandOrQuery);
+    }
+
+    protected function skip() {
+        throw new IncompleteTestFailure('Skipped');
     }
 }

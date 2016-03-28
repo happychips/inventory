@@ -1,12 +1,37 @@
 <?php
-namespace happy\inventory\scenario;
+namespace spec\happy\inventory\scenario;
+
+use happy\inventory\events\MaterialRegistered;
+use rtens\scrut\fixtures\ExceptionFixture;
+use watoki\karma\Specification;
 
 class Outcome {
 
-    public function ItShouldFailWith($message) {
+    /** @var Specification */
+    private $karma;
+    /** @var ExceptionFixture */
+    private $try;
+
+    /**
+     * @param Specification $karma
+     */
+    public function __construct(Specification $karma, ExceptionFixture $try) {
+        $this->karma = $karma;
+        $this->try = $try;
     }
 
-    public function AnArticle_WithTheUnit_ShouldBeRegistered($article, $unit) {
+    public function ItShouldFailWith($message) {
+        $this->try->thenTheException_ShouldBeThrown($message);
+    }
+
+    public function AMaterial_WithTheUnit_ShouldBeRegistered($material, $unit) {
+        $this->karma->thenShould(MaterialRegistered::class, function (MaterialRegistered $e) use ($material, $unit) {
+            return [
+                [$e->getName(), $material],
+                [$e->getUnit(), $unit]
+            ];
+        });
+        $this->try->thenNoExceptionShouldBeThrown();
     }
 
     public function AProduct_WithTheUnit_ShouldBeRegistered($article, $unit) {

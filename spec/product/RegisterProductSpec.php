@@ -1,6 +1,6 @@
 <?php
-namespace happy\inventory\product;
-use happy\inventory\scenario\Specification;
+namespace spec\happy\inventory\product;
+use spec\happy\inventory\scenario\Specification;
 
 /**
  * A product defines what can be in stock and in what unit
@@ -8,11 +8,13 @@ use happy\inventory\scenario\Specification;
 class RegisterProductSpec extends Specification {
 
     function nameCannotBeEmpty() {
+        $this->skip();
         $this->tryThat->IRegisterAProduct_WithTheUnit("  \t ", 'pack');
         $this->then->ItShouldFailWith('The product name cannot be empty');
     }
 
     function unitCannotBeEmpty() {
+        $this->skip();
         $this->tryThat->IRegisterAProduct_WithTheUnit('Chips', " \t ");
         $this->then->ItShouldFailWith('The unit cannot be empty');
     }

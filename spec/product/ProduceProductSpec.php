@@ -1,6 +1,6 @@
 <?php
-namespace happy\inventory\product;
-use happy\inventory\scenario\Specification;
+namespace spec\happy\inventory\product;
+use spec\happy\inventory\scenario\Specification;
 
 /**
  * Products are added to the stock when produced.

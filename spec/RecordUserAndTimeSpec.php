@@ -1,7 +1,7 @@
 <?php
-namespace happy\inventory;
+namespace spec\happy\inventory;
 
-use happy\inventory\scenario\Specification;
+use spec\happy\inventory\scenario\Specification;
 
 /**
  * The user that caused an event and the time when it was caused are always recorded

@@ -1,5 +1,5 @@
 <?php
-namespace happy\inventory\scenario;
+namespace spec\happy\inventory\scenario;
 
 class Context {
 

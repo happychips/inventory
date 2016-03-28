@@ -1,6 +1,6 @@
 <?php
-namespace happy\inventory\material;
-use happy\inventory\scenario\Specification;
+namespace spec\happy\inventory\material;
+use spec\happy\inventory\scenario\Specification;
 
 /**
  * Acquired Materials are added to the inventory when delivered.

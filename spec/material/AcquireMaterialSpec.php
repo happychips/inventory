@@ -1,6 +1,6 @@
 <?php
-namespace happy\inventory\material;
-use happy\inventory\scenario\Specification;
+namespace spec\happy\inventory\material;
+use spec\happy\inventory\scenario\Specification;
 
 /**
  * An amount of units of a Material can be acquired at a given cost. It is not available until delivered.

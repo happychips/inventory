@@ -1,7 +1,7 @@
 <?php
-namespace happy\inventory\product;
+namespace spec\happy\inventory\product;
 
-use happy\inventory\scenario\Specification;
+use spec\happy\inventory\scenario\Specification;
 
 /**
  * Count units of products currently in stock

@@ -8,10 +8,10 @@ use watoki\reflect\ValuePrinter;
 abstract class Specification {
 
     /** @var EventStore */
-    protected $events;
+    private $events;
 
     /** @var mixed */
-    protected $returned;
+    private $returned;
 
     /** @var null|\Exception */
     private $caught;
@@ -26,10 +26,11 @@ abstract class Specification {
     protected abstract function listeners();
 
     /**
+     * @param EventStore $events
      * @param mixed $commandOrQuery
      * @return mixed
      */
-    protected abstract function handle($commandOrQuery);
+    protected abstract function handle(EventStore $events, $commandOrQuery);
 
     protected function makeEventStore() {
         return new MemoryEventStore();
@@ -55,7 +56,7 @@ abstract class Specification {
                 }
             }
         }
-        $this->returned = $this->handle($message);
+        $this->returned = $this->handle($this->events, $message);
     }
 
     public function tryTo($messageOrCallable) {
