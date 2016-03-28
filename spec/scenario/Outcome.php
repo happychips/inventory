@@ -54,6 +54,7 @@ class Outcome {
                 [$e->getWhen()->format('c'), (new \DateTimeImmutable($when))->format('c')]
             ];
         }, count($this->karma->allEvents()));
+        $this->pass();
     }
 
     public function AllEventsShouldBeCausedBy($user) {
@@ -62,6 +63,7 @@ class Outcome {
                 [$e->getWho(), new UserIdentifier($user)]
             ];
         }, count($this->karma->allEvents()));
+        $this->pass();
     }
 
     public function _UnitsOf_For__ShouldBeAcquired($amount, $material, $cost, $currency) {
