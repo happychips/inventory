@@ -1,0 +1,29 @@
+{
+  "name": "happychips/inventory",
+  "description": "An inventory management system for Happy Chips",
+  "type": "application",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Nikolas Martens",
+      "email": "Nikolas.M@rtens.org"
+    }
+  ],
+  "require": {
+    "watoki/stores": "dev-master"
+  },
+  "require-dev": {
+    "rtens/scrut": "1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "happy\\inventory\\": "src/",
+      "watoki\\karma\\": "lib/karma/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "spec\\happy\\inventory\\": "spec/"
+    }
+  }
+}
