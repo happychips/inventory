@@ -10,6 +10,7 @@ use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
 use happy\inventory\events\ProductProduced;
 use happy\inventory\events\ProductRegistered;
+use happy\inventory\events\StockUpdated;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
@@ -192,6 +193,12 @@ class Outcome {
     }
 
     public function TheStockOf_ShouldBeUpdatedTo_Units($product, $amount) {
+        $this->then(StockUpdated::class, function (StockUpdated $e) use ($product, $amount) {
+            return [
+                [$e->getProduct(), new ProductIdentifier($product)],
+                [$e->getAmount(), $amount]
+            ];
+        });
     }
 
     public function ItSholdList_Materials($int) {

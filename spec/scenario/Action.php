@@ -18,6 +18,7 @@ use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
 use happy\inventory\UpdateInventory;
+use happy\inventory\UpdateStock;
 use rtens\domin\parameters\file\MemoryFile;
 use watoki\karma\Specification;
 
@@ -125,6 +126,11 @@ class Action {
     }
 
     public function IUpdateTheStockOf_To_Units($product, $amount) {
+        $this->karma->when(new UpdateStock(
+            new ProductIdentifier($product),
+            $amount,
+            $this->when
+        ));
     }
 
     public function ISetWhenTo($when) {
