@@ -1,7 +1,7 @@
 <?php
 namespace happy\inventory\model;
 
-abstract class Identifier {
+class Identifier {
 
     /** @var string */
     private $identifier;
@@ -24,7 +24,10 @@ abstract class Identifier {
         return $this->identifier;
     }
 
+    /**
+     * @return Identifier
+     */
     public static function generate() {
-        return new static(uniqid());
+        return new static(date('Ymd_His_') . substr(uniqid(), -4));
     }
 }

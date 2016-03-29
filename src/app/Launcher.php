@@ -30,15 +30,19 @@ class Launcher {
     /** @var array */
     private $users;
 
-    public function __construct(EventStore $events, HttpSession $session, array $users) {
+    /** @var string */
+    private $userDir;
+
+    public function __construct(EventStore $events, HttpSession $session, array $users, $userDir) {
         $this->session = $session;
         $this->app = new Application($events, $this->session);
         $this->users = $users;
+        $this->userDir = $userDir;
     }
 
     public function run() {
         $transformerRegistry = TransformerRegistryRepository::getDefaultTransformerRegistry();
-        $transformerRegistry->insert(new FileTransformer($transformerRegistry));
+        $transformerRegistry->insert(new FileTransformer($transformerRegistry, $this->userDir));
 
         WebDelivery::quickResponse(IndexResource::class, WebApplication::init(function (WebApplication $domin) {
             $domin->setNameAndBrand('Inventory');
