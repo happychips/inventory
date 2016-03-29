@@ -2,6 +2,7 @@
 namespace spec\happy\inventory\scenario;
 
 use happy\inventory\AcquireMaterial;
+use happy\inventory\AddCostumer;
 use happy\inventory\ConsumeMaterial;
 use happy\inventory\ListAcquisitions;
 use happy\inventory\ListMaterials;
@@ -106,6 +107,7 @@ class Action {
     }
 
     public function IAddTheCostumer($costumer) {
+        $this->karma->when(new AddCostumer($costumer));
     }
 
     public function ISell_UnitsOf_WithTheDocuments_Attached($amount, $product, $documents) {

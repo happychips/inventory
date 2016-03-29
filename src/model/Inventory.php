@@ -2,7 +2,9 @@
 namespace happy\inventory\model;
 
 use happy\inventory\AcquireMaterial;
+use happy\inventory\AddCostumer;
 use happy\inventory\ConsumeMaterial;
+use happy\inventory\events\CostumerAdded;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
@@ -21,6 +23,9 @@ class Inventory {
 
     /** @var MaterialIdentifier[] */
     private $materials = [];
+
+    /** @var CostumerIdentifier[] */
+    private $costumers = [];
 
     /**
      * @param Session $session
@@ -86,5 +91,21 @@ class Inventory {
             $this->session->requireLogin(),
             $c->getWhen()
         );
+    }
+
+    public function handleAddCostumer(AddCostumer $c) {
+        $costumer = CostumerIdentifier::fromName($c->getName());
+        if (in_array($costumer, $this->costumers)) {
+            throw new \Exception('A costumer with that name was already added.');
+        }
+        return new CostumerAdded(
+            $costumer,
+            $c->getName(),
+            $this->session->requireLogin()
+        );
+    }
+
+    public function applyCostumerAdded(CostumerAdded $e) {
+        $this->costumers[] = $e->getCostumer();
     }
 }

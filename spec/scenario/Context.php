@@ -1,10 +1,12 @@
 <?php
 namespace spec\happy\inventory\scenario;
 
+use happy\inventory\events\CostumerAdded;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialRegistered;
 use happy\inventory\model\AcquisitionIdentifier;
+use happy\inventory\model\CostumerIdentifier;
 use happy\inventory\model\Inventory;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
@@ -71,6 +73,11 @@ class Context {
     }
 
     public function IAddedACostumer($name) {
+        $this->karma->given(new CostumerAdded(
+            CostumerIdentifier::fromName($name),
+            $name,
+            new UserIdentifier('foo')
+        ), Inventory::IDENTIFIER);
     }
 
     public function IRegisteredTheProduct_WithTheUnit($name, $unit) {

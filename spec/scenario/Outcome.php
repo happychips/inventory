@@ -1,6 +1,7 @@
 <?php
 namespace spec\happy\inventory\scenario;
 
+use happy\inventory\events\CostumerAdded;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\Event;
 use happy\inventory\events\InventoryUpdated;
@@ -163,6 +164,11 @@ class Outcome {
     }
 
     public function TheCostumer_ShouldBeAdded($costumer) {
+        $this->then(CostumerAdded::class, function (CostumerAdded $e) use ($costumer) {
+            return [
+                [$e->getName(), $costumer]
+            ];
+        });
     }
 
     public function _UnitsOf_ShouldBeSoldWithTheDocuments_Attached($amount, $product, $document) {
@@ -202,7 +208,7 @@ class Outcome {
             }
 
             return [
-                [array_keys($returned->getMaterials())[$pos-1], $material]
+                [array_keys($returned->getMaterials())[$pos - 1], $material]
             ];
         });
     }
@@ -238,7 +244,7 @@ class Outcome {
             }
 
             return [
-                [array_keys($returned->getAcquisitions())[$pos-1], $id]
+                [array_keys($returned->getAcquisitions())[$pos - 1], $id]
             ];
         });
     }
