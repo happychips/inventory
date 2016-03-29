@@ -24,7 +24,7 @@ use happy\inventory\UpdateStock;
 
 class Inventory {
 
-    const IDENTIFIER = 'inventory';
+    const IDENTIFIER = 'inventory.json';
 
     /** @var Session */
     private $session;
