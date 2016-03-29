@@ -242,4 +242,19 @@ class Outcome {
             ];
         });
     }
+
+    public function ThereShouldBe_Costumers($count) {
+    }
+
+    public function Costumer_ShouldBe($pos, $name) {
+    }
+
+    public function ItShouldList_Products($int) {
+    }
+
+    public function Product_ShouldHaveTheCaption($id, $caption) {
+    }
+
+    public function Product_ShouldBe($pos, $id) {
+    }
 }

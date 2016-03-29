@@ -68,4 +68,10 @@ class Context {
             new UserIdentifier('test')
         ), Inventory::IDENTIFIER);
     }
+
+    public function IAddedACostumer($name) {
+    }
+
+    public function IRegisteredTheProduct_WithTheUnit($name, $unit) {
+    }
 }

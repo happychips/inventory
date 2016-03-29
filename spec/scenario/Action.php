@@ -139,4 +139,10 @@ class Action {
     public function IListAllAcquisitions() {
         $this->karma->when(new ListAcquisitions());
     }
+
+    public function IListAllCostumers() {
+    }
+
+    public function IListAllProducts() {
+    }
 }
