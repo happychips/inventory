@@ -42,6 +42,7 @@ class Context {
 
     public function IRegisteredTheMaterial_WithTheUnit($material, $unit) {
         $this->karma->given(new MaterialRegistered(
+            MaterialIdentifier::fromNameAndUnit($material, $unit),
             $material,
             $unit,
             new UserIdentifier('test')

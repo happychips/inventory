@@ -19,6 +19,9 @@ class Inventory {
     /** @var Session */
     private $session;
 
+    /** @var MaterialIdentifier[] */
+    private $materials = [];
+
     /**
      * @param Session $session
      */
@@ -27,11 +30,22 @@ class Inventory {
     }
 
     public function handleRegisterMaterial(RegisterMaterial $c) {
+        $material = MaterialIdentifier::fromNameAndUnit($c->getName(), $c->getUnit());
+
+        if (in_array($material, $this->materials)) {
+            throw new \Exception('A material with the same name and unit is already registered.');
+        }
+
         return new MaterialRegistered(
+            $material,
             $c->getName(),
             $c->getUnit(),
             $this->session->requireLogin(),
             $c->getWhen());
+    }
+
+    public function applyMaterialRegistered(MaterialRegistered $e) {
+        $this->materials[] = $e->getMaterial();
     }
 
     public function handleAcquireMaterial(AcquireMaterial $c) {

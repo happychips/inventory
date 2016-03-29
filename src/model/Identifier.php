@@ -25,7 +25,7 @@ class Identifier {
     }
 
     /**
-     * @return Identifier
+     * @return static
      */
     public static function generate() {
         return new static(date('Ymd_His_') . substr(uniqid(), -4));

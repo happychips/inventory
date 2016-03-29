@@ -27,7 +27,6 @@ class RegisterMaterialSpec extends Specification {
     }
 
     function materialAlreadyRegistered() {
-        $this->skip();
         $this->given->IRegisteredTheMaterial_WithTheUnit('Potatoes', 'kg');
         $this->tryThat->IRegisterAMaterial_WithTheUnit('Potatoes', 'kg');
         $this->then->ItShouldFailWith('A material with the same name and unit is already registered.');
