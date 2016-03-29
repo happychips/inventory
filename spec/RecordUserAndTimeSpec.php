@@ -30,7 +30,8 @@ class RecordUserAndTimeSpec extends Specification {
             $this->action->IUpdateTheInventoryOf_To_Units(1, 'foo'),
             $this->action->IRegisterAProduct_WithTheUnit('foo', 'bar'),
             $this->action->IProduce_UnitsOf(1, 'foo'),
-            $this->action->IUpdateTheStockOf_To_Units('foo', 1)
+            $this->action->IUpdateTheStockOf_To_Units('foo', 1),
+            $this->action->IDeliver_UnitsOf_To(1, 'foo', 'bar')
         ];
     }
 

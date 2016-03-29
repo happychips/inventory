@@ -4,11 +4,13 @@ namespace spec\happy\inventory\scenario;
 use happy\inventory\AcquireMaterial;
 use happy\inventory\AddCostumer;
 use happy\inventory\ConsumeMaterial;
+use happy\inventory\DeliverProduct;
 use happy\inventory\ListAcquisitions;
 use happy\inventory\ListCostumers;
 use happy\inventory\ListMaterials;
 use happy\inventory\ListProducts;
 use happy\inventory\model\AcquisitionIdentifier;
+use happy\inventory\model\CostumerIdentifier;
 use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
@@ -112,17 +114,17 @@ class Action {
         ));
     }
 
-    public function ISell_UnitsOf_For__To($amount, $product, $gain, $currency, $customer) {
-    }
-
     public function IDeliver_UnitsOf_To($amount, $product, $costumer) {
+        $this->karma->when(new DeliverProduct(
+            new ProductIdentifier($product),
+            $amount,
+            new CostumerIdentifier($costumer),
+            $this->when
+        ));
     }
 
     public function IAddTheCostumer($costumer) {
         $this->karma->when(new AddCostumer($costumer));
-    }
-
-    public function ISell_UnitsOf_WithTheDocuments_Attached($amount, $product, $documents) {
     }
 
     public function IUpdateTheStockOf_To_Units($product, $amount) {

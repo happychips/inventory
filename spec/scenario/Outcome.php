@@ -8,10 +8,12 @@ use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\ProductDelivered;
 use happy\inventory\events\ProductProduced;
 use happy\inventory\events\ProductRegistered;
 use happy\inventory\events\StockUpdated;
 use happy\inventory\model\AcquisitionIdentifier;
+use happy\inventory\model\CostumerIdentifier;
 use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
@@ -175,10 +177,14 @@ class Outcome {
         });
     }
 
-    public function _UnitsOf_ShouldBeSoldFor__To($amount, $product, $gain, $currency, $costumer) {
-    }
-
     public function _UnitsOf_ShouldBeDeliveredTo($amount, $product, $costumer) {
+        $this->then(ProductDelivered::class, function (ProductDelivered $e) use ($amount, $product, $costumer) {
+            return [
+                [$e->getProduct(), new ProductIdentifier($product)],
+                [$e->getAmount(), $amount],
+                [$e->getCostumer(), new CostumerIdentifier($costumer)]
+            ];
+        });
     }
 
     public function TheCostumer_ShouldBeAdded($costumer) {

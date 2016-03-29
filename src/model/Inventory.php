@@ -4,12 +4,14 @@ namespace happy\inventory\model;
 use happy\inventory\AcquireMaterial;
 use happy\inventory\AddCostumer;
 use happy\inventory\ConsumeMaterial;
+use happy\inventory\DeliverProduct;
 use happy\inventory\events\CostumerAdded;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\ProductDelivered;
 use happy\inventory\events\ProductProduced;
 use happy\inventory\events\ProductRegistered;
 use happy\inventory\events\StockUpdated;
@@ -146,6 +148,16 @@ class Inventory {
         return new StockUpdated(
             $c->getProduct(),
             $c->getAmount(),
+            $this->session->requireLogin(),
+            $c->getWhen()
+        );
+    }
+
+    public function handleDeliverProduct(DeliverProduct $c) {
+        return new ProductDelivered(
+            $c->getProduct(),
+            $c->getAmount(),
+            $c->getCostumer(),
             $this->session->requireLogin(),
             $c->getWhen()
         );
