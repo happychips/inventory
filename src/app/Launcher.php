@@ -78,29 +78,37 @@ class Launcher {
 
     private function addActions(WebApplication $domin) {
         if ($this->session->isLoggedIn()) {
-            $this->addAction($domin, RegisterMaterial::class);
-            $this->addAction($domin, RegisterProduct::class);
-            $this->addAction($domin, AddCostumer::class);
-            $this->addAction($domin, AcquireMaterial::class);
-            $this->addAction($domin, ReceiveDelivery::class);
-            $this->addAction($domin, ConsumeMaterial::class);
-            $this->addAction($domin, UpdateInventory::class);
-            $this->addAction($domin, ProduceProduct::class);
-            $this->addAction($domin, UpdateStock::class);
-            $this->addAction($domin, DeliverProduct::class);
-            $this->addAction($domin, ShowHistory::class)->setModifying(false);
+            $this->addAction($domin, RegisterMaterial::class, 'Setup');
+            $this->addAction($domin, RegisterProduct::class, 'Setup');
+            $this->addAction($domin, AddCostumer::class, 'Setup');
+
+            $this->addAction($domin, AcquireMaterial::class, 'Material');
+            $this->addAction($domin, ReceiveDelivery::class, 'Material');
+            $this->addAction($domin, ConsumeMaterial::class, 'Material');
+            $this->addAction($domin, UpdateInventory::class, 'Material');
+
+            $this->addAction($domin, ProduceProduct::class, 'Product');
+            $this->addAction($domin, UpdateStock::class, 'Product');
+            $this->addAction($domin, DeliverProduct::class, 'Product');
+
+            $this->addAction($domin, ShowHistory::class, 'Reporting')->setModifying(false);
         } else {
             $domin->actions->add('Login', (new GenericMethodAction($this, 'login', $domin->types, $domin->parser))->generic()->setCaption('Login'));
         }
     }
 
-    private function addAction(WebApplication $domin, $class) {
+    private function addAction(WebApplication $domin, $class, $group = null) {
         $execute = function ($object) {
             return $this->app->handle($object);
         };
 
+        $id = (new \ReflectionClass($class))->getShortName();
         $action = new GenericObjectAction($class, $domin->types, $domin->parser, $execute);
-        $domin->actions->add((new \ReflectionClass($class))->getShortName(), $action);
+        $domin->actions->add($id, $action);
+
+        if ($group) {
+            $domin->groups->put($id, $group);
+        }
 
         return $action->generic();
     }
