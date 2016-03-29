@@ -10,8 +10,10 @@ use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\ProductRegistered;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
+use happy\inventory\RegisterProduct;
 use happy\inventory\UpdateInventory;
 
 class Inventory {
@@ -20,12 +22,12 @@ class Inventory {
 
     /** @var Session */
     private $session;
-
     /** @var MaterialIdentifier[] */
     private $materials = [];
-
     /** @var CostumerIdentifier[] */
     private $costumers = [];
+    /** @var ProductIdentifier[] */
+    private $products = [];
 
     /**
      * @param Session $session
@@ -107,5 +109,23 @@ class Inventory {
 
     public function applyCostumerAdded(CostumerAdded $e) {
         $this->costumers[] = $e->getCostumer();
+    }
+
+    public function handleRegisterProduct(RegisterProduct $c) {
+        $product = ProductIdentifier::fromNameAndUnit($c->getName(), $c->getUnit());
+        if (in_array($product, $this->products)) {
+            throw new \Exception('A product with the same name and unit is already registered.');
+        }
+        return new ProductRegistered(
+            $product,
+            $c->getName(),
+            $c->getUnit(),
+            $this->session->requireLogin(),
+            $c->getWhen()
+        );
+    }
+
+    public function applyProductRegistered(ProductRegistered $e) {
+        $this->products[] = $e->getProduct();
     }
 }

@@ -12,6 +12,7 @@ use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
+use happy\inventory\RegisterProduct;
 use happy\inventory\UpdateInventory;
 use rtens\domin\parameters\file\MemoryFile;
 use watoki\karma\Specification;
@@ -35,6 +36,7 @@ class Action {
     }
 
     public function IRegisterAProduct_WithTheUnit($product, $unit) {
+        $this->karma->when(new RegisterProduct($product, $unit, $this->when));
     }
 
     public function IAcquire_UnitsOf_For($amount, $material, $cost, $currency) {

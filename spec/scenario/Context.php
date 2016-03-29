@@ -5,11 +5,13 @@ use happy\inventory\events\CostumerAdded;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\ProductRegistered;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\CostumerIdentifier;
 use happy\inventory\model\Inventory;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
+use happy\inventory\model\ProductIdentifier;
 use happy\inventory\model\Time;
 use happy\inventory\model\UserIdentifier;
 use watoki\karma\Specification as KarmaSpecification;
@@ -81,5 +83,11 @@ class Context {
     }
 
     public function IRegisteredTheProduct_WithTheUnit($name, $unit) {
+        $this->karma->given(new ProductRegistered(
+            ProductIdentifier::fromNameAndUnit($name, $unit),
+            $name,
+            $unit,
+            new UserIdentifier('nobody')
+        ), Inventory::IDENTIFIER);
     }
 }

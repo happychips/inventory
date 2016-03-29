@@ -8,6 +8,7 @@ use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\ProductRegistered;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
@@ -60,6 +61,12 @@ class Outcome {
     }
 
     public function AProduct_WithTheUnit_ShouldBeRegistered($article, $unit) {
+        $this->then(ProductRegistered::class, function (ProductRegistered $e) use ($article, $unit) {
+            return [
+                [$e->getName(), $article],
+                [$e->getUnit(), $unit]
+            ];
+        });
     }
 
     public function AllEventsShouldHaveHappenedAt($when) {
