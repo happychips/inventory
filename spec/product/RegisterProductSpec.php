@@ -23,4 +23,17 @@ class RegisterProductSpec extends Specification {
         $this->when->IRegisterAProduct_WithTheUnit('Chips', 'pack');
         $this->then->AProduct_WithTheUnit_ShouldBeRegistered('foo', 'bar');
     }
+
+    function productAlreadyRegistered() {
+        $this->skip();
+        $this->given->IRegisteredTheProduct_WithTheUnit('Chips', 'pack');
+        $this->tryThat->IRegisterAProduct_WithTheUnit('Chips', 'pack');
+        $this->then->ItShouldFailWith('A product with the same name and unit is already registered.');
+    }
+
+    function sameNameDifferentUnit() {
+        $this->given->IRegisteredTheProduct_WithTheUnit('Chips', 'pack');
+        $this->when->IRegisterAProduct_WithTheUnit('Chips', 'smaller pack');
+        $this->then->AProduct_WithTheUnit_ShouldBeRegistered('Chips', 'smaller pack');
+    }
 }

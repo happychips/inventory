@@ -25,4 +25,17 @@ class RegisterMaterialSpec extends Specification {
         $this->when->IRegisterAMaterial_WithTheUnit('Potatoes', 'kg');
         $this->then->AMaterial_WithTheUnit_ShouldBeRegistered('Potatoes', 'kg');
     }
+
+    function materialAlreadyRegistered() {
+        $this->skip();
+        $this->given->IRegisteredTheMaterial_WithTheUnit('Potatoes', 'kg');
+        $this->tryThat->IRegisterAMaterial_WithTheUnit('Potatoes', 'kg');
+        $this->then->ItShouldFailWith('A material with the same name and unit is already registered.');
+    }
+
+    function sameNameDifferentUnit() {
+        $this->given->IRegisteredTheMaterial_WithTheUnit('Oil', 'kg');
+        $this->when->IRegisterAMaterial_WithTheUnit('Oil', 'liter');
+        $this->then->AMaterial_WithTheUnit_ShouldBeRegistered('Oil', 'liter');
+    }
 }
