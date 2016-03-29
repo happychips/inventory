@@ -59,6 +59,7 @@ class Launcher {
             $this->addActions($domin);
 
             $domin->fields->add(new IdentifierField($domin->fields, $domin->identifiers));
+            $domin->fields->add(new PasswordField());
 
             $domin->identifiers->setProvider(MaterialIdentifier::class, function () {
                 return $this->app->handle(new ListMaterials())->getMaterials();
