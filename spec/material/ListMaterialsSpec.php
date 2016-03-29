@@ -14,7 +14,7 @@ class ListMaterialsSpec extends Specification {
         $this->given->IRegisteredTheMaterial_WithTheUnit('Potatoes', 'kg');
         $this->when->IListAllMaterials();
         $this->then->ItSholdList_Materials(1);
-        $this->then->Material_ShouldHaveTheCaption('Potatoes', 'Potatoes (kg)');
+        $this->then->Material_ShouldHaveTheCaption('Potatoes_kg', 'Potatoes (kg)');
     }
 
     function sortByName() {
@@ -23,8 +23,8 @@ class ListMaterialsSpec extends Specification {
         $this->given->IRegisteredTheMaterial_WithTheUnit('Carrots', 'kg');
         $this->when->IListAllMaterials();
         $this->then->ItSholdList_Materials(3);
-        $this->then->Material_ShouldBe(1, 'Carrots');
-        $this->then->Material_ShouldBe(2, 'Potatoes');
-        $this->then->Material_ShouldBe(3, 'Tomatoes');
+        $this->then->Material_ShouldBe(1, 'Carrots_kg');
+        $this->then->Material_ShouldBe(2, 'Potatoes_kg');
+        $this->then->Material_ShouldBe(3, 'Tomatoes_kg');
     }
 }

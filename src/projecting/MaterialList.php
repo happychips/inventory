@@ -9,7 +9,7 @@ class MaterialList {
     private $materials = [];
 
     public function applyMaterialRegistered(MaterialRegistered $e) {
-        $this->materials[$e->getName()] = $e->getName() . ' (' . $e->getUnit() . ')';
+        $this->materials[(string)$e->getMaterial()] = $e->getName() . ' (' . $e->getUnit() . ')';
     }
 
     /**
