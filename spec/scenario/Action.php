@@ -5,6 +5,7 @@ use happy\inventory\AcquireMaterial;
 use happy\inventory\AddCostumer;
 use happy\inventory\ConsumeMaterial;
 use happy\inventory\ListAcquisitions;
+use happy\inventory\ListCostumers;
 use happy\inventory\ListMaterials;
 use happy\inventory\ListProducts;
 use happy\inventory\model\AcquisitionIdentifier;
@@ -146,6 +147,7 @@ class Action {
     }
 
     public function IListAllCostumers() {
+        $this->karma->when(new ListCostumers());
     }
 
     public function IListAllProducts() {

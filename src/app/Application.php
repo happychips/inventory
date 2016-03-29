@@ -2,11 +2,13 @@
 namespace happy\inventory\app;
 
 use happy\inventory\ListAcquisitions;
+use happy\inventory\ListCostumers;
 use happy\inventory\ListMaterials;
 use happy\inventory\ListProducts;
 use happy\inventory\model\Inventory;
 use happy\inventory\model\Session;
 use happy\inventory\projecting\AcquisitionList;
+use happy\inventory\projecting\CostumerList;
 use happy\inventory\projecting\EventHistory;
 use happy\inventory\projecting\MaterialList;
 use happy\inventory\projecting\ProductList;
@@ -92,6 +94,8 @@ class Application implements AggregateFactory, ProjectionFactory {
             return new AcquisitionList();
         } else if ($query instanceof ListProducts) {
             return new ProductList();
+        } else if ($query instanceof ListCostumers) {
+            return new CostumerList();
         }
 
         throw new \Exception('Unknown query');

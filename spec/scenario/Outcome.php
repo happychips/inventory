@@ -15,6 +15,7 @@ use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\model\UserIdentifier;
 use happy\inventory\projecting\AcquisitionList;
+use happy\inventory\projecting\CostumerList;
 use happy\inventory\projecting\MaterialList;
 use happy\inventory\projecting\ProductList;
 use rtens\domin\parameters\File;
@@ -162,7 +163,7 @@ class Outcome {
         });
     }
 
-    public function _UnitsOf_ShouldBeProduced($amount, $prodcut) {
+    public function _UnitsOf_ShouldBeProduced($amount, $product) {
     }
 
     public function _UnitsOf_ShouldBeSoldFor__To($amount, $product, $gain, $currency, $costumer) {
@@ -233,10 +234,20 @@ class Outcome {
         });
     }
 
-    public function ThereShouldBe_Costumers($count) {
+    public function ThereShouldBe_Costumers($int) {
+        $this->thenReturn(function (CostumerList $returned) use ($int) {
+            return [
+                'count' => [count($returned->getCostumers()), $int]
+            ];
+        });
     }
 
-    public function Costumer_ShouldBe($pos, $name) {
+    public function Costumer_ShouldBe($pos, $id) {
+        $this->thenReturn(function (CostumerList $returned) use ($pos, $id) {
+            return [
+                [array_keys($returned->getCostumers())[$pos - 1], $id]
+            ];
+        });
     }
 
     public function ItShouldList_Products($int) {
