@@ -3,11 +3,13 @@ namespace happy\inventory\app;
 
 use happy\inventory\ListAcquisitions;
 use happy\inventory\ListMaterials;
+use happy\inventory\ListProducts;
 use happy\inventory\model\Inventory;
 use happy\inventory\model\Session;
 use happy\inventory\projecting\AcquisitionList;
 use happy\inventory\projecting\EventHistory;
 use happy\inventory\projecting\MaterialList;
+use happy\inventory\projecting\ProductList;
 use happy\inventory\ShowHistory;
 use watoki\karma\command\AggregateFactory;
 use watoki\karma\command\CommandHandler;
@@ -88,6 +90,8 @@ class Application implements AggregateFactory, ProjectionFactory {
             return new EventHistory($this->events->allEvents());
         } else if ($query instanceof ListAcquisitions) {
             return new AcquisitionList();
+        } else if ($query instanceof ListProducts) {
+            return new ProductList();
         }
 
         throw new \Exception('Unknown query');

@@ -16,6 +16,7 @@ use happy\inventory\model\Money;
 use happy\inventory\model\UserIdentifier;
 use happy\inventory\projecting\AcquisitionList;
 use happy\inventory\projecting\MaterialList;
+use happy\inventory\projecting\ProductList;
 use rtens\domin\parameters\File;
 use rtens\domin\parameters\file\MemoryFile;
 use rtens\scrut\fixtures\ExceptionFixture;
@@ -185,11 +186,7 @@ class Outcome {
     }
 
     public function ItSholdList_Materials($int) {
-        $this->thenReturn(function ($returned) use ($int) {
-            if (!($returned instanceof MaterialList)) {
-                return false;
-            }
-
+        $this->thenReturn(function (MaterialList $returned) use ($int) {
             return [
                 'count' => [count($returned->getMaterials()), $int]
             ];
@@ -197,11 +194,7 @@ class Outcome {
     }
 
     public function Material_ShouldHaveTheCaption($pos, $caption) {
-        $this->thenReturn(function ($returned) use ($pos, $caption) {
-            if (!($returned instanceof MaterialList)) {
-                return false;
-            }
-
+        $this->thenReturn(function (MaterialList $returned) use ($pos, $caption) {
             return [
                 [$returned->getMaterials()[$pos], $caption]
             ];
@@ -209,11 +202,7 @@ class Outcome {
     }
 
     public function Material_ShouldBe($pos, $material) {
-        $this->thenReturn(function ($returned) use ($pos, $material) {
-            if (!($returned instanceof MaterialList)) {
-                return false;
-            }
-
+        $this->thenReturn(function (MaterialList $returned) use ($pos, $material) {
             return [
                 [array_keys($returned->getMaterials())[$pos - 1], $material]
             ];
@@ -221,35 +210,23 @@ class Outcome {
     }
 
     public function ItShouldList_Acquisitions($int) {
-        $this->thenReturn(function ($returned) use ($int) {
-            if (!($returned instanceof AcquisitionList)) {
-                return false;
-            }
-
+        $this->thenReturn(function (AcquisitionList $returned) use ($int) {
             return [
                 'count' => [count($returned->getAcquisitions()), $int]
             ];
         });
     }
 
-    public function Acqusition_ShouldHaveTheCaption($id, $caption) {
-        $this->thenReturn(function ($returned) use ($id, $caption) {
-            if (!($returned instanceof AcquisitionList)) {
-                return false;
-            }
-
+    public function Acquisition_ShouldHaveTheCaption($id, $caption) {
+        $this->thenReturn(function (AcquisitionList $returned) use ($id, $caption) {
             return [
                 [$returned->getAcquisitions()[$id], $caption]
             ];
         });
     }
 
-    public function Acqusition_ShouldBe($pos, $id) {
-        $this->thenReturn(function ($returned) use ($pos, $id) {
-            if (!($returned instanceof AcquisitionList)) {
-                return false;
-            }
-
+    public function Acquisition_ShouldBe($pos, $id) {
+        $this->thenReturn(function (AcquisitionList $returned) use ($pos, $id) {
             return [
                 [array_keys($returned->getAcquisitions())[$pos - 1], $id]
             ];
@@ -263,11 +240,26 @@ class Outcome {
     }
 
     public function ItShouldList_Products($int) {
+        $this->thenReturn(function (ProductList $returned) use ($int) {
+            return [
+                'count' => [count($returned->getProducts()), $int]
+            ];
+        });
     }
 
     public function Product_ShouldHaveTheCaption($id, $caption) {
+        $this->thenReturn(function (ProductList $returned) use ($id, $caption) {
+            return [
+                [$returned->getProducts()[$id], $caption]
+            ];
+        });
     }
 
     public function Product_ShouldBe($pos, $id) {
+        $this->thenReturn(function (ProductList $returned) use ($pos, $id) {
+            return [
+                [array_keys($returned->getProducts())[$pos - 1], $id]
+            ];
+        });
     }
 }

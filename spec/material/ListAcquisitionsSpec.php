@@ -15,7 +15,7 @@ class ListAcquisitionsSpec extends Specification {
         $this->given->IAcquired_Of(42, 'Potatoes');
         $this->when->IListAllAcquisitions();
         $this->then->ItShouldList_Acquisitions(1);
-        $this->then->Acqusition_ShouldHaveTheCaption('42Potatoes', '2011-01-01 - Potatoes (42)');
+        $this->then->Acquisition_ShouldHaveTheCaption('42Potatoes', '2011-01-01 - Potatoes (42)');
     }
 
     function receivedDelivery() {
@@ -24,7 +24,7 @@ class ListAcquisitionsSpec extends Specification {
         $this->given->IReceivedTheDeliveryOf(42, 'Potatoes');
         $this->when->IListAllAcquisitions();
         $this->then->ItShouldList_Acquisitions(1);
-        $this->then->Acqusition_ShouldBe(1, '12Tomatoes');
+        $this->then->Acquisition_ShouldBe(1, '12Tomatoes');
     }
 
     function sortByDate() {
@@ -37,8 +37,8 @@ class ListAcquisitionsSpec extends Specification {
 
         $this->when->IListAllAcquisitions();
         $this->then->ItShouldList_Acquisitions(3);
-        $this->then->Acqusition_ShouldBe(1, '1Tomatoes');
-        $this->then->Acqusition_ShouldBe(2, '2Carrots');
-        $this->then->Acqusition_ShouldBe(3, '3Potatoes');
+        $this->then->Acquisition_ShouldBe(1, '1Tomatoes');
+        $this->then->Acquisition_ShouldBe(2, '2Carrots');
+        $this->then->Acquisition_ShouldBe(3, '3Potatoes');
     }
 }
