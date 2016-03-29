@@ -10,7 +10,9 @@ use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\ProductProduced;
 use happy\inventory\events\ProductRegistered;
+use happy\inventory\ProduceProduct;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
@@ -127,5 +129,14 @@ class Inventory {
 
     public function applyProductRegistered(ProductRegistered $e) {
         $this->products[] = $e->getProduct();
+    }
+
+    public function handleProduceProduct(ProduceProduct $c) {
+        return new ProductProduced(
+            $c->getProduct(),
+            $c->getAmount(),
+            $this->session->requireLogin(),
+            $c->getWhen()
+        );
     }
 }

@@ -12,6 +12,8 @@ use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
+use happy\inventory\model\ProductIdentifier;
+use happy\inventory\ProduceProduct;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
@@ -102,6 +104,11 @@ class Action {
     }
 
     public function IProduce_UnitsOf($amount, $product) {
+        $this->karma->when(new ProduceProduct(
+            new ProductIdentifier($product),
+            $amount,
+            $this->when
+        ));
     }
 
     public function ISell_UnitsOf_For__To($amount, $product, $gain, $currency, $customer) {

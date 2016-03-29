@@ -7,6 +7,10 @@ use spec\happy\inventory\scenario\Specification;
  */
 class ProduceProductSpec extends Specification {
 
+    function before() {
+        $this->given->IAmLoggedInAs('nobody');
+    }
+
     function succeed() {
         $this->when->IProduce_UnitsOf(5, 'Chips');
         $this->then->_UnitsOf_ShouldBeProduced(5, 'Chips');

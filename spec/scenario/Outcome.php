@@ -8,11 +8,13 @@ use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\ProductProduced;
 use happy\inventory\events\ProductRegistered;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
+use happy\inventory\model\ProductIdentifier;
 use happy\inventory\model\UserIdentifier;
 use happy\inventory\projecting\AcquisitionList;
 use happy\inventory\projecting\CostumerList;
@@ -164,6 +166,12 @@ class Outcome {
     }
 
     public function _UnitsOf_ShouldBeProduced($amount, $product) {
+        $this->then(ProductProduced::class, function (ProductProduced $e) use ($amount, $product) {
+            return [
+                [$e->getProduct(), new ProductIdentifier($product)],
+                [$e->getAmount(), $amount]
+            ];
+        });
     }
 
     public function _UnitsOf_ShouldBeSoldFor__To($amount, $product, $gain, $currency, $costumer) {
