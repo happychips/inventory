@@ -7,7 +7,10 @@ use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\ProductDelivered;
+use happy\inventory\events\ProductProduced;
 use happy\inventory\events\ProductRegistered;
+use happy\inventory\events\StockUpdated;
 use happy\inventory\events\SupplierAdded;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\CostumerIdentifier;
@@ -125,6 +128,31 @@ class Context {
     public function IUpdatedTheInventoryOf_To($material, $amount, $unit) {
         $this->karma->given(new InventoryUpdated(
             MaterialIdentifier::fromNameAndUnit($material, $unit),
+            $amount,
+            new UserIdentifier('me')
+        ));
+    }
+
+    public function IProduced__Of($amount, $units, $product) {
+        $this->karma->given(new ProductProduced(
+            ProductIdentifier::fromNameAndUnit($product, $units),
+            $amount,
+            new UserIdentifier('me')
+        ));
+    }
+
+    public function IDelivered__Of($amount, $unit, $product) {
+        $this->karma->given(new ProductDelivered(
+            ProductIdentifier::fromNameAndUnit($product, $unit),
+            $amount,
+            CostumerIdentifier::fromName('foo'),
+            new UserIdentifier('me')
+        ));
+    }
+
+    public function IUpdatedTheStockOf_To($product, $amount, $unit) {
+        $this->karma->given(new StockUpdated(
+            ProductIdentifier::fromNameAndUnit($product, $unit),
             $amount,
             new UserIdentifier('me')
         ));

@@ -11,12 +11,14 @@ use happy\inventory\model\Session;
 use happy\inventory\projecting\AcquisitionList;
 use happy\inventory\projecting\CostumerList;
 use happy\inventory\projecting\CurrentInventory;
+use happy\inventory\projecting\CurrentStock;
 use happy\inventory\projecting\EventHistory;
 use happy\inventory\projecting\MaterialList;
 use happy\inventory\projecting\ProductList;
 use happy\inventory\projecting\SupplierList;
 use happy\inventory\ShowHistory;
 use happy\inventory\ShowInventory;
+use happy\inventory\ShowStock;
 use watoki\karma\Application as Karma;
 use watoki\karma\implementations\aggregates\ObjectAggregateFactory;
 use watoki\karma\implementations\projections\ObjectProjectionFactory;
@@ -76,6 +78,8 @@ class Application extends Karma {
             return new SupplierList();
         } else if ($query instanceof ShowInventory) {
             return new CurrentInventory();
+        } else if ($query instanceof ShowStock) {
+            return new CurrentStock();
         }
 
         throw new \Exception('Unknown query');

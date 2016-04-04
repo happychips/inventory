@@ -22,6 +22,7 @@ use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
 use happy\inventory\ShowInventory;
+use happy\inventory\ShowStock;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\parameters\file\MemoryFile;
@@ -199,5 +200,9 @@ class Action {
 
     public function IShowTheInventory() {
         $this->karma->when(new ShowInventory());
+    }
+
+    public function IShowTheStock() {
+        $this->karma->when(new ShowStock());
     }
 }

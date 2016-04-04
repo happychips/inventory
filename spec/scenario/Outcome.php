@@ -25,6 +25,7 @@ use happy\inventory\model\UserIdentifier;
 use happy\inventory\projecting\AcquisitionList;
 use happy\inventory\projecting\CostumerList;
 use happy\inventory\projecting\CurrentInventory;
+use happy\inventory\projecting\CurrentStock;
 use happy\inventory\projecting\MaterialList;
 use happy\inventory\projecting\ProductList;
 use rtens\domin\parameters\File;
@@ -367,6 +368,30 @@ class Outcome {
         $this->thenReturn(function (CurrentInventory $inventory) use ($int, $count) {
             return [
                 'count' => [$inventory->getMaterials()[$int - 1]->getCount(), $count]
+            ];
+        });
+    }
+
+    public function TheStockShouldContain_Products($int) {
+        $this->thenReturn(function (CurrentStock $stock) use ($int) {
+            return [
+                'total' => [count($stock->getProducts()), $int]
+            ];
+        });
+    }
+
+    public function Product_InStockShouldHaveTheCaption($int, $caption) {
+        $this->thenReturn(function (CurrentStock $stock) use ($int, $caption) {
+            return [
+                'caption' => [$stock->getProducts()[$int - 1]->getCaption(), $caption]
+            ];
+        });
+    }
+
+    public function Product_InStockShouldCount($int, $count) {
+        $this->thenReturn(function (CurrentStock $stock) use ($int, $count) {
+            return [
+                'count' => [$stock->getProducts()[$int - 1]->getCount(), $count]
             ];
         });
     }

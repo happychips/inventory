@@ -9,25 +9,25 @@ use happy\inventory\events\MaterialRegistered;
 
 class CurrentInventory {
 
-    /** @var CurrentMaterialCount[] */
+    /** @var CurrentCount[] */
     private $materials = [];
     /** @var MaterialAcquired[] */
     private $acquisitions = [];
 
     /**
-     * @return CurrentMaterialCount[]
+     * @return CurrentCount[]
      */
     public function getMaterials() {
         $materials = array_values($this->materials);
 
-        usort($materials, function (CurrentMaterialCount $a, CurrentMaterialCount $b) {
+        usort($materials, function (CurrentCount $a, CurrentCount $b) {
             return strcmp($a->getCaption(), $b->getCaption());
         });
         return $materials;
     }
 
     public function applyMaterialRegistered(MaterialRegistered $e) {
-        $this->materials[(string)$e->getMaterial()] = new CurrentMaterialCount($e->getName(), $e->getUnit());
+        $this->materials[(string)$e->getMaterial()] = new CurrentCount($e->getName(), $e->getUnit());
     }
 
     public function applyMaterialAcquired(MaterialAcquired $e) {

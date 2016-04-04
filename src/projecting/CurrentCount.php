@@ -1,7 +1,7 @@
 <?php
 namespace happy\inventory\projecting;
 
-class CurrentMaterialCount {
+class CurrentCount {
 
     /** @var string */
     private $name;

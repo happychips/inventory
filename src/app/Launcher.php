@@ -18,11 +18,13 @@ use happy\inventory\model\ProductIdentifier;
 use happy\inventory\model\SupplierIdentifier;
 use happy\inventory\ProduceProduct;
 use happy\inventory\projecting\CurrentInventory;
+use happy\inventory\projecting\CurrentStock;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
 use happy\inventory\ShowHistory;
 use happy\inventory\ShowInventory;
+use happy\inventory\ShowStock;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\delivery\web\adapters\curir\root\IndexResource;
@@ -66,6 +68,9 @@ class Launcher {
 
             $this->addActions($domin);
 
+            $domin->menu->add(new ActionMenuItem('Inventory', 'ShowInventory'));
+            $domin->menu->add(new ActionMenuItem('Stock', 'ShowStock'));
+
             $domin->fields->add(new IdentifierField($domin->fields, $domin->identifiers));
             $domin->fields->add(new PasswordField());
 
@@ -107,6 +112,11 @@ class Launcher {
                 ->setModifying(false)
                 ->setAfterExecute(function (CurrentInventory $inventory) use ($domin) {
                     return new DataTable(new ObjectTable($inventory->getMaterials(), $domin->types));
+                });
+            $this->addAction($domin, ShowStock::class, 'Reporting')
+                ->setModifying(false)
+                ->setAfterExecute(function (CurrentStock $inventory) use ($domin) {
+                    return new DataTable(new ObjectTable($inventory->getProducts(), $domin->types));
                 });
             $this->addAction($domin, ShowHistory::class, 'Reporting')->setModifying(false);
 
