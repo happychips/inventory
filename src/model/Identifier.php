@@ -3,6 +3,8 @@ namespace happy\inventory\model;
 
 class Identifier {
 
+    public static $next;
+
     /** @var string */
     private $identifier;
 
@@ -28,6 +30,8 @@ class Identifier {
      * @return static
      */
     public static function generate() {
-        return new static(date('Ymd_His_') . substr(uniqid(), -4));
+        $id  = self::$next ?: date('Ymd_His_') . substr(uniqid(), -4);
+        self::$next = null;
+        return new static($id);
     }
 }

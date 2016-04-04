@@ -54,11 +54,16 @@ class Action {
         $this->AcquireMaterial($amount, $material, 42, 'FOO', $documents);
     }
 
-    private function AcquireMaterial($amount, $material, $cost, $currency, $documents = null) {
+    public function IAcquire_UnitsOf_For_Directly($amount, $material, $cost, $currency) {
+        $this->AcquireMaterial($amount, $material, $cost, $currency, null, true);
+    }
+
+    private function AcquireMaterial($amount, $material, $cost, $currency, $documents = null, $alreadyReceived = false) {
         $this->karma->when(new AcquireMaterial(
             new MaterialIdentifier($material),
             intval($amount),
             new Money($cost, $currency),
+            $alreadyReceived,
             $this->makeFiles($documents),
             $this->when
         ));

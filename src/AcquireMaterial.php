@@ -13,6 +13,8 @@ class AcquireMaterial extends Command {
     private $amount;
     /** @var Money */
     private $cost;
+    /** @var bool */
+    private $alreadyReceived;
     /** @var File[]|null */
     private $documents;
 
@@ -20,15 +22,18 @@ class AcquireMaterial extends Command {
      * @param MaterialIdentifier $material
      * @param int $amount
      * @param Money $cost
+     * @param bool $alreadyReceived
      * @param File[]|null $documents
      * @param \DateTimeImmutable|null $when
      */
-    public function __construct(MaterialIdentifier $material, $amount, Money $cost, array $documents = null, \DateTimeImmutable $when = null) {
+    public function __construct(MaterialIdentifier $material, $amount, Money $cost, $alreadyReceived = false,
+                                array $documents = null, \DateTimeImmutable $when = null) {
         parent::__construct($when);
 
         $this->material = $material;
         $this->amount = $amount;
         $this->cost = $cost;
+        $this->alreadyReceived = $alreadyReceived;
         $this->documents = $documents ?: [];
     }
 
@@ -58,5 +63,12 @@ class AcquireMaterial extends Command {
      */
     public function getCost() {
         return $this->cost;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isAlreadyReceived() {
+        return $this->alreadyReceived;
     }
 }

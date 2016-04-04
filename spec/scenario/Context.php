@@ -8,6 +8,7 @@ use happy\inventory\events\MaterialRegistered;
 use happy\inventory\events\ProductRegistered;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\CostumerIdentifier;
+use happy\inventory\model\Identifier;
 use happy\inventory\model\Inventory;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
@@ -85,5 +86,9 @@ class Context {
             $unit,
             new UserIdentifier('nobody')
         ), Inventory::IDENTIFIER);
+    }
+
+    public function theNextGeneratedIdentifierIs($string) {
+        Identifier::$next = $string;
     }
 }

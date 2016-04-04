@@ -62,14 +62,24 @@ class Inventory {
     }
 
     public function handleAcquireMaterial(AcquireMaterial $c) {
-        return new MaterialAcquired(
-            AcquisitionIdentifier::generate(),
+        $acquisition = AcquisitionIdentifier::generate();
+
+        $events[] = new MaterialAcquired(
+            $acquisition,
             $c->getMaterial(),
             $c->getAmount(),
             $c->getCost(),
             $c->getDocuments(),
             $this->session->requireLogin(),
             $c->getWhen());
+
+        if ($c->isAlreadyReceived()) {
+            $events[] = $this->handleReceiveDelivery(new ReceiveDelivery(
+                $acquisition
+            ));
+        }
+
+        return $events;
     }
 
     public function handleReceiveDelivery(ReceiveDelivery $c) {
