@@ -144,6 +144,10 @@ class Action {
         $this->karma->when(new AddCostumer($costumer));
     }
 
+    public function IAddTheCostumer_WithContact_AndLocation($costumer, $contact, $location) {
+        $this->karma->when(new AddCostumer($costumer, $contact, $location));
+    }
+
     public function IAddTheSupplier($name) {
         $this->karma->when(new AddSupplier($name));
     }

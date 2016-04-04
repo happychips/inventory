@@ -2,6 +2,7 @@
 namespace spec\happy\inventory\scenario;
 
 use happy\inventory\events\CostumerAdded;
+use happy\inventory\events\CostumerDetailsChanged;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\Event;
 use happy\inventory\events\InventoryUpdated;
@@ -323,6 +324,24 @@ class Outcome {
         $this->then(SupplierAdded::class, function (SupplierAdded $e) use ($name) {
             return [
                 [$e->getName(), $name]
+            ];
+        });
+    }
+
+    public function TheContactOfCostumer_ShouldBeChangedTo($costumer, $contact) {
+        $this->then(CostumerDetailsChanged::class, function (CostumerDetailsChanged $e) use ($costumer, $contact) {
+            return [
+                [$e->getCostumer(), new CostumerIdentifier($costumer)],
+                [$e->getContact(), $contact]
+            ];
+        });
+    }
+
+    public function TheLocationOfCostumer_ShouldBeChangedTo($costumer, $location) {
+        $this->then(CostumerDetailsChanged::class, function (CostumerDetailsChanged $e) use ($costumer, $location) {
+            return [
+                [$e->getCostumer(), new CostumerIdentifier($costumer)],
+                [$e->getLocation(), $location]
             ];
         });
     }

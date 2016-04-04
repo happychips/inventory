@@ -7,6 +7,7 @@ use happy\inventory\AddSupplier;
 use happy\inventory\ConsumeMaterial;
 use happy\inventory\DeliverProduct;
 use happy\inventory\events\CostumerAdded;
+use happy\inventory\events\CostumerDetailsChanged;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
@@ -122,12 +123,25 @@ class Inventory {
         if (in_array($costumer, $this->costumers)) {
             throw new \Exception('A costumer with that name was already added.');
         }
-        return new CostumerAdded(
+
+        $events[] = new CostumerAdded(
             $costumer,
             $c->getName(),
             $this->session->requireLogin(),
             $c->getWhen()
         );
+
+        if ($c->getContact() || $c->getLocation()) {
+            $events[] = new CostumerDetailsChanged(
+                $costumer,
+                $c->getContact(),
+                $c->getLocation(),
+                $this->session->requireLogin(),
+                $c->getWhen()
+            );
+        }
+
+        return $events;
     }
 
     public function applyCostumerAdded(CostumerAdded $e) {
