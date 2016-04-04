@@ -24,6 +24,8 @@ use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
+use rtens\domin\parameters\File;
+use rtens\domin\parameters\file\SavedFile;
 
 class Inventory {
 
@@ -31,6 +33,8 @@ class Inventory {
 
     /** @var Session */
     private $session;
+    /** @var string */
+    private $filesDir;
     /** @var MaterialIdentifier[] */
     private $materials = [];
     /** @var CostumerIdentifier[] */
@@ -42,9 +46,15 @@ class Inventory {
 
     /**
      * @param Session $session
+     * @param string $userDir
      */
-    public function __construct(Session $session) {
+    public function __construct(Session $session, $userDir) {
         $this->session = $session;
+        $this->filesDir = $userDir . '/files';
+
+        if (!file_exists($this->filesDir)) {
+            mkdir($this->filesDir, 0777, true);
+        }
     }
 
     public function handleRegisterMaterial(RegisterMaterial $c) {
@@ -75,7 +85,7 @@ class Inventory {
             $c->getAmount(),
             $c->getCost(),
             $c->getSupplier(),
-            $c->getDocuments(),
+            $this->saveFiles($c->getDocumentFiles()),
             $this->session->requireLogin(),
             $c->getWhen());
 
@@ -93,7 +103,7 @@ class Inventory {
             $c->getAcquisition(),
             $c->isPartialDelivery(),
             $c->getAmount(),
-            $c->getDocuments(),
+            $this->saveFiles($c->getDocumentFiles()),
             $c->getExtraCosts(),
             $this->session->requireLogin(),
             $c->getWhen()
@@ -209,5 +219,21 @@ class Inventory {
             $this->session->requireLogin(),
             $c->getWhen()
         );
+    }
+
+    /**
+     * @param File[] $files
+     * @return File[]
+     */
+    private function saveFiles($files) {
+        $savedFiles = [];
+        foreach ($files as $file) {
+            $path = $this->filesDir . '/' . date('Ymd_His_') . substr(uniqid(), -4) . '_' . $file->getName();
+            $file->save($path);
+
+            $savedFiles[] = new SavedFile($path, $file->getName(), $file->getType());
+        }
+
+        return $savedFiles;
     }
 }

@@ -30,6 +30,7 @@ use happy\inventory\projecting\MaterialList;
 use happy\inventory\projecting\ProductList;
 use rtens\domin\parameters\File;
 use rtens\domin\parameters\file\MemoryFile;
+use rtens\domin\parameters\file\SavedFile;
 use rtens\scrut\fixtures\ExceptionFixture;
 use watoki\karma\testing\Specification;
 
@@ -124,7 +125,9 @@ class Outcome {
         $this->then(MaterialAcquired::class, function (MaterialAcquired $e) use ($documents) {
             $conditions = [];
             foreach ($documents as $i => $name) {
-                $conditions[] = [$e->getDocuments()[$i], new MemoryFile($name, 'type/foo', $name . 'content')];
+                $conditions[] = [$e->getDocuments()[$i] instanceof SavedFile];
+                $conditions[] = [$e->getDocuments()[$i]->getName(), $name];
+                $conditions[] = [$e->getDocuments()[$i]->getType(), 'type/foo'];
             }
             return $conditions;
         });

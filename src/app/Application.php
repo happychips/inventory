@@ -30,18 +30,22 @@ class Application extends Karma {
     private $session;
     /** @var EventStore */
     private $events;
+    /** @var string */
+    private $userDir;
 
     /**
      * @param EventStore $events
      * @param Session $session
+     * @param string $userDir
      */
-    public function __construct(EventStore $events, Session $session) {
+    public function __construct(EventStore $events, Session $session, $userDir) {
         parent::__construct($events,
             (new ObjectAggregateFactory([$this, 'buildAggregateRoot']))
                 ->setGetAggregateIdentifierCallback([$this, 'getAggregateIdentifier']),
             new ObjectProjectionFactory([$this, 'buildProjection']));
         $this->session = $session;
         $this->events = $events;
+        $this->userDir = $userDir;
     }
 
     /**
@@ -55,7 +59,7 @@ class Application extends Karma {
      * @return object
      */
     public function buildAggregateRoot() {
-        return new Inventory($this->session);
+        return new Inventory($this->session, $this->userDir);
     }
 
     /**

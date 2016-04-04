@@ -36,7 +36,6 @@ use rtens\domin\reflection\GenericMethodAction;
 use rtens\domin\reflection\GenericObjectAction;
 use watoki\curir\WebDelivery;
 use watoki\karma\stores\EventStore;
-use watoki\stores\transforming\TransformerRegistryRepository;
 
 class Launcher {
 
@@ -54,19 +53,18 @@ class Launcher {
 
     public function __construct(EventStore $events, HttpSession $session, array $users, $userDir) {
         $this->session = $session;
-        $this->app = new Application($events, $this->session);
+        $this->app = new Application($events, $this->session, $userDir);
         $this->users = $users;
         $this->userDir = $userDir;
     }
 
     public function run() {
-        $transformerRegistry = TransformerRegistryRepository::getDefaultTransformerRegistry();
-        $transformerRegistry->insert(new FileTransformer($transformerRegistry, $this->userDir));
-
         WebDelivery::quickResponse(IndexResource::class, WebApplication::init(function (WebApplication $domin) {
             $domin->setNameAndBrand('Inventory');
 
             $this->addActions($domin);
+
+            $domin->renderers->add(new MyFileRenderer());
 
             $domin->menu->add(new ActionMenuItem('Inventory', 'ShowInventory'));
             $domin->menu->add(new ActionMenuItem('Stock', 'ShowStock'));

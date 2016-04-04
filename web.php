@@ -21,5 +21,5 @@ if (!file_exists($usersFile)) {
     new StoringEventStore(new FileStore($userDir . '/data')),
     new HttpSession(),
     json_decode(file_get_contents($usersFile), true),
-    $userDir . '/files'
+    $userDir
 ))->run();

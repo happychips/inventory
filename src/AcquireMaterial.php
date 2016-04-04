@@ -6,6 +6,7 @@ use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\model\SupplierIdentifier;
 use rtens\domin\parameters\File;
+use rtens\domin\parameters\Image;
 
 class AcquireMaterial extends Command {
     /** @var MaterialIdentifier */
@@ -18,7 +19,7 @@ class AcquireMaterial extends Command {
     private $supplier;
     /** @var bool */
     private $alreadyReceived;
-    /** @var File[]|null */
+    /** @var File[]|Image[]|null */
     private $documents;
 
     /**
@@ -27,7 +28,7 @@ class AcquireMaterial extends Command {
      * @param Money $cost
      * @param SupplierIdentifier|null $supplier
      * @param bool $alreadyReceived
-     * @param File[]|null $documents
+     * @param File[]|Image[]|null $documents
      * @param \DateTimeImmutable|null $when
      */
     public function __construct(MaterialIdentifier $material, $amount, Money $cost, SupplierIdentifier $supplier = null,
@@ -43,10 +44,18 @@ class AcquireMaterial extends Command {
     }
 
     /**
-     * @return File[]|null
+     * @return File[]
      */
-    public function getDocuments() {
-        return $this->documents;
+    public function getDocumentFiles() {
+        if (!$this->documents) {
+            return [];
+        }
+        return array_map(function ($fileOrImage) {
+            if ($fileOrImage instanceof Image) {
+                return $fileOrImage->getFile();
+            }
+            return $fileOrImage;
+        }, $this->documents);
     }
 
     /**

@@ -21,7 +21,7 @@ class Specification {
     public function __construct(ExceptionFixture $try) {
         $session = new FakeSession();
         $karma = new KarmaSpecification(function (EventStore $store) use ($session) {
-            return new Application($store, $session);
+            return new Application($store, $session, sys_get_temp_dir() . uniqid('/happy_inventory_'));
         });
 
         $this->given = new Context($karma, $session);

@@ -5,6 +5,7 @@ use happy\inventory\app\Command;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\ExtraCost;
 use rtens\domin\parameters\File;
+use rtens\domin\parameters\Image;
 
 class ReceiveDelivery extends Command {
 
@@ -12,7 +13,7 @@ class ReceiveDelivery extends Command {
     private $acquisition;
     /** @var bool */
     private $partialDelivery;
-    /** @var File[]|null */
+    /** @var File[]|Image[]|null */
     private $documents;
     /** @var ExtraCost[]|null */
     private $extraCosts;
@@ -23,7 +24,7 @@ class ReceiveDelivery extends Command {
      * @param AcquisitionIdentifier $acquisition
      * @param bool $partialDelivery
      * @param null|int $amount
-     * @param File[]|null $documents
+     * @param File[]|Image[]|null $documents
      * @param ExtraCost[]|null $extraCosts
      * @param \DateTimeImmutable $when
      */
@@ -52,10 +53,18 @@ class ReceiveDelivery extends Command {
     }
 
     /**
-     * @return File[]|null
+     * @return File[]
      */
-    public function getDocuments() {
-        return $this->documents;
+    public function getDocumentFiles() {
+        if (!$this->documents) {
+            return [];
+        }
+        return array_map(function ($fileOrImage) {
+            if ($fileOrImage instanceof Image) {
+                return $fileOrImage->getFile();
+            }
+            return $fileOrImage;
+        }, $this->documents);
     }
 
     /**
