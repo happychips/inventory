@@ -24,6 +24,7 @@ use happy\inventory\ShowHistory;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\delivery\web\adapters\curir\root\IndexResource;
+use rtens\domin\delivery\web\menu\ActionMenuItem;
 use rtens\domin\delivery\web\WebApplication;
 use rtens\domin\reflection\GenericMethodAction;
 use rtens\domin\reflection\GenericObjectAction;
@@ -99,8 +100,13 @@ class Launcher {
             $this->addAction($domin, DeliverProduct::class, 'Product');
 
             $this->addAction($domin, ShowHistory::class, 'Reporting')->setModifying(false);
+            $domin->actions->add('Logout', (new GenericMethodAction($this, 'logout', $domin->types, $domin->parser))->generic()
+                ->setModifying(false)
+                ->setCaption('Logout'));
+            $domin->menu->addRight(new ActionMenuItem('Logout', 'Logout'));
         } else {
             $domin->actions->add('Login', (new GenericMethodAction($this, 'login', $domin->types, $domin->parser))->generic()->setCaption('Login'));
+            $domin->menu->addRight(new ActionMenuItem('Login', 'Login'));
         }
     }
 
@@ -131,5 +137,9 @@ class Launcher {
         } else {
             throw new \Exception('Invalid credentials');
         }
+    }
+
+    public function logout() {
+        $this->session->logout();
     }
 }
