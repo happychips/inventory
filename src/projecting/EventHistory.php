@@ -10,7 +10,7 @@ class EventHistory {
      * @param mixed[] $events
      */
     public function __construct($events) {
-        $this->events = $events;
+        $this->events = array_reverse($events);
     }
 
     /**
