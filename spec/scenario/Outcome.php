@@ -53,7 +53,7 @@ class Outcome {
     }
 
     private function thenReturn(callable $condition) {
-        $this->karma->then->returnShouldMatch($condition);
+        $this->karma->then->returnShouldMatchAll($condition);
         $this->try->thenNoExceptionShouldBeThrown();
     }
 
@@ -119,6 +119,15 @@ class Outcome {
         $this->then(DeliveryReceived::class, function (DeliveryReceived $e) use ($acquisition) {
             return [
                 [$e->getAcquisition(), new AcquisitionIdentifier($acquisition)]
+            ];
+        });
+    }
+
+    public function _ShouldBePartiallyReceived($acquisition) {
+        $this->then(DeliveryReceived::class, function (DeliveryReceived $e) use ($acquisition) {
+            return [
+                [$e->getAcquisition(), new AcquisitionIdentifier($acquisition)],
+                [$e->isPartialDelivery(), true]
             ];
         });
     }

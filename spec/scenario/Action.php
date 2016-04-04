@@ -85,9 +85,14 @@ class Action {
         $this->ReceiveDelivery($acquisition, $amount);
     }
 
-    private function ReceiveDelivery($acquisition, $amount = null, $extraCosts = null, $documents = null) {
+    public function IReceiveTheDeliveryOf_Partially($acquisition) {
+        $this->ReceiveDelivery($acquisition, null, null, null, true);
+    }
+
+    private function ReceiveDelivery($acquisition, $amount = null, $extraCosts = null, $documents = null, $partial = false) {
         $this->karma->when(new ReceiveDelivery(
             new AcquisitionIdentifier($acquisition),
+            $partial,
             $amount,
             $this->makeFiles($documents),
             $extraCosts,

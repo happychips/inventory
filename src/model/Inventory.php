@@ -85,6 +85,7 @@ class Inventory {
     public function handleReceiveDelivery(ReceiveDelivery $c) {
         return new DeliveryReceived(
             $c->getAcquisition(),
+            $c->isPartialDelivery(),
             $c->getAmount(),
             $c->getDocuments(),
             $c->getExtraCosts(),

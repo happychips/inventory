@@ -27,6 +27,14 @@ class ListAcquisitionsSpec extends Specification {
         $this->then->Acquisition_ShouldBe(1, '12Tomatoes');
     }
 
+    function partialDelivery() {
+        $this->given->IAcquired_Of(42, 'Potatoes');
+        $this->given->IReceivedTheDeliveryOf__Partially(42, 'Potatoes');
+        $this->when->IListAllAcquisitions();
+        $this->then->ItShouldList_Acquisitions(1);
+        $this->then->Acquisition_ShouldBe(1, '42Potatoes');
+    }
+
     function sortByDate() {
         $this->given->NowIs('2013-01-01');
         $this->given->IAcquired_Of(3, 'Potatoes');

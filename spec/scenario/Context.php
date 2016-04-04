@@ -61,9 +61,14 @@ class Context {
         ), Inventory::IDENTIFIER);
     }
 
-    public function IReceivedTheDeliveryOf($amount, $material) {
+    public function IReceivedTheDeliveryOf__Partially($amount, $material) {
+        $this->IReceivedTheDeliveryOf($amount, $material, true);
+    }
+
+    public function IReceivedTheDeliveryOf($amount, $material, $partial = false) {
         $this->karma->given(new DeliveryReceived(
             new AcquisitionIdentifier($amount . $material),
+            $partial,
             null,
             [],
             [],

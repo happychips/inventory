@@ -10,6 +10,8 @@ class DeliveryReceived extends Event {
 
     /** @var AcquisitionIdentifier */
     private $acquisition;
+    /** @var bool */
+    private $partialDelivery;
     /** @var File[] */
     private $documents;
     /** @var ExtraCost[] */
@@ -19,16 +21,19 @@ class DeliveryReceived extends Event {
 
     /**
      * @param AcquisitionIdentifier $acquisition
+     * @param bool $partialDelivery
      * @param int|null $amount
      * @param File[] $documents
      * @param ExtraCost[] $extraCosts
      * @param UserIdentifier $who
      * @param \DateTimeImmutable|null $when
      */
-    public function __construct(AcquisitionIdentifier $acquisition, $amount, array $documents, array $extraCosts, UserIdentifier $who, \DateTimeImmutable $when = null) {
+    public function __construct(AcquisitionIdentifier $acquisition, $partialDelivery, $amount, array $documents,
+                                array $extraCosts, UserIdentifier $who, \DateTimeImmutable $when = null) {
         parent::__construct($who, $when);
 
         $this->acquisition = $acquisition;
+        $this->partialDelivery = $partialDelivery;
         $this->documents = $documents;
         $this->extraCosts = $extraCosts;
         $this->amount = $amount;
@@ -60,5 +65,12 @@ class DeliveryReceived extends Event {
      */
     public function getAmount() {
         return $this->amount;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPartialDelivery() {
+        return $this->partialDelivery;
     }
 }

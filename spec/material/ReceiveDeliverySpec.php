@@ -30,4 +30,9 @@ class ReceiveDeliverySpec extends Specification {
         $this->when->IReceiveTheDeliveryOf_Containing_Units('acquisition1', 10);
         $this->then->_ShouldBeReceivedContaining_Units('acquisition1', 10);
     }
+
+    function partialDelivery() {
+        $this->when->IReceiveTheDeliveryOf_Partially('acquisition1');
+        $this->then->_ShouldBePartiallyReceived('acquisition1');
+    }
 }

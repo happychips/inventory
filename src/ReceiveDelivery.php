@@ -10,6 +10,8 @@ class ReceiveDelivery extends Command {
 
     /** @var AcquisitionIdentifier */
     private $acquisition;
+    /** @var bool */
+    private $partialDelivery;
     /** @var File[]|null */
     private $documents;
     /** @var ExtraCost[]|null */
@@ -19,14 +21,17 @@ class ReceiveDelivery extends Command {
 
     /**
      * @param AcquisitionIdentifier $acquisition
+     * @param bool $partialDelivery
      * @param null|int $amount
      * @param File[]|null $documents
      * @param ExtraCost[]|null $extraCosts
      * @param \DateTimeImmutable $when
      */
-    public function __construct(AcquisitionIdentifier $acquisition, $amount = null, array $documents = null, array $extraCosts = null, \DateTimeImmutable $when = null) {
+    public function __construct(AcquisitionIdentifier $acquisition, $partialDelivery = false, $amount = null,
+                                array $documents = null, array $extraCosts = null, \DateTimeImmutable $when = null) {
         parent::__construct($when);
         $this->acquisition = $acquisition;
+        $this->partialDelivery = $partialDelivery;
         $this->documents = $documents ?: [];
         $this->extraCosts = $extraCosts ?: [];
         $this->amount = $amount;
@@ -58,5 +63,12 @@ class ReceiveDelivery extends Command {
      */
     public function getExtraCosts() {
         return $this->extraCosts;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPartialDelivery() {
+        return $this->partialDelivery;
     }
 }

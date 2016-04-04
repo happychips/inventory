@@ -313,12 +313,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/watoki/karma.git",
-                "reference": "8c46b002a71a78401274563e9b0e15589129446c"
+                "reference": "245dc49c46c49aac27fcf022f2dd00d2cace9938"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/watoki/karma/zipball/8c46b002a71a78401274563e9b0e15589129446c",
-                "reference": "8c46b002a71a78401274563e9b0e15589129446c",
+                "url": "https://api.github.com/repos/watoki/karma/zipball/245dc49c46c49aac27fcf022f2dd00d2cace9938",
+                "reference": "245dc49c46c49aac27fcf022f2dd00d2cace9938",
                 "shasum": ""
             },
             "require": {
@@ -344,7 +344,7 @@
                 }
             ],
             "description": "Event sourcing library for PHP",
-            "time": "2016-04-04 05:12:12"
+            "time": "2016-04-04 05:40:51"
         },
         {
             "name": "watoki/reflect",

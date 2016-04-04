@@ -16,7 +16,9 @@ class AcquisitionList {
     }
 
     public function applyDeliveryReceived(DeliveryReceived $e) {
-        unset($this->acquisitions[(string)$e->getAcquisition()]);
+        if (!$e->isPartialDelivery()) {
+            unset($this->acquisitions[(string)$e->getAcquisition()]);
+        }
     }
 
     public function getAcquisitions() {
