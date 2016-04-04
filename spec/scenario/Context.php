@@ -3,7 +3,9 @@ namespace spec\happy\inventory\scenario;
 
 use happy\inventory\events\CostumerAdded;
 use happy\inventory\events\DeliveryReceived;
+use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
+use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
 use happy\inventory\events\ProductRegistered;
 use happy\inventory\events\SupplierAdded;
@@ -55,7 +57,7 @@ class Context {
     public function IAcquired_Of($amount, $material) {
         $this->karma->given(new MaterialAcquired(
             new AcquisitionIdentifier($amount . $material),
-            new MaterialIdentifier($material),
+            MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT),
             $amount,
             new Money(0, 'FOO'),
             null,
@@ -64,15 +66,19 @@ class Context {
         ), Inventory::IDENTIFIER);
     }
 
+    public function IReceived_OfTheDeliveryOf($deliveredAmount, $amount, $material) {
+        $this->IReceivedTheDeliveryOf($amount, $material, true, $deliveredAmount);
+    }
+
     public function IReceivedTheDeliveryOf__Partially($amount, $material) {
         $this->IReceivedTheDeliveryOf($amount, $material, true);
     }
 
-    public function IReceivedTheDeliveryOf($amount, $material, $partial = false) {
+    public function IReceivedTheDeliveryOf($amount, $material, $partial = false, $deliveredMaterial = null) {
         $this->karma->given(new DeliveryReceived(
             new AcquisitionIdentifier($amount . $material),
             $partial,
-            null,
+            $deliveredMaterial,
             [],
             [],
             new UserIdentifier('test')
@@ -106,5 +112,21 @@ class Context {
             $name,
             new UserIdentifier('test')
         ), Inventory::IDENTIFIER);
+    }
+
+    public function IConsumed__Of($amount, $unit, $material) {
+        $this->karma->given(new MaterialConsumed(
+            MaterialIdentifier::fromNameAndUnit($material, $unit),
+            $amount,
+            new UserIdentifier('me')
+        ), Inventory::IDENTIFIER);
+    }
+
+    public function IUpdatedTheInventoryOf_To($material, $amount, $unit) {
+        $this->karma->given(new InventoryUpdated(
+            MaterialIdentifier::fromNameAndUnit($material, $unit),
+            $amount,
+            new UserIdentifier('me')
+        ));
     }
 }

@@ -21,12 +21,15 @@ use happy\inventory\ProduceProduct;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
+use happy\inventory\ShowInventory;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\parameters\file\MemoryFile;
 use watoki\karma\testing\Specification;
 
 class Action {
+
+    const DEFAULT_UNIT = 'kg';
 
     /** @var Specification */
     private $karma;
@@ -66,7 +69,7 @@ class Action {
 
     private function AcquireMaterial($amount, $material, $cost, $currency, $documents = null, $alreadyReceived = false, $supplier = null) {
         $this->karma->when(new AcquireMaterial(
-            new MaterialIdentifier($material),
+            MaterialIdentifier::fromNameAndUnit($material, self::DEFAULT_UNIT),
             intval($amount),
             new Money($cost, $currency),
             $supplier,
@@ -109,7 +112,7 @@ class Action {
 
     public function IConsume_UnitsOf($amount, $material) {
         $this->karma->when(new ConsumeMaterial(
-            new MaterialIdentifier($material),
+            MaterialIdentifier::fromNameAndUnit($material, self::DEFAULT_UNIT),
             $amount,
             $this->when
         ));
@@ -117,7 +120,7 @@ class Action {
 
     public function IUpdateTheInventoryOf_To_Units($material, $amount) {
         $this->karma->when(new UpdateInventory(
-            new MaterialIdentifier($material),
+            MaterialIdentifier::fromNameAndUnit($material, self::DEFAULT_UNIT),
             $amount,
             $this->when
         ));
@@ -192,5 +195,9 @@ class Action {
 
     public function IListAllProducts() {
         $this->karma->when(new ListProducts());
+    }
+
+    public function IShowTheInventory() {
+        $this->karma->when(new ShowInventory());
     }
 }

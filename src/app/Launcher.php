@@ -17,14 +17,18 @@ use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\ProductIdentifier;
 use happy\inventory\model\SupplierIdentifier;
 use happy\inventory\ProduceProduct;
+use happy\inventory\projecting\CurrentInventory;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
 use happy\inventory\ShowHistory;
+use happy\inventory\ShowInventory;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\delivery\web\adapters\curir\root\IndexResource;
 use rtens\domin\delivery\web\menu\ActionMenuItem;
+use rtens\domin\delivery\web\renderers\tables\types\DataTable;
+use rtens\domin\delivery\web\renderers\tables\types\ObjectTable;
 use rtens\domin\delivery\web\WebApplication;
 use rtens\domin\reflection\GenericMethodAction;
 use rtens\domin\reflection\GenericObjectAction;
@@ -99,7 +103,13 @@ class Launcher {
             $this->addAction($domin, UpdateStock::class, 'Product');
             $this->addAction($domin, DeliverProduct::class, 'Product');
 
+            $this->addAction($domin, ShowInventory::class, 'Reporting')
+                ->setModifying(false)
+                ->setAfterExecute(function (CurrentInventory $inventory) use ($domin) {
+                    return new DataTable(new ObjectTable($inventory->getMaterials(), $domin->types));
+                });
             $this->addAction($domin, ShowHistory::class, 'Reporting')->setModifying(false);
+
             $domin->actions->add('Logout', (new GenericMethodAction($this, 'logout', $domin->types, $domin->parser))->generic()
                 ->setModifying(false)
                 ->setCaption('Logout'));

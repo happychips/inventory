@@ -24,6 +24,7 @@ use happy\inventory\model\SupplierIdentifier;
 use happy\inventory\model\UserIdentifier;
 use happy\inventory\projecting\AcquisitionList;
 use happy\inventory\projecting\CostumerList;
+use happy\inventory\projecting\CurrentInventory;
 use happy\inventory\projecting\MaterialList;
 use happy\inventory\projecting\ProductList;
 use rtens\domin\parameters\File;
@@ -101,7 +102,7 @@ class Outcome {
     public function _UnitsOf_For__ShouldBeAcquired($amount, $material, $cost, $currency) {
         $this->then(MaterialAcquired::class, function (MaterialAcquired $e) use ($amount, $material, $cost, $currency) {
             return [
-                [$e->getMaterial(), new MaterialIdentifier($material)],
+                [$e->getMaterial(), MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT)],
                 [$e->getAmount(), intval($amount)],
                 [$e->getCost(), new Money($cost, $currency)],
             ];
@@ -111,7 +112,7 @@ class Outcome {
     public function _UnitsOf_ShouldBeAcquiredFrom($amount, $material, $supplier) {
         $this->then(MaterialAcquired::class, function (MaterialAcquired $e) use ($amount, $material, $supplier) {
             return [
-                [$e->getMaterial(), new MaterialIdentifier($material)],
+                [$e->getMaterial(), MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT)],
                 [$e->getAmount(), intval($amount)],
                 [$e->getSupplier(), new SupplierIdentifier($supplier)],
             ];
@@ -178,7 +179,7 @@ class Outcome {
     public function _UnitsOf_ShouldBeConsumed($amount, $material) {
         $this->then(MaterialConsumed::class, function (MaterialConsumed $e) use ($amount, $material) {
             return [
-                [$e->getMaterial(), new MaterialIdentifier($material)],
+                [$e->getMaterial(), MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT)],
                 [$e->getAmount(), $amount]
             ];
         });
@@ -187,7 +188,7 @@ class Outcome {
     public function TheInventoryOf_ShouldBeUpdatedTo_Units($material, $amount) {
         $this->then(InventoryUpdated::class, function (InventoryUpdated $e) use ($amount, $material) {
             return [
-                [$e->getMaterial(), new MaterialIdentifier($material)],
+                [$e->getMaterial(), MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT)],
                 [$e->getAmount(), $amount]
             ];
         });
@@ -342,6 +343,30 @@ class Outcome {
             return [
                 [$e->getCostumer(), new CostumerIdentifier($costumer)],
                 [$e->getLocation(), $location]
+            ];
+        });
+    }
+
+    public function TheInventoryShouldContain_Materials($int) {
+        $this->thenReturn(function (CurrentInventory $inventory) use ($int) {
+            return [
+                'total' => [count($inventory->getMaterials()), $int]
+            ];
+        });
+    }
+
+    public function MaterialOfTheInventory_ShouldHaveTheCaption($int, $caption) {
+        $this->thenReturn(function (CurrentInventory $inventory) use ($int, $caption) {
+            return [
+                'caption' => [$inventory->getMaterials()[$int - 1]->getCaption(), $caption]
+            ];
+        });
+    }
+
+    public function MaterialOfTheInventory_ShouldHaveTheCount($int, $count) {
+        $this->thenReturn(function (CurrentInventory $inventory) use ($int, $count) {
+            return [
+                'count' => [$inventory->getMaterials()[$int - 1]->getCount(), $count]
             ];
         });
     }

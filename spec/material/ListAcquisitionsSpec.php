@@ -15,7 +15,7 @@ class ListAcquisitionsSpec extends Specification {
         $this->given->IAcquired_Of(42, 'Potatoes');
         $this->when->IListAllAcquisitions();
         $this->then->ItShouldList_Acquisitions(1);
-        $this->then->Acquisition_ShouldHaveTheCaption('42Potatoes', '2011-01-01 - Potatoes (42)');
+        $this->then->Acquisition_ShouldHaveTheCaption('42Potatoes', '2011-01-01 - Potatoes_kg (42)');
     }
 
     function receivedDelivery() {
