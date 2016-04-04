@@ -5,6 +5,7 @@ use happy\inventory\ListAcquisitions;
 use happy\inventory\ListCostumers;
 use happy\inventory\ListMaterials;
 use happy\inventory\ListProducts;
+use happy\inventory\ListSuppliers;
 use happy\inventory\model\Inventory;
 use happy\inventory\model\Session;
 use happy\inventory\projecting\AcquisitionList;
@@ -12,6 +13,7 @@ use happy\inventory\projecting\CostumerList;
 use happy\inventory\projecting\EventHistory;
 use happy\inventory\projecting\MaterialList;
 use happy\inventory\projecting\ProductList;
+use happy\inventory\projecting\SupplierList;
 use happy\inventory\ShowHistory;
 use watoki\karma\Application as Karma;
 use watoki\karma\implementations\aggregates\ObjectAggregateFactory;
@@ -68,6 +70,8 @@ class Application extends Karma {
             return new ProductList();
         } else if ($query instanceof ListCostumers) {
             return new CostumerList();
+        } else if ($query instanceof ListSuppliers) {
+            return new SupplierList();
         }
 
         throw new \Exception('Unknown query');

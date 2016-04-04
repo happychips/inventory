@@ -12,12 +12,14 @@ use happy\inventory\events\ProductDelivered;
 use happy\inventory\events\ProductProduced;
 use happy\inventory\events\ProductRegistered;
 use happy\inventory\events\StockUpdated;
+use happy\inventory\events\SupplierAdded;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\CostumerIdentifier;
 use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\model\ProductIdentifier;
+use happy\inventory\model\SupplierIdentifier;
 use happy\inventory\model\UserIdentifier;
 use happy\inventory\projecting\AcquisitionList;
 use happy\inventory\projecting\CostumerList;
@@ -101,6 +103,16 @@ class Outcome {
                 [$e->getMaterial(), new MaterialIdentifier($material)],
                 [$e->getAmount(), intval($amount)],
                 [$e->getCost(), new Money($cost, $currency)],
+            ];
+        });
+    }
+
+    public function _UnitsOf_ShouldBeAcquiredFrom($amount, $material, $supplier) {
+        $this->then(MaterialAcquired::class, function (MaterialAcquired $e) use ($amount, $material, $supplier) {
+            return [
+                [$e->getMaterial(), new MaterialIdentifier($material)],
+                [$e->getAmount(), intval($amount)],
+                [$e->getSupplier(), new SupplierIdentifier($supplier)],
             ];
         });
     }
@@ -303,6 +315,14 @@ class Outcome {
         $this->thenReturn(function (ProductList $returned) use ($pos, $id) {
             return [
                 [array_keys($returned->getProducts())[$pos - 1], $id]
+            ];
+        });
+    }
+
+    public function TheSupplier_ShouldBeAdded($name) {
+        $this->then(SupplierAdded::class, function (SupplierAdded $e) use ($name) {
+            return [
+                [$e->getName(), $name]
             ];
         });
     }

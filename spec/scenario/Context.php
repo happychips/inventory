@@ -6,6 +6,7 @@ use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialRegistered;
 use happy\inventory\events\ProductRegistered;
+use happy\inventory\events\SupplierAdded;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\CostumerIdentifier;
 use happy\inventory\model\Identifier;
@@ -13,6 +14,7 @@ use happy\inventory\model\Inventory;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\model\ProductIdentifier;
+use happy\inventory\model\SupplierIdentifier;
 use happy\inventory\model\Time;
 use happy\inventory\model\UserIdentifier;
 use watoki\karma\testing\Specification as KarmaSpecification;
@@ -56,6 +58,7 @@ class Context {
             new MaterialIdentifier($material),
             $amount,
             new Money(0, 'FOO'),
+            null,
             [],
             new UserIdentifier('test')
         ), Inventory::IDENTIFIER);
@@ -95,5 +98,13 @@ class Context {
 
     public function theNextGeneratedIdentifierIs($string) {
         Identifier::$next = $string;
+    }
+
+    public function IAddedASupplier($name) {
+        $this->karma->given(new SupplierAdded(
+            SupplierIdentifier::fromName($name),
+            $name,
+            new UserIdentifier('test')
+        ), Inventory::IDENTIFIER);
     }
 }

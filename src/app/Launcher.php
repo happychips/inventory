@@ -3,16 +3,19 @@ namespace happy\inventory\app;
 
 use happy\inventory\AcquireMaterial;
 use happy\inventory\AddCostumer;
+use happy\inventory\AddSupplier;
 use happy\inventory\ConsumeMaterial;
 use happy\inventory\DeliverProduct;
 use happy\inventory\ListAcquisitions;
 use happy\inventory\ListCostumers;
 use happy\inventory\ListMaterials;
 use happy\inventory\ListProducts;
+use happy\inventory\ListSuppliers;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\CostumerIdentifier;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\ProductIdentifier;
+use happy\inventory\model\SupplierIdentifier;
 use happy\inventory\ProduceProduct;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
@@ -73,6 +76,9 @@ class Launcher {
             $domin->identifiers->setProvider(CostumerIdentifier::class, function () {
                 return $this->app->handle(new ListCostumers())->getCostumers();
             });
+            $domin->identifiers->setProvider(SupplierIdentifier::class, function () {
+                return $this->app->handle(new ListSuppliers())->getSuppliers();
+            });
         }, WebDelivery::init()));
     }
 
@@ -81,6 +87,7 @@ class Launcher {
             $this->addAction($domin, RegisterMaterial::class, 'Setup');
             $this->addAction($domin, RegisterProduct::class, 'Setup');
             $this->addAction($domin, AddCostumer::class, 'Setup');
+            $this->addAction($domin, AddSupplier::class, 'Setup');
 
             $this->addAction($domin, AcquireMaterial::class, 'Material');
             $this->addAction($domin, ReceiveDelivery::class, 'Material');

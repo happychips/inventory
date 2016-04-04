@@ -3,6 +3,7 @@ namespace happy\inventory\model;
 
 use happy\inventory\AcquireMaterial;
 use happy\inventory\AddCostumer;
+use happy\inventory\AddSupplier;
 use happy\inventory\ConsumeMaterial;
 use happy\inventory\DeliverProduct;
 use happy\inventory\events\CostumerAdded;
@@ -15,6 +16,7 @@ use happy\inventory\events\ProductDelivered;
 use happy\inventory\events\ProductProduced;
 use happy\inventory\events\ProductRegistered;
 use happy\inventory\events\StockUpdated;
+use happy\inventory\events\SupplierAdded;
 use happy\inventory\ProduceProduct;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
@@ -34,6 +36,8 @@ class Inventory {
     private $costumers = [];
     /** @var ProductIdentifier[] */
     private $products = [];
+    /** @var SupplierIdentifier[] */
+    private $suppliers = [];
 
     /**
      * @param Session $session
@@ -69,6 +73,7 @@ class Inventory {
             $c->getMaterial(),
             $c->getAmount(),
             $c->getCost(),
+            $c->getSupplier(),
             $c->getDocuments(),
             $this->session->requireLogin(),
             $c->getWhen());
@@ -120,12 +125,30 @@ class Inventory {
         return new CostumerAdded(
             $costumer,
             $c->getName(),
-            $this->session->requireLogin()
+            $this->session->requireLogin(),
+            $c->getWhen()
         );
     }
 
     public function applyCostumerAdded(CostumerAdded $e) {
         $this->costumers[] = $e->getCostumer();
+    }
+
+    public function handleAddSupplier(AddSupplier $c) {
+        $supplier = SupplierIdentifier::fromName($c->getName());
+        if (in_array($supplier, $this->suppliers)) {
+            throw new \Exception('A supplier with that name was already added.');
+        }
+        return new SupplierAdded(
+            $supplier,
+            $c->getName(),
+            $this->session->requireLogin(),
+            $c->getWhen()
+        );
+    }
+
+    public function applySupplierAdded(SupplierAdded $e) {
+        $this->suppliers[] = $e->getSupplier();
     }
 
     public function handleRegisterProduct(RegisterProduct $c) {

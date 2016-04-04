@@ -3,6 +3,7 @@ namespace spec\happy\inventory\scenario;
 
 use happy\inventory\AcquireMaterial;
 use happy\inventory\AddCostumer;
+use happy\inventory\AddSupplier;
 use happy\inventory\ConsumeMaterial;
 use happy\inventory\DeliverProduct;
 use happy\inventory\ListAcquisitions;
@@ -15,6 +16,7 @@ use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\model\ProductIdentifier;
+use happy\inventory\model\SupplierIdentifier;
 use happy\inventory\ProduceProduct;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
@@ -58,11 +60,16 @@ class Action {
         $this->AcquireMaterial($amount, $material, $cost, $currency, null, true);
     }
 
-    private function AcquireMaterial($amount, $material, $cost, $currency, $documents = null, $alreadyReceived = false) {
+    public function IAcquire_UnitsOf_From($amount, $material, $supplier) {
+        $this->AcquireMaterial($amount, $material, 42, 'BTN', null, false, new SupplierIdentifier($supplier));
+    }
+
+    private function AcquireMaterial($amount, $material, $cost, $currency, $documents = null, $alreadyReceived = false, $supplier = null) {
         $this->karma->when(new AcquireMaterial(
             new MaterialIdentifier($material),
             intval($amount),
             new Money($cost, $currency),
+            $supplier,
             $alreadyReceived,
             $this->makeFiles($documents),
             $this->when
@@ -135,6 +142,10 @@ class Action {
 
     public function IAddTheCostumer($costumer) {
         $this->karma->when(new AddCostumer($costumer));
+    }
+
+    public function IAddTheSupplier($name) {
+        $this->karma->when(new AddSupplier($name));
     }
 
     public function IUpdateTheStockOf_To_Units($product, $amount) {

@@ -26,4 +26,9 @@ class AcquireMaterialSpec extends Specification {
         $this->when->IAcquire_UnitsOf_For_Directly(4, 'Tomatoes', 12, 'BTN');
         $this->then->_ShouldBeReceived('Tomatoes_4');
     }
+
+    function withSupplier() {
+        $this->when->IAcquire_UnitsOf_From(4, 'Potatoes', 'Karma');
+        $this->then->_UnitsOf_ShouldBeAcquiredFrom(4, 'Potatoes', 'Karma');
+    }
 }
