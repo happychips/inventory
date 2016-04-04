@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "af18e9884646e0be06bef58ac254ad32",
-    "content-hash": "ddb1e6fec5de02d6e282f3fcbaeb05f4",
+    "hash": "7f3c3bc48a48b434c369a9af79292db7",
+    "content-hash": "2be5903eec671c0c2f34f0db1a2f344d",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -308,6 +308,45 @@
             "time": "2016-02-17 05:49:53"
         },
         {
+            "name": "watoki/karma",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/watoki/karma.git",
+                "reference": "8c46b002a71a78401274563e9b0e15589129446c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/watoki/karma/zipball/8c46b002a71a78401274563e9b0e15589129446c",
+                "reference": "8c46b002a71a78401274563e9b0e15589129446c",
+                "shasum": ""
+            },
+            "require": {
+                "watoki/stores": "*"
+            },
+            "require-dev": {
+                "rtens/scrut": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "watoki\\karma\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nikolas Martens",
+                    "email": "Nikolas.M@rtens.org"
+                }
+            ],
+            "description": "Event sourcing library for PHP",
+            "time": "2016-04-04 05:12:12"
+        },
+        {
             "name": "watoki/reflect",
             "version": "v1.0",
             "source": {
@@ -458,12 +497,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rtens/scrut.git",
-                "reference": "83a23fab0e9ae23b6a7373fde9ef0e548162f40b"
+                "reference": "6bff52009d9134c027c215a059e4a1f14a687247"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rtens/scrut/zipball/83a23fab0e9ae23b6a7373fde9ef0e548162f40b",
-                "reference": "83a23fab0e9ae23b6a7373fde9ef0e548162f40b",
+                "url": "https://api.github.com/repos/rtens/scrut/zipball/6bff52009d9134c027c215a059e4a1f14a687247",
+                "reference": "6bff52009d9134c027c215a059e4a1f14a687247",
                 "shasum": ""
             },
             "require": {
@@ -498,12 +537,13 @@
                 "test",
                 "test runner"
             ],
-            "time": "2016-03-08 12:33:18"
+            "time": "2016-03-31 11:11:28"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "watoki/karma": 20,
         "watoki/stores": 20,
         "rtens/domin": 20,
         "watoki/curir": 20,

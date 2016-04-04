@@ -14,7 +14,7 @@ use happy\inventory\model\Money;
 use happy\inventory\model\ProductIdentifier;
 use happy\inventory\model\Time;
 use happy\inventory\model\UserIdentifier;
-use watoki\karma\Specification as KarmaSpecification;
+use watoki\karma\testing\Specification as KarmaSpecification;
 
 class Context {
 
@@ -38,10 +38,6 @@ class Context {
 
     public function NowIs($when) {
         Time::freeze(new \DateTimeImmutable($when));
-    }
-
-    public function nothingHasHappened() {
-        $this->karma->reset();
     }
 
     public function IRegisteredTheMaterial_WithTheUnit($material, $unit) {

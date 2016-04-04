@@ -43,11 +43,10 @@ class RecordUserAndTimeSpec extends Specification {
     }
 
     function succeed() {
-        $this->given->IAmLoggedInAs('Foo');
-        $this->given->NowIs('2011-12-13 14:15:16 UTC');
-
         $this->forEachAction(function ($action, $args) {
-            $this->given->nothingHasHappened();
+            $this->given->IAmLoggedInAs('Foo');
+            $this->given->NowIs('2011-12-13 14:15:16 UTC');
+
             call_user_func_array([$this->when, $action], $args);
             $this->then->AllEventsShouldBeCausedBy('Foo');
             $this->then->AllEventsShouldHaveHappenedAt('2011-12-13 14:15:16 UTC');
@@ -55,11 +54,9 @@ class RecordUserAndTimeSpec extends Specification {
     }
 
     function overwriteTime() {
-        $this->given->IAmLoggedInAs('Foo');
-        $this->given->NowIs('2011-12-13 14:15:16 UTC');
-
         $this->forEachAction(function ($action, $args) {
-            $this->given->nothingHasHappened();
+            $this->given->IAmLoggedInAs('Foo');
+            $this->given->NowIs('2011-12-13 14:15:16 UTC');
 
             $this->when->ISetWhenTo('2015-12-11 14:15:16');
             call_user_func_array([$this->when, $action], $args);

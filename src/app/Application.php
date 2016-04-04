@@ -13,70 +13,42 @@ use happy\inventory\projecting\EventHistory;
 use happy\inventory\projecting\MaterialList;
 use happy\inventory\projecting\ProductList;
 use happy\inventory\ShowHistory;
-use watoki\karma\command\AggregateFactory;
-use watoki\karma\command\CommandHandler;
-use watoki\karma\EventStore;
-use watoki\karma\query\ProjectionFactory;
-use watoki\karma\query\QueryProjector;
+use watoki\karma\Application as Karma;
+use watoki\karma\implementations\aggregates\ObjectAggregateFactory;
+use watoki\karma\implementations\projections\ObjectProjectionFactory;
+use watoki\karma\stores\EventStore;
 
-class Application implements AggregateFactory, ProjectionFactory {
+class Application extends Karma {
+
     /** @var Session */
     private $session;
-    /** @var CommandHandler */
-    private $command;
-    /** @var QueryProjector */
-    private $query;
     /** @var EventStore */
     private $events;
 
     /**
      * @param EventStore $events
+     * @param Session $session
      */
     public function __construct(EventStore $events, Session $session) {
-        $this->events = $events;
+        parent::__construct($events,
+            (new ObjectAggregateFactory([$this, 'buildAggregateRoot']))
+                ->setGetAggregateIdentifierCallback([$this, 'getAggregateIdentifier']),
+            new ObjectProjectionFactory([$this, 'buildProjection']));
         $this->session = $session;
-        $this->command = new CommandHandler($events, $this);
-        $this->query = new QueryProjector($events, $this);
-    }
-
-    public function handle($commandOrQuery) {
-        if ($commandOrQuery instanceof Command) {
-            $this->command->handle($commandOrQuery);
-            return null;
-        } else {
-            return $this->query->project($commandOrQuery);
-        }
+        $this->events = $events;
     }
 
     /**
-     * @param object $command
-     * @return string
-     */
-    public function handleMethod($command) {
-        return 'handle' . (new \ReflectionClass($command))->getShortName();
-    }
-
-    /**
-     * @param object $event
-     * @return string
-     */
-    public function applyMethod($event) {
-        return 'apply' . (new \ReflectionClass($event))->getShortName();
-    }
-
-    /**
-     * @param object $command
      * @return mixed
      */
-    public function getAggregateIdentifier($command) {
+    public function getAggregateIdentifier() {
         return Inventory::IDENTIFIER;
     }
 
     /**
-     * @param mixed $identifier
      * @return object
      */
-    public function buildAggregateRoot($identifier) {
+    public function buildAggregateRoot() {
         return new Inventory($this->session);
     }
 
@@ -85,7 +57,7 @@ class Application implements AggregateFactory, ProjectionFactory {
      * @return object
      * @throws \Exception
      */
-    public function buildProjection($query) {
+    public function buildProjection($query = null) {
         if ($query instanceof ListMaterials) {
             return new MaterialList();
         } else if ($query instanceof ShowHistory) {
@@ -99,5 +71,13 @@ class Application implements AggregateFactory, ProjectionFactory {
         }
 
         throw new \Exception('Unknown query');
+    }
+
+    /**
+     * @param mixed $commandOrQuery
+     * @return boolean
+     */
+    protected function isCommand($commandOrQuery) {
+        return $commandOrQuery instanceof Command;
     }
 }

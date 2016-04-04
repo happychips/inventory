@@ -25,7 +25,7 @@ use rtens\domin\delivery\web\WebApplication;
 use rtens\domin\reflection\GenericMethodAction;
 use rtens\domin\reflection\GenericObjectAction;
 use watoki\curir\WebDelivery;
-use watoki\karma\EventStore;
+use watoki\karma\stores\EventStore;
 use watoki\stores\transforming\TransformerRegistryRepository;
 
 class Launcher {

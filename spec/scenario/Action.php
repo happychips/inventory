@@ -22,7 +22,7 @@ use happy\inventory\RegisterProduct;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\parameters\file\MemoryFile;
-use watoki\karma\Specification;
+use watoki\karma\testing\Specification;
 
 class Action {
 

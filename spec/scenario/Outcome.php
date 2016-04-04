@@ -26,7 +26,7 @@ use happy\inventory\projecting\ProductList;
 use rtens\domin\parameters\File;
 use rtens\domin\parameters\file\MemoryFile;
 use rtens\scrut\fixtures\ExceptionFixture;
-use watoki\karma\Specification;
+use watoki\karma\testing\Specification;
 
 class Outcome {
 
@@ -45,12 +45,15 @@ class Outcome {
     }
 
     private function then($eventClass, $condition = null, $count = null) {
-        $this->karma->thenShould($eventClass, $condition, $count);
+        $metExpectation = $this->karma->then->shouldMatchAllObject($eventClass, $condition);
+        if ($count) {
+            $metExpectation->count($count);
+        }
         $this->try->thenNoExceptionShouldBeThrown();
     }
 
     private function thenReturn(callable $condition) {
-        $this->karma->thenItShouldReturn($condition);
+        $this->karma->then->returnShouldMatch($condition);
         $this->try->thenNoExceptionShouldBeThrown();
     }
 
@@ -81,7 +84,7 @@ class Outcome {
             return [
                 [$e->getWhen()->format('c'), (new \DateTimeImmutable($when))->format('c')]
             ];
-        }, count($this->karma->allEvents()));
+        }, count($this->karma->appendedEvents()));
     }
 
     public function AllEventsShouldBeCausedBy($user) {
@@ -89,7 +92,7 @@ class Outcome {
             return [
                 [$e->getWho(), new UserIdentifier($user)]
             ];
-        }, count($this->karma->allEvents()));
+        }, count($this->karma->appendedEvents()));
     }
 
     public function _UnitsOf_For__ShouldBeAcquired($amount, $material, $cost, $currency) {

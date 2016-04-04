@@ -10,6 +10,7 @@
     }
   ],
   "require": {
+    "watoki/karma": "dev-master",
     "watoki/stores": "dev-master",
     "rtens/domin": "dev-master",
     "watoki/curir": "dev-master",
