@@ -32,6 +32,7 @@ use rtens\domin\delivery\web\menu\ActionMenuItem;
 use rtens\domin\delivery\web\renderers\tables\types\DataTable;
 use rtens\domin\delivery\web\renderers\tables\types\ObjectTable;
 use rtens\domin\delivery\web\WebApplication;
+use rtens\domin\execution\RedirectResult;
 use rtens\domin\reflection\GenericMethodAction;
 use rtens\domin\reflection\GenericObjectAction;
 use watoki\curir\WebDelivery;
@@ -45,16 +46,16 @@ class Launcher {
     /** @var Application */
     private $app;
 
-    /** @var array */
-    private $users;
+    /** @var string */
+    private $usersFile;
 
     /** @var string */
     private $userDir;
 
-    public function __construct(EventStore $events, HttpSession $session, array $users, $userDir) {
+    public function __construct(EventStore $events, HttpSession $session, $usersFile, $userDir) {
         $this->session = $session;
         $this->app = new Application($events, $this->session, $userDir);
-        $this->users = $users;
+        $this->usersFile = $usersFile;
         $this->userDir = $userDir;
     }
 
@@ -122,6 +123,10 @@ class Launcher {
                 ->setModifying(false)
                 ->setCaption('Logout'));
             $domin->menu->addRight(new ActionMenuItem('Logout', 'Logout'));
+
+            $domin->actions->add('CreateUser', (new GenericMethodAction($this, 'createUser', $domin->types, $domin->parser))->generic()
+                ->setCaption('Create User'));
+            $domin->groups->put('CreateUser', 'Setup');
         } else {
             $domin->actions->add('Login', (new GenericMethodAction($this, 'login', $domin->types, $domin->parser))->generic()->setCaption('Login'));
             $domin->menu->addRight(new ActionMenuItem('Login', 'Login'));
@@ -144,20 +149,49 @@ class Launcher {
         return $action->generic();
     }
 
+    private function readUsers() {
+        return json_decode(file_get_contents($this->usersFile), true);
+    }
+
+    private function saveUsers($users) {
+        file_put_contents($this->usersFile, json_encode($users));
+    }
+
+    /**
+     * @param string $user
+     * @param Password $password
+     * @throws \Exception
+     */
+    public function createUser($user, $password) {
+        $users = $this->readUsers();
+
+        if (isset($users[$user])) {
+            throw new \Exception('User already exists');
+        }
+
+        $users[$user] = sha1($password->getPassword());
+
+        $this->saveUsers($users);
+    }
+
     /**
      * @param string $user
      * @param Password $password
      * @throws \Exception
      */
     public function login($user, $password) {
-        if (isset($this->users[$user]) && $this->users[$user] == $password->getPassword()) {
+        $users = $this->readUsers();
+
+        if (isset($users[$user]) && $users[$user] == sha1($password->getPassword())) {
             $this->session->login($user);
         } else {
             throw new \Exception('Invalid credentials');
         }
     }
 
+
     public function logout() {
         $this->session->logout();
+        return new RedirectResult('index');
     }
 }

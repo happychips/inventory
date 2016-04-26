@@ -20,6 +20,6 @@ if (!file_exists($usersFile)) {
 (new Launcher(
     new StoringEventStore(new FileStore($userDir . '/data')),
     new HttpSession(),
-    json_decode(file_get_contents($usersFile), true),
+    $usersFile,
     $userDir
 ))->run();
