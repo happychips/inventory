@@ -27,15 +27,14 @@ class PasswordField implements WebField {
 
     /**
      * @param Parameter $parameter
-     * @param mixed $value
+     * @param Password $value
      * @return string
      */
     public function render(Parameter $parameter, $value) {
         return (string)new Element('input', array_merge([
             'class' => 'form-control',
             'type' => 'password',
-            'name' => $parameter->getName(),
-            'value' => $value
+            'name' => $parameter->getName()
         ], $parameter->isRequired() ? [
             'required' => 'required'
         ] : []));
