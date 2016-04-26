@@ -160,13 +160,16 @@ class Launcher {
     /**
      * @param string $user
      * @param Password $password
+     * @param Password $passwordRepeated
      * @throws \Exception
      */
-    public function createUser($user, $password) {
+    public function createUser($user, $password, $passwordRepeated) {
         $users = $this->readUsers();
 
         if (isset($users[$user])) {
             throw new \Exception('User already exists');
+        } else if ($password->getPassword() != $passwordRepeated->getPassword()) {
+            throw new \Exception('Passwords do not match');
         }
 
         $users[$user] = sha1($password->getPassword());
