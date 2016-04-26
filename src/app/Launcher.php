@@ -180,6 +180,7 @@ class Launcher {
     /**
      * @param string $user
      * @param Password $password
+     * @return RedirectResult
      * @throws \Exception
      */
     public function login($user, $password) {
@@ -190,9 +191,12 @@ class Launcher {
         } else {
             throw new \Exception('Invalid credentials');
         }
+        return new RedirectResult('index');
     }
 
-
+    /**
+     * @return RedirectResult
+     */
     public function logout() {
         $this->session->logout();
         return new RedirectResult('index');
