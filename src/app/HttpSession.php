@@ -32,4 +32,8 @@ class HttpSession implements Session {
     public function logout() {
         unset($_SESSION['user']);
     }
+
+    public function user() {
+        return $_SESSION['user'];
+    }
 }

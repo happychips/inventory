@@ -122,7 +122,7 @@ class Launcher {
             $domin->actions->add('Logout', (new GenericMethodAction($this, 'logout', $domin->types, $domin->parser))->generic()
                 ->setModifying(false)
                 ->setCaption('Logout'));
-            $domin->menu->addRight(new ActionMenuItem('Logout', 'Logout'));
+            $domin->menu->addRight(new ActionMenuItem('Logout (' . $this->session->user() . ')', 'Logout'));
 
             $domin->actions->add('CreateUser', (new GenericMethodAction($this, 'createUser', $domin->types, $domin->parser))->generic()
                 ->setCaption('Create User'));
