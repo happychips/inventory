@@ -67,9 +67,6 @@ class Launcher {
 
             $domin->renderers->add(new MyFileRenderer());
 
-            $domin->menu->add(new ActionMenuItem('Inventory', 'ShowInventory'));
-            $domin->menu->add(new ActionMenuItem('Stock', 'ShowStock'));
-
             $domin->fields->add(new IdentifierField($domin->fields, $domin->identifiers));
             $domin->fields->add(new PasswordField());
 
@@ -118,6 +115,9 @@ class Launcher {
                     return new DataTable(new ObjectTable($inventory->getProducts(), $domin->types));
                 });
             $this->addAction($domin, ShowHistory::class, 'Reporting')->setModifying(false);
+
+            $domin->menu->add(new ActionMenuItem('Inventory', 'ShowInventory'));
+            $domin->menu->add(new ActionMenuItem('Stock', 'ShowStock'));
 
             $domin->actions->add('Logout', (new GenericMethodAction($this, 'logout', $domin->types, $domin->parser))->generic()
                 ->setModifying(false)
