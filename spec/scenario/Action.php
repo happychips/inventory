@@ -164,7 +164,7 @@ class Action {
         ));
     }
 
-    public function ISetWhenTo($when) {
+    public function IDateTheEventAt($when) {
         $this->when = new \DateTimeImmutable($when);
     }
 

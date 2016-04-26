@@ -92,6 +92,14 @@ class Outcome {
         }, count($this->karma->appendedEvents()));
     }
 
+    public function AllEventsShouldBeDatedAt($when) {
+        $this->then(Event::class, function (Event $e) use ($when) {
+            return [
+                [$e->getDated()->format('c'), (new \DateTimeImmutable($when))->format('c')]
+            ];
+        }, count($this->karma->appendedEvents()));
+    }
+
     public function AllEventsShouldBeCausedBy($user) {
         $this->then(Event::class, function (Event $e) use ($user) {
             return [

@@ -10,14 +10,17 @@ abstract class Event {
     private $who;
     /** @var \DateTimeImmutable */
     private $when;
+    /** @var \DateTimeImmutable|null */
+    private $dated;
 
     /**
      * @param UserIdentifier $who
-     * @param \DateTimeImmutable|null $when
+     * @param \DateTimeImmutable|null $dated
      */
-    public function __construct(UserIdentifier $who, \DateTimeImmutable $when = null) {
+    public function __construct(UserIdentifier $who, \DateTimeImmutable $dated = null) {
         $this->who = $who;
-        $this->when = $when ?: Time::now();
+        $this->dated = $dated;
+        $this->when = Time::now();
     }
 
     /**
@@ -32,5 +35,12 @@ abstract class Event {
      */
     public function getWhen() {
         return $this->when;
+    }
+
+    /**
+     * @return \DateTimeImmutable|null
+     */
+    public function getDated() {
+        return $this->dated;
     }
 }

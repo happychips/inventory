@@ -58,9 +58,10 @@ class RecordUserAndTimeSpec extends Specification {
             $this->given->IAmLoggedInAs('Foo');
             $this->given->NowIs('2011-12-13 14:15:16 UTC');
 
-            $this->when->ISetWhenTo('2015-12-11 14:15:16');
+            $this->when->IDateTheEventAt('2015-12-11 14:15:16 UTC');
             call_user_func_array([$this->when, $action], $args);
-            $this->then->AllEventsShouldHaveHappenedAt('2015-12-11 14:15:16');
+            $this->then->AllEventsShouldHaveHappenedAt('2011-12-13 14:15:16 UTC');
+            $this->then->AllEventsShouldBeDatedAt('2015-12-11 14:15:16 UTC');
         });
     }
 
