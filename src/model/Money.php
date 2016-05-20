@@ -10,7 +10,7 @@ class Money {
 
     private static $PRECISION = 10000;
 
-    /** @var int */
+    /** @var float */
     private $amount;
     /** @var self::CURRENCY_* */
     private $currency;

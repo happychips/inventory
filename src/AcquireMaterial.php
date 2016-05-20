@@ -11,7 +11,7 @@ use rtens\domin\parameters\Image;
 class AcquireMaterial extends Command {
     /** @var MaterialIdentifier */
     private $material;
-    /** @var int */
+    /** @var float */
     private $amount;
     /** @var Money */
     private $cost;
@@ -24,7 +24,7 @@ class AcquireMaterial extends Command {
 
     /**
      * @param MaterialIdentifier $material
-     * @param int $amount
+     * @param float $amount
      * @param Money $cost
      * @param SupplierIdentifier|null $supplier
      * @param bool $alreadyReceived
@@ -66,7 +66,7 @@ class AcquireMaterial extends Command {
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getAmount() {
         return $this->amount;

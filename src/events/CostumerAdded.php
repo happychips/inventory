@@ -8,7 +8,6 @@ class CostumerAdded extends Event {
 
     /** @var CostumerIdentifier */
     private $costumer;
-
     /** @var string */
     private $name;
 

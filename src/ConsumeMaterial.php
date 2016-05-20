@@ -8,12 +8,12 @@ class ConsumeMaterial extends Command {
 
     /** @var MaterialIdentifier */
     private $material;
-    /** @var int */
+    /** @var float */
     private $amount;
 
     /**
      * @param MaterialIdentifier $material
-     * @param int $amount
+     * @param float $amount
      * @param \DateTimeImmutable|null $when
      */
     public function __construct(MaterialIdentifier $material, $amount, \DateTimeImmutable $when = null) {
@@ -31,7 +31,7 @@ class ConsumeMaterial extends Command {
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getAmount() {
         return $this->amount;

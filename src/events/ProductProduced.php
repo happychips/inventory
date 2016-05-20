@@ -8,13 +8,13 @@ class ProductProduced extends Event {
 
     /** @var ProductIdentifier */
     private $product;
-    /** @var int */
+    /** @var float */
     private $amount;
 
     /**
      * ProductProduced constructor.
      * @param ProductIdentifier $product
-     * @param int $amount
+     * @param float $amount
      * @param UserIdentifier $who
      * @param \DateTimeImmutable|null $when
      */
@@ -33,7 +33,7 @@ class ProductProduced extends Event {
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getAmount() {
         return $this->amount;

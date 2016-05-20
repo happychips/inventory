@@ -5,6 +5,7 @@ use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\UserIdentifier;
 
 class MaterialRegistered extends Event {
+
     /** @var string */
     private $name;
     /** @var string */

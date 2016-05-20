@@ -381,7 +381,7 @@ class Outcome {
     public function MaterialOfTheInventory_ShouldHaveTheCount($int, $count) {
         $this->thenReturn(function (CurrentInventory $inventory) use ($int, $count) {
             return [
-                'count' => [$inventory->getMaterials()[$int - 1]->getCount(), $count]
+                'count' => [$inventory->getMaterials()[$int - 1]->getAmount(), $count]
             ];
         });
     }
@@ -405,7 +405,7 @@ class Outcome {
     public function Product_InStockShouldCount($int, $count) {
         $this->thenReturn(function (CurrentStock $stock) use ($int, $count) {
             return [
-                'count' => [$stock->getProducts()[$int - 1]->getCount(), $count]
+                'count' => [$stock->getProducts()[$int - 1]->getAmount(), $count]
             ];
         });
     }

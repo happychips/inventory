@@ -35,6 +35,6 @@ class CurrentStock {
     }
 
     public function applyStockUpdated(StockUpdated $e) {
-        $this->products[(string)$e->getProduct()]->setCount($e->getAmount());
+        $this->products[(string)$e->getProduct()]->setAmount($e->getAmount());
     }
 }

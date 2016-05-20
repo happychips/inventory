@@ -9,11 +9,12 @@ use happy\inventory\model\UserIdentifier;
 use rtens\domin\parameters\File;
 
 class MaterialAcquired extends Event {
+
     /** @var AcquisitionIdentifier */
     private $acquisition;
     /** @var MaterialIdentifier */
     private $material;
-    /** @var int */
+    /** @var float */
     private $amount;
     /** @var SupplierIdentifier|null */
     private $supplier;
@@ -25,7 +26,7 @@ class MaterialAcquired extends Event {
     /**
      * @param AcquisitionIdentifier $acquisition
      * @param MaterialIdentifier $material
-     * @param int $amount
+     * @param float $amount
      * @param Money $cost
      * @param SupplierIdentifier|null $supplier
      * @param File[] $documents
@@ -53,7 +54,7 @@ class MaterialAcquired extends Event {
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getAmount() {
         return $this->amount;

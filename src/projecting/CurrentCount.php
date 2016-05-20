@@ -7,8 +7,8 @@ class CurrentCount {
     private $name;
     /** @var string */
     private $unit;
-    /** @var int */
-    private $count = 0;
+    /** @var float */
+    private $amount = 0;
 
     /**
      * @param string $name
@@ -26,19 +26,19 @@ class CurrentCount {
         return $this->name . ' (' . $this->unit . ')';
     }
 
-    public function getCount() {
-        return $this->count;
+    public function getAmount() {
+        return $this->amount;
     }
 
     public function addCount($amount) {
-        $this->count += $amount;
+        $this->amount += $amount;
     }
 
     public function subtractCount($amount) {
-        $this->count -= $amount;
+        $this->amount -= $amount;
     }
 
-    public function setCount($amount) {
-        $this->count = $amount;
+    public function setAmount($amount) {
+        $this->amount = $amount;
     }
 }

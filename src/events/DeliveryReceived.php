@@ -16,13 +16,13 @@ class DeliveryReceived extends Event {
     private $documents;
     /** @var ExtraCost[] */
     private $extraCosts;
-    /** @var int|null */
+    /** @var float|null */
     private $amount;
 
     /**
      * @param AcquisitionIdentifier $acquisition
      * @param bool $partialDelivery
-     * @param int|null $amount
+     * @param float|null $amount
      * @param File[] $documents
      * @param ExtraCost[] $extraCosts
      * @param UserIdentifier $who
@@ -61,7 +61,7 @@ class DeliveryReceived extends Event {
     }
 
     /**
-     * @return int|null
+     * @return float|null
      */
     public function getAmount() {
         return $this->amount;

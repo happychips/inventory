@@ -9,14 +9,14 @@ class DeliverProduct extends Command {
 
     /** @var ProductIdentifier */
     private $product;
-    /** @var int */
+    /** @var float */
     private $amount;
     /** @var CostumerIdentifier */
     private $costumer;
 
     /**
      * @param ProductIdentifier $product
-     * @param int $amount
+     * @param float $amount
      * @param CostumerIdentifier $costumer
      * @param \DateTimeImmutable|null $when
      */
@@ -36,7 +36,7 @@ class DeliverProduct extends Command {
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getAmount() {
         return $this->amount;

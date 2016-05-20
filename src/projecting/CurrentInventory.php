@@ -51,6 +51,6 @@ class CurrentInventory {
     }
 
     public function applyInventoryUpdated(InventoryUpdated $e) {
-        $this->materials[(string)$e->getMaterial()]->setCount($e->getAmount());
+        $this->materials[(string)$e->getMaterial()]->setAmount($e->getAmount());
     }
 }

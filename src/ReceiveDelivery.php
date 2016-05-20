@@ -17,13 +17,13 @@ class ReceiveDelivery extends Command {
     private $documents;
     /** @var ExtraCost[]|null */
     private $extraCosts;
-    /** @var int|null */
+    /** @var float|null */
     private $amount;
 
     /**
      * @param AcquisitionIdentifier $acquisition
      * @param bool $partialDelivery
-     * @param null|int $amount
+     * @param null|float $amount
      * @param File[]|Image[]|null $documents
      * @param ExtraCost[]|null $extraCosts
      * @param \DateTimeImmutable $when
@@ -39,7 +39,7 @@ class ReceiveDelivery extends Command {
     }
 
     /**
-     * @return int|null
+     * @return float|null
      */
     public function getAmount() {
         return $this->amount;

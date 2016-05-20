@@ -8,12 +8,12 @@ class ProduceProduct extends Command {
 
     /** @var ProductIdentifier */
     private $product;
-    /** @var int */
+    /** @var float */
     private $amount;
 
     /**
      * @param ProductIdentifier $product
-     * @param int $amount
+     * @param float $amount
      * @param \DateTimeImmutable|null $when
      */
     public function __construct(ProductIdentifier $product, $amount, \DateTimeImmutable $when = null) {
@@ -30,7 +30,7 @@ class ProduceProduct extends Command {
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getAmount() {
         return $this->amount;
