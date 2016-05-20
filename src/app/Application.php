@@ -4,6 +4,7 @@ namespace happy\inventory\app;
 use happy\inventory\ListAcquisitions;
 use happy\inventory\ListCostumers;
 use happy\inventory\ListLinkedConsumptions;
+use happy\inventory\ListLinkedProductConsumptions;
 use happy\inventory\ListMaterials;
 use happy\inventory\ListProducts;
 use happy\inventory\ListSuppliers;
@@ -15,6 +16,7 @@ use happy\inventory\projecting\CurrentInventory;
 use happy\inventory\projecting\CurrentStock;
 use happy\inventory\projecting\EventHistory;
 use happy\inventory\projecting\LinkedConsumptions;
+use happy\inventory\projecting\LinkedProductConsumptions;
 use happy\inventory\projecting\MaterialList;
 use happy\inventory\projecting\ProductList;
 use happy\inventory\projecting\SupplierList;
@@ -88,6 +90,8 @@ class Application extends Karma {
             return new CurrentStock();
         } else if ($query instanceof ListLinkedConsumptions) {
             return new LinkedConsumptions();
+        } else if ($query instanceof ListLinkedProductConsumptions) {
+            return new LinkedProductConsumptions($query->getProduct());
         }
 
         throw new \Exception('Unknown query');

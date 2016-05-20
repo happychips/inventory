@@ -8,6 +8,8 @@ use happy\inventory\ConsumeMaterial;
 use happy\inventory\DeliverProduct;
 use happy\inventory\ListAcquisitions;
 use happy\inventory\ListCostumers;
+use happy\inventory\ListLinkedConsumptions;
+use happy\inventory\ListLinkedProductConsumptions;
 use happy\inventory\ListMaterials;
 use happy\inventory\ListProducts;
 use happy\inventory\ListSuppliers;
@@ -19,9 +21,12 @@ use happy\inventory\model\SupplierIdentifier;
 use happy\inventory\ProduceProduct;
 use happy\inventory\projecting\CurrentInventory;
 use happy\inventory\projecting\CurrentStock;
+use happy\inventory\projecting\LinkedConsumptions;
+use happy\inventory\projecting\LinkedProductConsumptions;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
+use happy\inventory\SetLinkedConsumption;
 use happy\inventory\ShowHistory;
 use happy\inventory\ShowInventory;
 use happy\inventory\ShowStock;
@@ -29,6 +34,7 @@ use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\delivery\web\adapters\curir\root\IndexResource;
 use rtens\domin\delivery\web\menu\ActionMenuItem;
+use rtens\domin\delivery\web\renderers\link\types\ClassLink;
 use rtens\domin\delivery\web\renderers\tables\types\DataTable;
 use rtens\domin\delivery\web\renderers\tables\types\ObjectTable;
 use rtens\domin\delivery\web\WebApplication;
@@ -85,6 +91,8 @@ class Launcher {
             $domin->identifiers->setProvider(SupplierIdentifier::class, function () {
                 return $this->app->handle(new ListSuppliers())->getSuppliers();
             });
+
+            $domin->renderers->add(new ConsumeMaterialRenderer($this->app->handle(new ListMaterials())->getMaterials()));
         }, WebDelivery::init()));
     }
 
@@ -94,6 +102,25 @@ class Launcher {
             $this->addAction($domin, RegisterProduct::class, 'Setup');
             $this->addAction($domin, AddCostumer::class, 'Setup');
             $this->addAction($domin, AddSupplier::class, 'Setup');
+            $this->addAction($domin, ListLinkedConsumptions::class, 'Setup')
+                ->setModifying(false)
+                ->setAfterExecute(function (LinkedConsumptions $consumptions) use ($domin) {
+                    return new DataTable(new ObjectTable($consumptions->getConsumptions(), $domin->types));
+                });
+
+            $this->addAction($domin, SetLinkedConsumption::class)
+                ->setFill(function ($parameters) {
+                    if (isset($parameters['product'])) {
+                        $product = new ProductIdentifier($parameters['product']);
+                        $parameters['consumptions'] = $this->app->handle(new ListLinkedProductConsumptions($product))->getConsumptions();
+                    }
+                    return $parameters;
+                });
+            $domin->links->add(new ClassLink(LinkedProductConsumptions::class,
+                $this->makeActionId(SetLinkedConsumption::class),
+                function (LinkedProductConsumptions $consumptions) {
+                    return ['product' => $consumptions->productIdentifier()];
+                }));
 
             $this->addAction($domin, AcquireMaterial::class, 'Material');
             $this->addAction($domin, ReceiveDelivery::class, 'Material');
@@ -138,7 +165,7 @@ class Launcher {
             return $this->app->handle($object);
         };
 
-        $id = (new \ReflectionClass($class))->getShortName();
+        $id = $this->makeActionId($class);
         $action = new GenericObjectAction($class, $domin->types, $domin->parser, $execute);
         $domin->actions->add($id, $action);
 
@@ -147,6 +174,10 @@ class Launcher {
         }
 
         return $action->generic();
+    }
+
+    private function makeActionId($class) {
+        return (new \ReflectionClass($class))->getShortName();
     }
 
     private function readUsers() {

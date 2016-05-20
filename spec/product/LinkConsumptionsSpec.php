@@ -45,7 +45,7 @@ class LinkConsumptionsSpec extends Specification {
     function listWithNoConsumptions() {
         $this->when->IListLinkedConsumptions();
         $this->then->ItShouldListTheLinkedConsumptionsOf_Products(1);
-        $this->then->TheLinkedConsumptionOfProduct_ShouldBe(1, []);
+        $this->then->TheLinkedConsumptionsOfProduct_ShouldBe(1, []);
     }
 
     function listWithConsumptions() {
@@ -53,6 +53,13 @@ class LinkConsumptionsSpec extends Specification {
         $this->given->ISetTheConsumptions_For([[3, 'Potatoes_kg'], [2, 'Tomatoes_kg']], 'Chips_pack');
         $this->when->IListLinkedConsumptions();
         $this->then->ItShouldListTheLinkedConsumptionsOf_Products(1);
-        $this->then->TheLinkedConsumptionOfProduct_ShouldBe(1, [[3, 'Potatoes_kg'], [2, 'Tomatoes_kg']]);
+        $this->then->TheLinkedConsumptionsOfProduct_ShouldBe(1, [[3, 'Potatoes_kg'], [2, 'Tomatoes_kg']]);
+    }
+
+    function listConsumptionsOfProduct() {
+        $this->given->ISetTheConsumptions_For([[1, 'Potatoes_kg']], 'Chips_pack');
+        $this->given->ISetTheConsumptions_For([[3, 'Potatoes_kg'], [2, 'Tomatoes_kg']], 'Chips_pack');
+        $this->when->IListLinkedConsumptionsFor('Chips_pack');
+        $this->then->TheLinkedConsumptionsShouldBe([[3, 'Potatoes_kg'], [2, 'Tomatoes_kg']]);
     }
 }

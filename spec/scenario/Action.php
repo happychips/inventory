@@ -9,6 +9,7 @@ use happy\inventory\DeliverProduct;
 use happy\inventory\ListAcquisitions;
 use happy\inventory\ListCostumers;
 use happy\inventory\ListLinkedConsumptions;
+use happy\inventory\ListLinkedProductConsumptions;
 use happy\inventory\ListMaterials;
 use happy\inventory\ListProducts;
 use happy\inventory\model\AcquisitionIdentifier;
@@ -219,5 +220,9 @@ class Action {
 
     public function IListLinkedConsumptions() {
         $this->karma->when(new ListLinkedConsumptions());
+    }
+
+    public function IListLinkedConsumptionsFor($product) {
+        $this->karma->when(new ListLinkedProductConsumptions(new ProductIdentifier($product)));
     }
 }

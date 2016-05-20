@@ -17,10 +17,13 @@ class LinkedConsumptions {
     }
 
     public function applyProductRegistered(ProductRegistered $e) {
-        $this->consumptions[(string)$e->getProduct()] = new LinkedProductConsumptions($e->getName(), $e->getUnit());
+        $consumption = new LinkedProductConsumptions($e->getProduct());
+        $consumption->applyProductRegistered($e);
+
+        $this->consumptions[(string)$e->getProduct()] = $consumption;
     }
 
     public function applyLinkedConsumptionsSet(LinkedConsumptionsSet $e) {
-        $this->consumptions[(string)$e->getProduct()]->setConsumptions($e->getConsumptions());
+        $this->consumptions[(string)$e->getProduct()]->applyLinkedConsumptionsSet($e);
     }
 }

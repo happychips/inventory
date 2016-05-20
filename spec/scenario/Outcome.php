@@ -29,6 +29,7 @@ use happy\inventory\projecting\CostumerList;
 use happy\inventory\projecting\CurrentInventory;
 use happy\inventory\projecting\CurrentStock;
 use happy\inventory\projecting\LinkedConsumptions;
+use happy\inventory\projecting\LinkedProductConsumptions;
 use happy\inventory\projecting\MaterialList;
 use happy\inventory\projecting\ProductList;
 use rtens\domin\parameters\File;
@@ -432,10 +433,20 @@ class Outcome {
         });
     }
 
-    public function TheLinkedConsumptionOfProduct_ShouldBe($pos, array $expected) {
+    public function TheLinkedConsumptionsOfProduct_ShouldBe($pos, array $expected) {
         $this->thenReturn(function (LinkedConsumptions $consumptions) use ($pos, $expected) {
             return [
                 'consumptions' => [$consumptions->getConsumptions()[$pos - 1]->getConsumptions(), array_map(function ($consumption) {
+                    return new ConsumeMaterial(new MaterialIdentifier($consumption[1]), $consumption[0]);
+                }, $expected)]
+            ];
+        });
+    }
+
+    public function TheLinkedConsumptionsShouldBe($expected) {
+        $this->thenReturn(function (LinkedProductConsumptions $consumptions) use ($expected) {
+            return [
+                'consumptions' => [$consumptions->getConsumptions(), array_map(function ($consumption) {
                     return new ConsumeMaterial(new MaterialIdentifier($consumption[1]), $consumption[0]);
                 }, $expected)]
             ];
