@@ -32,7 +32,7 @@ class MaterialConsumed extends Event {
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getAmount() {
         return $this->amount;

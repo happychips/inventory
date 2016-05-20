@@ -10,6 +10,7 @@ use happy\inventory\events\CostumerAdded;
 use happy\inventory\events\CostumerDetailsChanged;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\InventoryUpdated;
+use happy\inventory\events\LinkedConsumptionsSet;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
@@ -22,6 +23,7 @@ use happy\inventory\ProduceProduct;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
+use happy\inventory\SetLinkedConsumption;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\parameters\File;
@@ -43,6 +45,8 @@ class Inventory {
     private $products = [];
     /** @var SupplierIdentifier[] */
     private $suppliers = [];
+    /** @var ConsumeMaterial[][] indexed by ProductIdentifier */
+    private $linkedConsumptions = [];
 
     /**
      * @param Session $session
@@ -108,6 +112,22 @@ class Inventory {
             $this->session->requireLogin(),
             $c->getWhen()
         );
+    }
+
+    /**
+     * @param File[] $files
+     * @return File[]
+     */
+    private function saveFiles($files) {
+        $savedFiles = [];
+        foreach ($files as $file) {
+            $path = $this->filesDir . '/' . date('Ymd_His_') . substr(uniqid(), -4) . '_' . $file->getName();
+            $file->save($path);
+
+            $savedFiles[] = new SavedFile($path, $file->getName(), $file->getType());
+        }
+
+        return $savedFiles;
     }
 
     public function handleConsumeMaterial(ConsumeMaterial $c) {
@@ -194,12 +214,33 @@ class Inventory {
     }
 
     public function handleProduceProduct(ProduceProduct $c) {
-        return new ProductProduced(
-            $c->getProduct(),
-            $c->getAmount(),
-            $this->session->requireLogin(),
-            $c->getWhen()
-        );
+        $events = [
+            new ProductProduced(
+                $c->getProduct(),
+                $c->getAmount(),
+                $this->session->requireLogin(),
+                $c->getWhen()
+            )
+        ];
+
+        foreach ($this->getLinkedConsumptions($c->getProduct()) as $consumption) {
+            $events[] = new MaterialConsumed(
+                $consumption->getMaterial(),
+                $consumption->getAmount() * $c->getAmount(),
+                $this->session->requireLogin(),
+                $c->getWhen()
+            );
+        }
+
+        return $events;
+    }
+
+    private function getLinkedConsumptions(ProductIdentifier $product) {
+        if (!isset($this->linkedConsumptions[(string)$product])) {
+            return [];
+        }
+
+        return $this->linkedConsumptions[(string)$product];
     }
 
     public function handleUpdateStock(UpdateStock $c) {
@@ -221,19 +262,26 @@ class Inventory {
         );
     }
 
-    /**
-     * @param File[] $files
-     * @return File[]
-     */
-    private function saveFiles($files) {
-        $savedFiles = [];
-        foreach ($files as $file) {
-            $path = $this->filesDir . '/' . date('Ymd_His_') . substr(uniqid(), -4) . '_' . $file->getName();
-            $file->save($path);
-
-            $savedFiles[] = new SavedFile($path, $file->getName(), $file->getType());
+    public function handleSetLinkedConsumption(SetLinkedConsumption $c) {
+        if (!in_array($c->getProduct(), $this->products)) {
+            throw new \Exception('This product does not exist.');
         }
 
-        return $savedFiles;
+        foreach ($c->getConsumptions() as $consumption) {
+            if (!in_array($consumption->getMaterial(), $this->materials)) {
+                throw new \Exception("Material [{$consumption->getMaterial()}] does not exist.");
+            }
+        }
+
+        return new LinkedConsumptionsSet(
+            $c->getProduct(),
+            $c->getConsumptions(),
+            $this->session->requireLogin(),
+            $c->getWhen()
+        );
+    }
+
+    public function applyLinkedConsumptionsSet(LinkedConsumptionsSet $e) {
+        $this->linkedConsumptions[(string)$e->getProduct()] = $e->getConsumptions();
     }
 }

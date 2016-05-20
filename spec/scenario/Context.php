@@ -1,9 +1,11 @@
 <?php
 namespace spec\happy\inventory\scenario;
 
+use happy\inventory\ConsumeMaterial;
 use happy\inventory\events\CostumerAdded;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\InventoryUpdated;
+use happy\inventory\events\LinkedConsumptionsSet;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
@@ -130,7 +132,7 @@ class Context {
             MaterialIdentifier::fromNameAndUnit($material, $unit),
             $amount,
             new UserIdentifier('me')
-        ));
+        ), Inventory::IDENTIFIER);
     }
 
     public function IProduced__Of($amount, $units, $product) {
@@ -138,7 +140,7 @@ class Context {
             ProductIdentifier::fromNameAndUnit($product, $units),
             $amount,
             new UserIdentifier('me')
-        ));
+        ), Inventory::IDENTIFIER);
     }
 
     public function IDelivered__Of($amount, $unit, $product) {
@@ -147,7 +149,7 @@ class Context {
             $amount,
             CostumerIdentifier::fromName('foo'),
             new UserIdentifier('me')
-        ));
+        ), Inventory::IDENTIFIER);
     }
 
     public function IUpdatedTheStockOf_To($product, $amount, $unit) {
@@ -155,6 +157,16 @@ class Context {
             ProductIdentifier::fromNameAndUnit($product, $unit),
             $amount,
             new UserIdentifier('me')
-        ));
+        ), Inventory::IDENTIFIER);
+    }
+
+    public function ISetTheConsumptions_For(array $consumptions, $product) {
+        $this->karma->given(new LinkedConsumptionsSet(
+            new ProductIdentifier($product),
+            array_map(function ($consumption) {
+                return new ConsumeMaterial(new MaterialIdentifier($consumption[1]), $consumption[0]);
+            }, $consumptions),
+            new UserIdentifier('me')
+        ), Inventory::IDENTIFIER);
     }
 }

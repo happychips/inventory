@@ -1,11 +1,13 @@
 <?php
 namespace spec\happy\inventory\scenario;
 
+use happy\inventory\ConsumeMaterial;
 use happy\inventory\events\CostumerAdded;
 use happy\inventory\events\CostumerDetailsChanged;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\Event;
 use happy\inventory\events\InventoryUpdated;
+use happy\inventory\events\LinkedConsumptionsSet;
 use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
@@ -26,6 +28,7 @@ use happy\inventory\projecting\AcquisitionList;
 use happy\inventory\projecting\CostumerList;
 use happy\inventory\projecting\CurrentInventory;
 use happy\inventory\projecting\CurrentStock;
+use happy\inventory\projecting\LinkedConsumptions;
 use happy\inventory\projecting\MaterialList;
 use happy\inventory\projecting\ProductList;
 use rtens\domin\parameters\File;
@@ -406,6 +409,35 @@ class Outcome {
         $this->thenReturn(function (CurrentStock $stock) use ($int, $count) {
             return [
                 'count' => [$stock->getProducts()[$int - 1]->getAmount(), $count]
+            ];
+        });
+    }
+
+    public function TheConsumptions_ShouldBeSetFor(array $consumptions, $product) {
+        $this->then(LinkedConsumptionsSet::class, function (LinkedConsumptionsSet $e) use ($consumptions, $product) {
+            return [
+                'product' => [$e->getProduct(), $product],
+                'consumptions' => [$e->getConsumptions(), array_map(function ($consumption) {
+                    return new ConsumeMaterial(new MaterialIdentifier($consumption[1]), $consumption[0]);
+                }, $consumptions)],
+            ];
+        });
+    }
+
+    public function ItShouldListTheLinkedConsumptionsOf_Products($int) {
+        $this->thenReturn(function (LinkedConsumptions $consumptions) use ($int) {
+            return [
+                'total' => [count($consumptions->getConsumptions()), $int]
+            ];
+        });
+    }
+
+    public function TheLinkedConsumptionOfProduct_ShouldBe($pos, array $expected) {
+        $this->thenReturn(function (LinkedConsumptions $consumptions) use ($pos, $expected) {
+            return [
+                'consumptions' => [$consumptions->getConsumptions()[$pos - 1]->getConsumptions(), array_map(function ($consumption) {
+                    return new ConsumeMaterial(new MaterialIdentifier($consumption[1]), $consumption[0]);
+                }, $expected)]
             ];
         });
     }

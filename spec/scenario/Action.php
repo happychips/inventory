@@ -8,6 +8,7 @@ use happy\inventory\ConsumeMaterial;
 use happy\inventory\DeliverProduct;
 use happy\inventory\ListAcquisitions;
 use happy\inventory\ListCostumers;
+use happy\inventory\ListLinkedConsumptions;
 use happy\inventory\ListMaterials;
 use happy\inventory\ListProducts;
 use happy\inventory\model\AcquisitionIdentifier;
@@ -21,6 +22,7 @@ use happy\inventory\ProduceProduct;
 use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
+use happy\inventory\SetLinkedConsumption;
 use happy\inventory\ShowInventory;
 use happy\inventory\ShowStock;
 use happy\inventory\UpdateInventory;
@@ -204,5 +206,18 @@ class Action {
 
     public function IShowTheStock() {
         $this->karma->when(new ShowStock());
+    }
+
+    public function ISetTheConsumptions_For(array $consumptions, $product) {
+        $this->karma->when(new SetLinkedConsumption(
+            new ProductIdentifier($product),
+            array_map(function ($consumption) {
+                return new ConsumeMaterial(new MaterialIdentifier($consumption[1]), $consumption[0]);
+            }, $consumptions)
+        ));
+    }
+
+    public function IListLinkedConsumptions() {
+        $this->karma->when(new ListLinkedConsumptions());
     }
 }
