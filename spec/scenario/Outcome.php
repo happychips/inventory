@@ -9,6 +9,7 @@ use happy\inventory\events\Event;
 use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\LinkedConsumptionsSet;
 use happy\inventory\events\MaterialAcquired;
+use happy\inventory\events\MaterialCategorySet;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
 use happy\inventory\events\ProductDelivered;
@@ -128,6 +129,15 @@ class Outcome {
                 [$e->getMaterial(), MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT)],
                 [$e->getAmount(), intval($amount)],
                 [$e->getSupplier(), new SupplierIdentifier($supplier)],
+            ];
+        });
+    }
+
+    public function Material_ShouldHaveTheCategory($material, $category) {
+        $this->then(MaterialCategorySet::class, function (MaterialCategorySet $e) use ($material, $category) {
+            return [
+                [$e->getMaterial(), MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT)],
+                [$e->getCategory(), $category],
             ];
         });
     }
@@ -378,6 +388,14 @@ class Outcome {
         $this->thenReturn(function (CurrentInventory $inventory) use ($int, $caption) {
             return [
                 'caption' => [$inventory->getMaterials()[$int - 1]->getCaption(), $caption]
+            ];
+        });
+    }
+
+    public function MaterialOfTheInventory_ShouldHaveTheCategory($int, $category) {
+        $this->thenReturn(function (CurrentInventory $inventory) use ($int, $category) {
+            return [
+                'category' => [$inventory->getMaterials()[$int - 1]->getCategory(), $category]
             ];
         });
     }

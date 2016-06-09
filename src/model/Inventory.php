@@ -12,6 +12,7 @@ use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\LinkedConsumptionsSet;
 use happy\inventory\events\MaterialAcquired;
+use happy\inventory\events\MaterialCategorySet;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
 use happy\inventory\events\ProductDelivered;
@@ -24,6 +25,7 @@ use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
 use happy\inventory\SetLinkedConsumption;
+use happy\inventory\SetMaterialCategory;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\parameters\File;
@@ -283,5 +285,14 @@ class Inventory {
 
     public function applyLinkedConsumptionsSet(LinkedConsumptionsSet $e) {
         $this->linkedConsumptions[(string)$e->getProduct()] = $e->getConsumptions();
+    }
+
+    public function handleSetMaterialCategory(SetMaterialCategory $c) {
+        return new MaterialCategorySet(
+            $c->getMaterial(),
+            $c->getCategory(),
+            $this->session->requireLogin(),
+            $c->getWhen()
+        );
     }
 }

@@ -91,4 +91,15 @@ class ShowInventorySpec extends Specification {
         $this->when->IShowTheInventory();
         $this->then->MaterialOfTheInventory_ShouldHaveTheCount(1, 4);
     }
+
+    function showCategory() {
+        $this->given->IRegisteredTheMaterial_WithTheUnit('Potatoes', 'kg');
+        $this->given->IRegisteredTheMaterial_WithTheUnit('Tomatoes', 'kg');
+        $this->given->IPut_Into('Tomatoes', 'Fruits');
+        $this->given->IPut_Into('Tomatoes', 'Vegetables');
+
+        $this->when->IShowTheInventory();
+        $this->then->MaterialOfTheInventory_ShouldHaveTheCategory(1, null);
+        $this->then->MaterialOfTheInventory_ShouldHaveTheCategory(2, 'Vegetables');
+    }
 }

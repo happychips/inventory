@@ -27,6 +27,7 @@ use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
 use happy\inventory\SetLinkedConsumption;
+use happy\inventory\SetMaterialCategory;
 use happy\inventory\ShowHistory;
 use happy\inventory\ShowInventory;
 use happy\inventory\ShowStock;
@@ -99,6 +100,7 @@ class Launcher {
     private function addActions(WebApplication $domin) {
         if ($this->session->isLoggedIn()) {
             $this->addAction($domin, RegisterMaterial::class, 'Setup');
+            $this->addAction($domin, SetMaterialCategory::class, 'Setup');
             $this->addAction($domin, RegisterProduct::class, 'Setup');
             $this->addAction($domin, AddCostumer::class, 'Setup');
             $this->addAction($domin, AddSupplier::class, 'Setup');

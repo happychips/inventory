@@ -7,6 +7,7 @@ use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\LinkedConsumptionsSet;
 use happy\inventory\events\MaterialAcquired;
+use happy\inventory\events\MaterialCategorySet;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
 use happy\inventory\events\ProductDelivered;
@@ -168,5 +169,13 @@ class Context {
             }, $consumptions),
             new UserIdentifier('me')
         ), Inventory::IDENTIFIER);
+    }
+
+    public function IPut_Into($material, $category) {
+        $this->karma->given(new MaterialCategorySet(
+            MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT),
+            $category,
+            new UserIdentifier('test')
+        ));
     }
 }

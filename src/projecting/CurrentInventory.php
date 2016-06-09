@@ -4,18 +4,19 @@ namespace happy\inventory\projecting;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\MaterialAcquired;
+use happy\inventory\events\MaterialCategorySet;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
 
 class CurrentInventory {
 
-    /** @var CurrentCount[] */
+    /** @var CurrentMaterialCount[] */
     private $materials = [];
     /** @var MaterialAcquired[] */
     private $acquisitions = [];
 
     /**
-     * @return CurrentCount[]
+     * @return CurrentMaterialCount[]
      */
     public function getMaterials() {
         $materials = array_values($this->materials);
@@ -27,7 +28,7 @@ class CurrentInventory {
     }
 
     public function applyMaterialRegistered(MaterialRegistered $e) {
-        $this->materials[(string)$e->getMaterial()] = new CurrentCount($e->getName(), $e->getUnit());
+        $this->materials[(string)$e->getMaterial()] = new CurrentMaterialCount($e->getName(), $e->getUnit());
     }
 
     public function applyMaterialAcquired(MaterialAcquired $e) {
@@ -52,5 +53,9 @@ class CurrentInventory {
 
     public function applyInventoryUpdated(InventoryUpdated $e) {
         $this->materials[(string)$e->getMaterial()]->setAmount($e->getAmount());
+    }
+
+    public function applyMaterialCategorySet(MaterialCategorySet $e) {
+        $this->materials[(string)$e->getMaterial()]->setCategory($e->getCategory());
     }
 }

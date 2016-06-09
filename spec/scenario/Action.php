@@ -24,6 +24,7 @@ use happy\inventory\ReceiveDelivery;
 use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
 use happy\inventory\SetLinkedConsumption;
+use happy\inventory\SetMaterialCategory;
 use happy\inventory\ShowInventory;
 use happy\inventory\ShowStock;
 use happy\inventory\UpdateInventory;
@@ -224,5 +225,9 @@ class Action {
 
     public function IListLinkedConsumptionsFor($product) {
         $this->karma->when(new ListLinkedProductConsumptions(new ProductIdentifier($product)));
+    }
+
+    public function IPut_Into($material, $category) {
+        $this->karma->when(new SetMaterialCategory(MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT), $category));
     }
 }
