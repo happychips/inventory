@@ -227,7 +227,10 @@ class Action {
         $this->karma->when(new ListLinkedProductConsumptions(new ProductIdentifier($product)));
     }
 
-    public function IPut_Into($material, $category) {
-        $this->karma->when(new SetMaterialCategory(MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT), $category));
+    public function IPut_Into($materials, $category) {
+        $materialIdentifiers = array_map(function ($material) {
+            return MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT);
+        }, (array)$materials);
+        $this->karma->when(new SetMaterialCategory($category, $materialIdentifiers));
     }
 }

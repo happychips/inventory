@@ -6,27 +6,27 @@ use happy\inventory\model\MaterialIdentifier;
 
 class SetMaterialCategory extends Command {
 
-    /** @var MaterialIdentifier */
-    private $material;
+    /** @var MaterialIdentifier[] */
+    private $materials;
     /** @var string */
     private $category;
 
     /**
-     * @param MaterialIdentifier $material
      * @param string $category
+     * @param MaterialIdentifier[] $materials
      * @param \DateTimeImmutable $when
      */
-    public function __construct($material, $category, \DateTimeImmutable $when = null) {
+    public function __construct($category, array $materials, \DateTimeImmutable $when = null) {
         parent::__construct($when);
-        $this->material = $material;
+        $this->materials = $materials;
         $this->category = trim(strtolower($category));
     }
 
     /**
-     * @return MaterialIdentifier
+     * @return MaterialIdentifier[]
      */
-    public function getMaterial() {
-        return $this->material;
+    public function getMaterials() {
+        return $this->materials;
     }
 
     /**

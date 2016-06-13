@@ -288,11 +288,15 @@ class Inventory {
     }
 
     public function handleSetMaterialCategory(SetMaterialCategory $c) {
-        return new MaterialCategorySet(
-            $c->getMaterial(),
-            $c->getCategory(),
-            $this->session->requireLogin(),
-            $c->getWhen()
-        );
+        $events = [];
+        foreach ($c->getMaterials() as $material) {
+            $events[] = new MaterialCategorySet(
+                $material,
+                $c->getCategory(),
+                $this->session->requireLogin(),
+                $c->getWhen()
+            );
+        }
+        return $events;
     }
 }
