@@ -3,6 +3,7 @@ namespace happy\inventory;
 
 use happy\inventory\app\Command;
 use happy\inventory\model\AcquisitionIdentifier;
+use happy\inventory\model\DeviantAmount;
 use happy\inventory\model\ExtraCost;
 use rtens\domin\parameters\File;
 use rtens\domin\parameters\Image;
@@ -17,32 +18,25 @@ class ReceiveDelivery extends Command {
     private $documents;
     /** @var ExtraCost[]|null */
     private $extraCosts;
-    /** @var float|null */
-    private $amount;
+    /** @var DeviantAmount[] */
+    private $deviantAmounts;
 
     /**
      * @param AcquisitionIdentifier $acquisition
      * @param bool $partialDelivery
-     * @param null|float $amount
+     * @param DeviantAmount[]|null $deviantAmounts
      * @param File[]|Image[]|null $documents
      * @param ExtraCost[]|null $extraCosts
      * @param \DateTimeImmutable $when
      */
-    public function __construct(AcquisitionIdentifier $acquisition, $partialDelivery = false, $amount = null,
+    public function __construct(AcquisitionIdentifier $acquisition, $partialDelivery = false, $deviantAmounts = null,
                                 array $documents = null, array $extraCosts = null, \DateTimeImmutable $when = null) {
         parent::__construct($when);
         $this->acquisition = $acquisition;
         $this->partialDelivery = $partialDelivery;
         $this->documents = $documents ?: [];
         $this->extraCosts = $extraCosts ?: [];
-        $this->amount = $amount;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getAmount() {
-        return $this->amount;
+        $this->deviantAmounts = $deviantAmounts ?: [];
     }
 
     /**
@@ -79,5 +73,12 @@ class ReceiveDelivery extends Command {
      */
     public function isPartialDelivery() {
         return $this->partialDelivery;
+    }
+
+    /**
+     * @return DeviantAmount[]|null
+     */
+    public function getDeviantAmounts() {
+        return $this->deviantAmounts;
     }
 }

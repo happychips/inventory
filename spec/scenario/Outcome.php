@@ -8,10 +8,10 @@ use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\Event;
 use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\LinkedConsumptionsSet;
-use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialCategorySet;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\MaterialsAcquired;
 use happy\inventory\events\ProductDelivered;
 use happy\inventory\events\ProductProduced;
 use happy\inventory\events\ProductRegistered;
@@ -114,20 +114,26 @@ class Outcome {
     }
 
     public function _UnitsOf_For__ShouldBeAcquired($amount, $material, $cost, $currency) {
-        $this->then(MaterialAcquired::class, function (MaterialAcquired $e) use ($amount, $material, $cost, $currency) {
-            return [
-                [$e->getMaterial(), MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT)],
-                [$e->getAmount(), intval($amount)],
-                [$e->getCost(), new Money($cost, $currency)],
-            ];
+        $this->then(MaterialsAcquired::class, function (MaterialsAcquired $e) use ($amount, $material, $cost, $currency) {
+            foreach ($e->getMaterials() as $materialAcquisition) {
+                if ($materialAcquisition->getAmount() == intval($amount)) {
+                    return [
+                        [$materialAcquisition->getMaterial(), MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT)],
+                        [$materialAcquisition->getAmount(), intval($amount)],
+                        [$materialAcquisition->getCost(), new Money($cost, $currency)],
+                    ];
+                }
+            }
+
+            return false;
         });
     }
 
     public function _UnitsOf_ShouldBeAcquiredFrom($amount, $material, $supplier) {
-        $this->then(MaterialAcquired::class, function (MaterialAcquired $e) use ($amount, $material, $supplier) {
+        $this->then(MaterialsAcquired::class, function (MaterialsAcquired $e) use ($amount, $material, $supplier) {
             return [
-                [$e->getMaterial(), MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT)],
-                [$e->getAmount(), intval($amount)],
+                [$e->getMaterials()[0]->getMaterial(), MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT)],
+                [$e->getMaterials()[0]->getAmount(), intval($amount)],
                 [$e->getSupplier(), new SupplierIdentifier($supplier)],
             ];
         });
@@ -143,7 +149,7 @@ class Outcome {
     }
 
     public function TheAcquisitionShouldContainTheDocuments($documents) {
-        $this->then(MaterialAcquired::class, function (MaterialAcquired $e) use ($documents) {
+        $this->then(MaterialsAcquired::class, function (MaterialsAcquired $e) use ($documents) {
             $conditions = [];
             foreach ($documents as $i => $name) {
                 $conditions[] = [$e->getDocuments()[$i] instanceof SavedFile];
@@ -158,7 +164,8 @@ class Outcome {
     public function _ShouldBeReceived($acquisition) {
         $this->then(DeliveryReceived::class, function (DeliveryReceived $e) use ($acquisition) {
             return [
-                [$e->getAcquisition(), new AcquisitionIdentifier($acquisition)]
+                [$e->getAcquisition(), new AcquisitionIdentifier($acquisition)],
+                [$e->isPartialDelivery(), false]
             ];
         });
     }
@@ -196,12 +203,19 @@ class Outcome {
         });
     }
 
-    public function _ShouldBeReceivedContaining_Units($acquisition, $amount) {
-        $this->then(DeliveryReceived::class, function (DeliveryReceived $e) use ($acquisition, $amount) {
-            return [
-                [$e->getAcquisition(), new AcquisitionIdentifier($acquisition)],
-                [$e->getAmount(), $amount]
+    public function _ShouldBeReceivedContaining($acquisition, $deviantAmounts) {
+        $this->then(DeliveryReceived::class, function (DeliveryReceived $e) use ($acquisition, $deviantAmounts) {
+            $conditions = [
+                [$e->getAcquisition(), new AcquisitionIdentifier($acquisition)]
             ];
+
+            foreach ($deviantAmounts as $deviantAmount) {
+                list($amount, $material) = $deviantAmount;
+                $material = MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT);
+                $conditions[] = [$e->getDeviantAmount($material), $amount];
+            }
+
+            return $conditions;
         });
     }
 

@@ -6,10 +6,10 @@ use happy\inventory\events\CostumerAdded;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\LinkedConsumptionsSet;
-use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialCategorySet;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\MaterialsAcquired;
 use happy\inventory\events\ProductDelivered;
 use happy\inventory\events\ProductProduced;
 use happy\inventory\events\ProductRegistered;
@@ -17,8 +17,10 @@ use happy\inventory\events\StockUpdated;
 use happy\inventory\events\SupplierAdded;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\CostumerIdentifier;
+use happy\inventory\model\DeviantAmount;
 use happy\inventory\model\Identifier;
 use happy\inventory\model\Inventory;
+use happy\inventory\model\MaterialAcquisition;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\model\ProductIdentifier;
@@ -61,11 +63,21 @@ class Context {
     }
 
     public function IAcquired_Of($amount, $material) {
-        $this->karma->given(new MaterialAcquired(
-            new AcquisitionIdentifier($amount . $material),
-            MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT),
-            $amount,
-            new Money(0, 'FOO'),
+        $this->IAcquired([[$amount, $material]]);
+    }
+
+    public function IAcquired($amountsAndMaterials) {
+        $this->karma->given(new MaterialsAcquired(
+            new AcquisitionIdentifier(implode('', $amountsAndMaterials[0])),
+            array_map(function ($amountAndMatieral) {
+                list($amount, $material) = $amountAndMatieral;
+
+                return new MaterialAcquisition(
+                    MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT),
+                    $amount,
+                    new Money(0, 'FOO')
+                );
+            }, $amountsAndMaterials),
             null,
             [],
             new UserIdentifier('test')
@@ -80,11 +92,14 @@ class Context {
         $this->IReceivedTheDeliveryOf($amount, $material, true);
     }
 
-    public function IReceivedTheDeliveryOf($amount, $material, $partial = false, $deliveredMaterial = null) {
+    public function IReceivedTheDeliveryOf($amount, $material, $partial = false, $deliveredAmount = null) {
         $this->karma->given(new DeliveryReceived(
             new AcquisitionIdentifier($amount . $material),
             $partial,
-            $deliveredMaterial,
+            [new DeviantAmount(
+                MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT),
+                $deliveredAmount
+            )],
             [],
             [],
             new UserIdentifier('test')

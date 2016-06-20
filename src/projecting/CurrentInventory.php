@@ -7,12 +7,13 @@ use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialCategorySet;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\MaterialsAcquired;
 
 class CurrentInventory {
 
     /** @var CurrentMaterialCount[] */
     private $materials = [];
-    /** @var MaterialAcquired[] */
+    /** @var MaterialsAcquired[] */
     private $acquisitions = [];
 
     /**
@@ -32,19 +33,26 @@ class CurrentInventory {
     }
 
     public function applyMaterialAcquired(MaterialAcquired $e) {
+        $this->applyMaterialsAcquired($e->asMultiple());
+    }
+
+    public function applyMaterialsAcquired(MaterialsAcquired $e) {
         $this->acquisitions[(string)$e->getAcquisition()] = $e;
     }
 
     public function applyDeliveryReceived(DeliveryReceived $e) {
         $acquisition = $this->acquisitions[(string)$e->getAcquisition()];
-        $material = $acquisition->getMaterial();
 
-        $amount = $e->getAmount();
-        if (is_null($amount)) {
-            $amount = $acquisition->getAmount();
+        foreach ($acquisition->getMaterials() as $materialAcquisition) {
+            $material = $materialAcquisition->getMaterial();
+            $amount = $materialAcquisition->getAmount();
+
+            if ($e->hasDeviantAmount($material)) {
+                $amount = $e->getDeviantAmount($material);
+            }
+
+            $this->materials[(string)$material]->addCount($amount);
         }
-
-        $this->materials[(string)$material]->addCount($amount);
     }
 
     public function applyMaterialConsumed(MaterialConsumed $e) {

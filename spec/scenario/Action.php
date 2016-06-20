@@ -1,7 +1,7 @@
 <?php
 namespace spec\happy\inventory\scenario;
 
-use happy\inventory\AcquireMaterial;
+use happy\inventory\AcquireMaterials;
 use happy\inventory\AddCostumer;
 use happy\inventory\AddSupplier;
 use happy\inventory\ConsumeMaterial;
@@ -14,7 +14,9 @@ use happy\inventory\ListMaterials;
 use happy\inventory\ListProducts;
 use happy\inventory\model\AcquisitionIdentifier;
 use happy\inventory\model\CostumerIdentifier;
+use happy\inventory\model\DeviantAmount;
 use happy\inventory\model\ExtraCost;
+use happy\inventory\model\MaterialAcquisition;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\model\ProductIdentifier;
@@ -72,11 +74,31 @@ class Action {
         $this->AcquireMaterial($amount, $material, 42, 'BTN', null, false, new SupplierIdentifier($supplier));
     }
 
+    public function IAcquire_For__Each($materials, $cost, $currency) {
+        $this->karma->when(new AcquireMaterials(
+            array_map(function ($amountAndMaterial) use ($cost, $currency) {
+                list($amount, $material) = $amountAndMaterial;
+
+                return new MaterialAcquisition(
+                    MaterialIdentifier::fromNameAndUnit($material, self::DEFAULT_UNIT),
+                    intval($amount),
+                    new Money($cost, $currency)
+                );
+            }, $materials),
+            null,
+            false,
+            null,
+            $this->when
+        ));
+    }
+
     private function AcquireMaterial($amount, $material, $cost, $currency, $documents = null, $alreadyReceived = false, $supplier = null) {
-        $this->karma->when(new AcquireMaterial(
-            MaterialIdentifier::fromNameAndUnit($material, self::DEFAULT_UNIT),
-            intval($amount),
-            new Money($cost, $currency),
+        $this->karma->when(new AcquireMaterials(
+            [new MaterialAcquisition(
+                MaterialIdentifier::fromNameAndUnit($material, self::DEFAULT_UNIT),
+                intval($amount),
+                new Money($cost, $currency)
+            )],
             $supplier,
             $alreadyReceived,
             $this->makeFiles($documents),
@@ -89,26 +111,32 @@ class Action {
     }
 
     public function IReceiveTheDeliveryOf_WithTheDocuments_Attached($acquisition, $documents) {
-        $this->ReceiveDelivery($acquisition, null, [], $documents);
+        $this->ReceiveDelivery($acquisition, [], [], $documents);
     }
 
     public function IReceiveTheDeliveryOf_WithTheExtraCostOf__For($acquisition, $cost, $currency, $reason) {
-        $this->ReceiveDelivery($acquisition, null, [new ExtraCost(new Money($cost, $currency), $reason)]);
-    }
-
-    public function IReceiveTheDeliveryOf_Containing_Units($acquisition, $amount) {
-        $this->ReceiveDelivery($acquisition, $amount);
+        $this->ReceiveDelivery($acquisition, [], [new ExtraCost(new Money($cost, $currency), $reason)]);
     }
 
     public function IReceiveTheDeliveryOf_Partially($acquisition) {
-        $this->ReceiveDelivery($acquisition, null, null, null, true);
+        $this->ReceiveDelivery($acquisition, [], null, null, true);
     }
 
-    private function ReceiveDelivery($acquisition, $amount = null, $extraCosts = null, $documents = null, $partial = false) {
+    public function IReceiveTheDeliveryOf_Containing($acquisition, $deviantQuantities) {
+        $this->ReceiveDelivery($acquisition, $deviantQuantities);
+    }
+
+    private function ReceiveDelivery($acquisition, $deviantQuantities = [], $extraCosts = null, $documents = null, $partial = false) {
         $this->karma->when(new ReceiveDelivery(
             new AcquisitionIdentifier($acquisition),
             $partial,
-            $amount,
+            array_map(function ($deviantQuantity) {
+                list($amount, $material) = $deviantQuantity;
+                return new DeviantAmount(
+                    MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT),
+                    $amount
+                );
+            }, $deviantQuantities),
             $this->makeFiles($documents),
             $extraCosts,
             $this->when

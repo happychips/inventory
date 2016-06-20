@@ -15,7 +15,18 @@ class ListAcquisitionsSpec extends Specification {
         $this->given->IAcquired_Of(42, 'Potatoes');
         $this->when->IListAllAcquisitions();
         $this->then->ItShouldList_Acquisitions(1);
-        $this->then->Acquisition_ShouldHaveTheCaption('42Potatoes', '2011-01-01 - Potatoes_kg (42)');
+        $this->then->Acquisition_ShouldHaveTheCaption('42Potatoes', '2011-01-01 - Potatoes_kg(42)');
+    }
+
+    function acquisitionOfMultipleMaterials() {
+        $this->given->NowIs('2011-01-01');
+        $this->given->IAcquired([
+            [42, 'Potatoes'],
+            [21, 'Tomatoes']
+        ]);
+        $this->when->IListAllAcquisitions();
+        $this->then->ItShouldList_Acquisitions(1);
+        $this->then->Acquisition_ShouldHaveTheCaption('42Potatoes', '2011-01-01 - Potatoes_kg(42), Tomatoes_kg(21)');
     }
 
     function receivedDelivery() {

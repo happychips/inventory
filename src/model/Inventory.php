@@ -1,7 +1,7 @@
 <?php
 namespace happy\inventory\model;
 
-use happy\inventory\AcquireMaterial;
+use happy\inventory\AcquireMaterials;
 use happy\inventory\AddCostumer;
 use happy\inventory\AddSupplier;
 use happy\inventory\ConsumeMaterial;
@@ -11,10 +11,10 @@ use happy\inventory\events\CostumerDetailsChanged;
 use happy\inventory\events\DeliveryReceived;
 use happy\inventory\events\InventoryUpdated;
 use happy\inventory\events\LinkedConsumptionsSet;
-use happy\inventory\events\MaterialAcquired;
 use happy\inventory\events\MaterialCategorySet;
 use happy\inventory\events\MaterialConsumed;
 use happy\inventory\events\MaterialRegistered;
+use happy\inventory\events\MaterialsAcquired;
 use happy\inventory\events\ProductDelivered;
 use happy\inventory\events\ProductProduced;
 use happy\inventory\events\ProductRegistered;
@@ -82,14 +82,12 @@ class Inventory {
         $this->materials[] = $e->getMaterial();
     }
 
-    public function handleAcquireMaterial(AcquireMaterial $c) {
+    public function handleAcquireMaterials(AcquireMaterials $c) {
         $acquisition = AcquisitionIdentifier::generate();
 
-        $events[] = new MaterialAcquired(
+        $events[] = new MaterialsAcquired(
             $acquisition,
-            $c->getMaterial(),
-            $c->getAmount(),
-            $c->getCost(),
+            $c->getMaterials(),
             $c->getSupplier(),
             $this->saveFiles($c->getDocumentFiles()),
             $this->session->requireLogin(),
@@ -108,7 +106,7 @@ class Inventory {
         return new DeliveryReceived(
             $c->getAcquisition(),
             $c->isPartialDelivery(),
-            $c->getAmount(),
+            $c->getDeviantAmounts(),
             $this->saveFiles($c->getDocumentFiles()),
             $c->getExtraCosts(),
             $this->session->requireLogin(),

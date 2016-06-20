@@ -26,9 +26,15 @@ class ReceiveDeliverySpec extends Specification {
         $this->then->_ShouldBeReceivedWithTheExtraCostOf__For('acquisition1', 5, 'BTN', 'import tax');
     }
 
-    function differentQuantity() {
-        $this->when->IReceiveTheDeliveryOf_Containing_Units('acquisition1', 10);
-        $this->then->_ShouldBeReceivedContaining_Units('acquisition1', 10);
+    function deviantQuantities() {
+        $this->when->IReceiveTheDeliveryOf_Containing('acquisition1', [
+            [10, 'Potatoes'],
+            [7, 'Tomatoes']
+        ]);
+        $this->then->_ShouldBeReceivedContaining('acquisition1', [
+            [10, 'Potatoes'],
+            [7, 'Tomatoes']
+        ]);
     }
 
     function partialDelivery() {

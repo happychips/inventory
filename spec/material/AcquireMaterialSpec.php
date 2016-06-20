@@ -3,7 +3,7 @@ namespace spec\happy\inventory\material;
 use spec\happy\inventory\scenario\Specification;
 
 /**
- * An amount of units of a Material can be acquired at a given cost. It is not available until delivered.
+ * An amount of units of several Materials can be acquired at a given cost. It is not available until delivered.
  */
 class AcquireMaterialSpec extends Specification {
 
@@ -14,6 +14,15 @@ class AcquireMaterialSpec extends Specification {
     function succeed() {
         $this->when->IAcquire_UnitsOf_For(12, 'Potatoes', 6, 'BTN');
         $this->then->_UnitsOf_For__ShouldBeAcquired(12, 'Potatoes', 6, 'BTN');
+    }
+
+    function multipleMaterials() {
+        $this->when->IAcquire_For__Each([
+            [13, 'Potatoes'],
+            [34, 'Tomatoes']
+        ], 120, 'BTN');
+        $this->then->_UnitsOf_For__ShouldBeAcquired(13, 'Potatoes', 120, 'BTN');
+        $this->then->_UnitsOf_For__ShouldBeAcquired(34, 'Tomatoes', 120, 'BTN');
     }
 
     function withDocuments() {

@@ -2,19 +2,15 @@
 namespace happy\inventory;
 
 use happy\inventory\app\Command;
-use happy\inventory\model\MaterialIdentifier;
-use happy\inventory\model\Money;
+use happy\inventory\model\MaterialAcquisition;
 use happy\inventory\model\SupplierIdentifier;
 use rtens\domin\parameters\File;
 use rtens\domin\parameters\Image;
 
-class AcquireMaterial extends Command {
-    /** @var MaterialIdentifier */
-    private $material;
-    /** @var float */
-    private $amount;
-    /** @var Money */
-    private $cost;
+class AcquireMaterials extends Command {
+
+    /** @var MaterialAcquisition[] */
+    private $materials;
     /** @var SupplierIdentifier|null */
     private $supplier;
     /** @var bool */
@@ -23,21 +19,17 @@ class AcquireMaterial extends Command {
     private $documents;
 
     /**
-     * @param MaterialIdentifier $material
-     * @param float $amount
-     * @param Money $cost
+     * @param MaterialAcquisition[] $materials
      * @param SupplierIdentifier|null $supplier
      * @param bool $alreadyReceived
      * @param File[]|Image[]|null $documents
      * @param \DateTimeImmutable|null $when
      */
-    public function __construct(MaterialIdentifier $material, $amount, Money $cost, SupplierIdentifier $supplier = null,
+    public function __construct(array $materials, SupplierIdentifier $supplier = null,
                                 $alreadyReceived = false, array $documents = null, \DateTimeImmutable $when = null) {
         parent::__construct($when);
 
-        $this->material = $material;
-        $this->amount = $amount;
-        $this->cost = $cost;
+        $this->materials = $materials;
         $this->supplier = $supplier;
         $this->alreadyReceived = $alreadyReceived;
         $this->documents = $documents ?: [];
@@ -59,27 +51,6 @@ class AcquireMaterial extends Command {
     }
 
     /**
-     * @return MaterialIdentifier
-     */
-    public function getMaterial() {
-        return $this->material;
-    }
-
-    /**
-     * @return float
-     */
-    public function getAmount() {
-        return $this->amount;
-    }
-
-    /**
-     * @return Money
-     */
-    public function getCost() {
-        return $this->cost;
-    }
-
-    /**
      * @return boolean
      */
     public function isAlreadyReceived() {
@@ -91,5 +62,12 @@ class AcquireMaterial extends Command {
      */
     public function getSupplier() {
         return $this->supplier;
+    }
+
+    /**
+     * @return MaterialAcquisition[]
+     */
+    public function getMaterials() {
+        return $this->materials;
     }
 }

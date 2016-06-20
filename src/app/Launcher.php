@@ -1,7 +1,7 @@
 <?php
 namespace happy\inventory\app;
 
-use happy\inventory\AcquireMaterial;
+use happy\inventory\AcquireMaterials;
 use happy\inventory\AddCostumer;
 use happy\inventory\AddSupplier;
 use happy\inventory\ConsumeMaterial;
@@ -124,7 +124,7 @@ class Launcher {
                     return ['product' => $consumptions->productIdentifier()];
                 }));
 
-            $this->addAction($domin, AcquireMaterial::class, 'Material');
+            $this->addAction($domin, AcquireMaterials::class, 'Material');
             $this->addAction($domin, ReceiveDelivery::class, 'Material');
             $this->addAction($domin, ConsumeMaterial::class, 'Material');
             $this->addAction($domin, UpdateInventory::class, 'Material');

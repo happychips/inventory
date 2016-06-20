@@ -2,12 +2,16 @@
 namespace happy\inventory\events;
 
 use happy\inventory\model\AcquisitionIdentifier;
+use happy\inventory\model\MaterialAcquisition;
 use happy\inventory\model\MaterialIdentifier;
 use happy\inventory\model\Money;
 use happy\inventory\model\SupplierIdentifier;
 use happy\inventory\model\UserIdentifier;
 use rtens\domin\parameters\File;
 
+/**
+ * @deprecated Replaced by MaterialsAcquired
+ */
 class MaterialAcquired extends Event {
 
     /** @var AcquisitionIdentifier */
@@ -86,5 +90,23 @@ class MaterialAcquired extends Event {
      */
     public function getSupplier() {
         return $this->supplier;
+    }
+
+    /**
+     * @return MaterialsAcquired
+     */
+    public function asMultiple() {
+        return new MaterialsAcquired(
+            $this->acquisition,
+            [new MaterialAcquisition(
+                $this->material,
+                $this->amount,
+                $this->cost
+            )],
+            $this->supplier,
+            $this->documents,
+            $this->getWho(),
+            $this->getWhen()
+        );
     }
 }
