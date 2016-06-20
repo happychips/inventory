@@ -30,13 +30,13 @@ use happy\inventory\ShowStock;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\parameters\file\MemoryFile;
-use watoki\karma\testing\Specification;
+use watoki\karma\testing\Specification as Karma;
 
 class Action {
 
     const DEFAULT_UNIT = 'kg';
 
-    /** @var Specification */
+    /** @var Karma */
     private $karma;
     /** @var \DateTimeImmutable */
     private $when;
@@ -44,7 +44,7 @@ class Action {
     /**
      * @param Specification $karma
      */
-    public function __construct(Specification $karma) {
+    public function __construct(Karma $karma) {
         $this->karma = $karma;
     }
 

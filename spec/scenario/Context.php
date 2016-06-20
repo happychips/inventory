@@ -25,20 +25,20 @@ use happy\inventory\model\ProductIdentifier;
 use happy\inventory\model\SupplierIdentifier;
 use happy\inventory\model\Time;
 use happy\inventory\model\UserIdentifier;
-use watoki\karma\testing\Specification as KarmaSpecification;
+use watoki\karma\testing\Specification as Karma;
 
 class Context {
 
-    /** @var KarmaSpecification */
+    /** @var Karma */
     public $karma;
     /** @var FakeSession */
     private $session;
 
     /**
-     * @param KarmaSpecification $karma
+     * @param Karma $karma
      * @param FakeSession $session
      */
-    public function __construct(KarmaSpecification $karma, FakeSession $session) {
+    public function __construct(Karma $karma, FakeSession $session) {
         $this->session = $session;
         $this->karma = $karma;
     }

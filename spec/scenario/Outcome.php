@@ -36,20 +36,20 @@ use happy\inventory\projecting\ProductList;
 use rtens\domin\parameters\File;
 use rtens\domin\parameters\file\SavedFile;
 use rtens\scrut\fixtures\ExceptionFixture;
-use watoki\karma\testing\Specification;
+use watoki\karma\testing\Specification as Karma;
 
 class Outcome {
 
-    /** @var Specification */
+    /** @var Karma */
     private $karma;
     /** @var ExceptionFixture */
     private $try;
 
     /**
-     * @param Specification $karma
+     * @param Karma $karma
      * @param ExceptionFixture $try
      */
-    public function __construct(Specification $karma, ExceptionFixture $try) {
+    public function __construct(Karma $karma, ExceptionFixture $try) {
         $this->karma = $karma;
         $this->try = $try;
     }

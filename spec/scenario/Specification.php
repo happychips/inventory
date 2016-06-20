@@ -5,7 +5,7 @@ use happy\inventory\app\Application;
 use rtens\scrut\failures\IncompleteTestFailure;
 use rtens\scrut\fixtures\ExceptionFixture;
 use watoki\karma\stores\EventStore;
-use watoki\karma\testing\Specification as KarmaSpecification;
+use watoki\karma\testing\Specification as Karma;
 
 /**
  * @property Context given
@@ -20,7 +20,7 @@ class Specification {
      */
     public function __construct(ExceptionFixture $try) {
         $session = new FakeSession();
-        $karma = new KarmaSpecification(function (EventStore $store) use ($session) {
+        $karma = new Karma(function (EventStore $store) use ($session) {
             return new Application($store, $session, sys_get_temp_dir() . uniqid('/happy_inventory_'));
         });
 
