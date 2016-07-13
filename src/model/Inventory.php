@@ -26,6 +26,7 @@ use happy\inventory\RegisterMaterial;
 use happy\inventory\RegisterProduct;
 use happy\inventory\SetLinkedConsumption;
 use happy\inventory\SetMaterialCategory;
+use happy\inventory\TransformMaterial;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\parameters\File;
@@ -295,6 +296,30 @@ class Inventory {
                 $c->getWhen()
             );
         }
+        return $events;
+    }
+
+    public function handleTransformMaterial(TransformMaterial $c) {
+        $events = $this->handleAcquireMaterials(new AcquireMaterials(
+            array_map(function (MaterialQuantity $quantity) {
+                return new MaterialAcquisition(
+                    $quantity->getMaterial(),
+                    $quantity->getAmount(),
+                    new Money(0, Money::CURRENCY_BTN)
+                );
+            }, $c->getOutputs()),
+            null,
+            true
+        ));
+
+        foreach ($c->getInputs() as $input) {
+            $events[] = $this->handleConsumeMaterial(new ConsumeMaterial(
+                $input->getMaterial(),
+                $input->getAmount(),
+                $c->getWhen()
+            ));
+        }
+
         return $events;
     }
 }

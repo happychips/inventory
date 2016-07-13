@@ -31,6 +31,7 @@ use happy\inventory\SetMaterialCategory;
 use happy\inventory\ShowHistory;
 use happy\inventory\ShowInventory;
 use happy\inventory\ShowStock;
+use happy\inventory\TransformMaterial;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\delivery\web\adapters\curir\root\IndexResource;
@@ -128,6 +129,7 @@ class Launcher {
             $this->addAction($domin, ReceiveDelivery::class, 'Material');
             $this->addAction($domin, ConsumeMaterial::class, 'Material');
             $this->addAction($domin, UpdateInventory::class, 'Material');
+            $this->addAction($domin, TransformMaterial::class, 'Material');
 
             $this->addAction($domin, ProduceProduct::class, 'Product');
             $this->addAction($domin, UpdateStock::class, 'Product');

@@ -18,6 +18,7 @@ use happy\inventory\model\DeviantAmount;
 use happy\inventory\model\ExtraCost;
 use happy\inventory\model\MaterialAcquisition;
 use happy\inventory\model\MaterialIdentifier;
+use happy\inventory\model\MaterialQuantity;
 use happy\inventory\model\Money;
 use happy\inventory\model\ProductIdentifier;
 use happy\inventory\model\SupplierIdentifier;
@@ -29,6 +30,7 @@ use happy\inventory\SetLinkedConsumption;
 use happy\inventory\SetMaterialCategory;
 use happy\inventory\ShowInventory;
 use happy\inventory\ShowStock;
+use happy\inventory\TransformMaterial;
 use happy\inventory\UpdateInventory;
 use happy\inventory\UpdateStock;
 use rtens\domin\parameters\file\MemoryFile;
@@ -260,5 +262,17 @@ class Action {
             return MaterialIdentifier::fromNameAndUnit($material, Action::DEFAULT_UNIT);
         }, (array)$materials);
         $this->karma->when(new SetMaterialCategory($category, $materialIdentifiers));
+    }
+
+    public function ITransform_Into($input, $output) {
+        $toQuantity = function ($array) {
+            return array_map(function ($entry) {
+                return new MaterialQuantity(MaterialIdentifier::fromNameAndUnit($entry[2], $entry[1]), $entry[0]);
+            }, $array);
+        };
+
+        $this->karma->when(new TransformMaterial(
+            $toQuantity($input),
+            $toQuantity($output)));
     }
 }
