@@ -26,7 +26,7 @@ class AcquireMaterials extends Command {
      * @param \DateTimeImmutable|null $when
      */
     public function __construct(array $materials, SupplierIdentifier $supplier,
-                                $alreadyReceived = false, array $documents = null, \DateTimeImmutable $when = null) {
+                                $alreadyReceived = true, array $documents = null, \DateTimeImmutable $when = null) {
         parent::__construct($when);
 
         $this->materials = $materials;
