@@ -39,6 +39,7 @@ use watoki\karma\testing\Specification as Karma;
 class Action {
 
     const DEFAULT_UNIT = 'kg';
+    const DEFAULT_SUPPLIER = 'foo';
 
     /** @var Karma */
     private $karma;
@@ -87,7 +88,7 @@ class Action {
                     new Money($cost, $currency)
                 );
             }, $materials),
-            null,
+            new SupplierIdentifier(self::DEFAULT_SUPPLIER),
             false,
             null,
             $this->when
@@ -101,7 +102,7 @@ class Action {
                 intval($amount),
                 new Money($cost, $currency)
             )],
-            $supplier,
+            $supplier ?: new SupplierIdentifier(self::DEFAULT_SUPPLIER),
             $alreadyReceived,
             $this->makeFiles($documents),
             $this->when

@@ -308,7 +308,7 @@ class Inventory {
                     new Money(0, Money::CURRENCY_BTN)
                 );
             }, $c->getOutputs()),
-            null,
+            new SupplierIdentifier('TRANSFORMATION'),
             true
         ));
 

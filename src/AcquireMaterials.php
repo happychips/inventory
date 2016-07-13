@@ -20,12 +20,12 @@ class AcquireMaterials extends Command {
 
     /**
      * @param MaterialAcquisition[] $materials
-     * @param SupplierIdentifier|null $supplier
+     * @param SupplierIdentifier $supplier
      * @param bool $alreadyReceived
      * @param File[]|Image[]|null $documents
      * @param \DateTimeImmutable|null $when
      */
-    public function __construct(array $materials, SupplierIdentifier $supplier = null,
+    public function __construct(array $materials, SupplierIdentifier $supplier,
                                 $alreadyReceived = false, array $documents = null, \DateTimeImmutable $when = null) {
         parent::__construct($when);
 
@@ -58,7 +58,7 @@ class AcquireMaterials extends Command {
     }
 
     /**
-     * @return SupplierIdentifier|null
+     * @return SupplierIdentifier
      */
     public function getSupplier() {
         return $this->supplier;
